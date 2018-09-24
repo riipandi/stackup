@@ -22,14 +22,6 @@ else
   echo "deb http://mirror.jaleco.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/lempstack.list
 fi
 
-cat >> /etc/apt/sources.list.d/lempstack.list <<EOF
-deb [arch=amd64] https://repo.powerdns.com/debian `lsb_release -cs`-auth-41 main
-deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main
-deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx
-deb https://deb.nodesource.com/node_8.x `lsb_release -cs` main
-deb https://packages.sury.org/php/ `lsb_release -cs` main
-EOF
-
 if [ ! -f /etc/apt/sources.list.d/lempstack.list ]; then
   apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 #MariaDB
   curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc   | apt-key add -
@@ -39,5 +31,13 @@ if [ ! -f /etc/apt/sources.list.d/lempstack.list ]; then
   curl -sS https://repo.powerdns.com/FD380FBB-pub.asc           | apt-key add -
   echo -e "Package: pdns-*\nPin: origin repo.powerdns.com\nPin-Priority: 600" > /etc/apt/preferences.d/pdns
 fi
+
+cat >> /etc/apt/sources.list.d/lempstack.list <<EOF
+deb [arch=amd64] https://repo.powerdns.com/debian `lsb_release -cs`-auth-41 main
+deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main
+deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx
+deb https://deb.nodesource.com/node_8.x `lsb_release -cs` main
+deb https://packages.sury.org/php/ `lsb_release -cs` main
+EOF
 
 echo 'Repository has been configured'
