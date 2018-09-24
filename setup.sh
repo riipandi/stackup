@@ -161,10 +161,11 @@ echo '- Configure Nginx'
 # 06 - Configure Nginx
 #-----------------------------------------------------------------------------------------
 systemctl enable --now haveged ; systemctl stop nginx
-certbot certonly --standalone --rsa-key-size 4096 --agree-tos --register-unsafely-without-email -d "$(hostname -f)"
 
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
+
+certbot certonly --standalone --rsa-key-size 4096 --agree-tos --register-unsafely-without-email -d "$(hostname -f)"
 
 rm -fr /etc/nginx ; cp -r $PWD/config/nginx /etc ; chown -R root: /etc/nginx
 cp /etc/nginx/manifest/default-hello.tpl /var/www/index.php
@@ -233,6 +234,8 @@ mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE DATABASE IF NOT EXISTS $CP_DB_NAME"
 mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE USER IF NOT EXISTS '$CP_DB_NAME'@'$DB_BIND_ADDR' IDENTIFIED BY '$CP_DB_PASS'"
 mysql -uroot -p"$DB_ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $CP_DB_NAME.* TO '$CP_DB_NAME'@'$DB_BIND_ADDR'"
 mysql -uroot -p"$DB_ROOT_PASS" -e "FLUSH PRIVILEGES"
+
+mysql -uroot -p"$DB_ROOT_PASS" $CP_DB_NAME < $PWD/schema.sql
 
 rm -fr /etc/powerdns ; cp -r $PWD/config/powerdns /etc ; chown -R root: /etc/powerdns
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-host'     $DB_BIND_ADDR
