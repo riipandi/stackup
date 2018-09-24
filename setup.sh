@@ -198,8 +198,8 @@ echo '- Installing phpMyAdmin'
 #-----------------------------------------------------------------------------------------
 # 08 - Installing phpMyAdmin
 #-----------------------------------------------------------------------------------------
-cd /tmp; curl -fsSL https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-english.zip | bsdtar -xvf-
-mv /tmp/phpMyAdmin*-english $PMA_DIR
+curl -fsSL https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-english.zip | bsdtar -xvf-
+rm -fr $PMA_DIR ; mv /tmp/phpMyAdmin*-english $PMA_DIR
 
 chmod -R 755 $PMA_DIR
 find $PMA_DIR/. -type d -exec chmod 0777 {} \;
@@ -271,29 +271,30 @@ echo '- Installing Redis Cache'
 #-----------------------------------------------------------------------------------------
 # Redis Cache
 #-----------------------------------------------------------------------------------------
-apt install -y sysfsutils redis-{server,tools} ; mkdir -p /var/run/redis
-echo 'kernel/mm/transparent_hugepage/enabled = never' > /etc/sysfs.conf
-echo 'kernel/mm/transparent_hugepage/defrag = never' >> /etc/sysfs.conf
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-echo never > /sys/kernel/mm/transparent_hugepage/defrag
+if [ $SETUP_REDIS == "yes" ]; then
+  apt install -y sysfsutils redis-{server,tools}
+  echo 'kernel/mm/transparent_hugepage/enabled = never' > /etc/sysfs.conf
+  echo 'kernel/mm/transparent_hugepage/defrag = never' >> /etc/sysfs.conf
+  echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
-crudini --set /etc/sysctl.conf '' 'vm.overcommit_memory' '1'
-crudini --set /etc/sysctl.conf '' 'net.core.somaxconn' '512'
-echo 512 > /proc/sys/net/core/somaxconn
+  crudini --set /etc/sysctl.conf '' 'vm.overcommit_memory' '1'
+  crudini --set /etc/sysctl.conf '' 'net.core.somaxconn' '512'
+  echo 512 > /proc/sys/net/core/somaxconn
+  mkdir -p /var/run/redis
 
-sed -i "s/supervised no/supervised systemd/" /etc/redis/redis.conf
-sed -i "s/# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/" /etc/redis/redis.conf
-sed -i "s/# maxmemory <bytes>/maxmemory 256mb/" /etc/redis/redis.conf
-sed -i "s|\("^bind" * *\).*|\1$DB_BIND_ADDR|" /etc/redis/redis.conf
-systemctl restart redis-server
+  sed -i "s/supervised no/supervised systemd/" /etc/redis/redis.conf
+  sed -i "s/# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/" /etc/redis/redis.conf
+  sed -i "s/# maxmemory <bytes>/maxmemory 256mb/" /etc/redis/redis.conf
+  sed -i "s|\("^bind" * *\).*|\1$DB_BIND_ADDR|" /etc/redis/redis.conf
+  systemctl restart redis-server
+fi
 
-
-echo '- Installing IMAPSync'
 #-----------------------------------------------------------------------------------------
 # 12 - Installing IMAPSync
 #-----------------------------------------------------------------------------------------
-
 if [ $SETUP_IMAPSYNC == "yes" ]; then
+  echo '- Installing IMAPSync'
   apt install -y make cpanminus libauthen-ntlm-perl libclass-load-perl libcrypt-ssleay-perl \
   libdata-uniqid-perl libdigest-hmac-perl libdist-checkconflicts-perl libio-compress-perl \
   libfile-copy-recursive-perl libio-socket-inet6-perl libio-socket-ssl-perl libio-tee-perl \
@@ -311,8 +312,7 @@ fi
 #-----------------------------------------------------------------------------------------
 # 13 - Configure Telegram Notification
 #-----------------------------------------------------------------------------------------
-cp $PWD/sshnotify.sh /usr/bin/sshnotify ; chmod a+x /usr/bin/sshnotify
-echo -e '#!/usr/bin/env bash\nbash /usr/bin/sshnotify' > /etc/profile.d/tg-alert.sh
+cp $PWD/sshnotify.sh /etc/profile.d/tg-alert.sh ; chmod a+x /etc/profile.d/tg-alert.sh
 echo -e "USERID='$TELEGRAM_USERID'\nBOTKEY='$TELEGRAM_BOTKEY'" > /etc/sshnotify.conf
 
 echo '- Installation finish, congratulation!'
