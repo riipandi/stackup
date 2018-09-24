@@ -4,4 +4,4 @@ Debian LEMP Stack installer script.
 
 ## Usage
 
-Clonse this repo and run `setup.sh`.
+Clone this repo and run `setup.sh`.
