@@ -230,7 +230,7 @@ mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE USER '$CP_DB_NAME'@'$DB_BIND_ADDR' IDE
 mysql -uroot -p"$DB_ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $CP_DB_NAME.* TO '$CP_DB_NAME'@'$DB_BIND_ADDR'"
 mysql -uroot -p"$DB_ROOT_PASS" -e "FLUSH PRIVILEGES"
 
-rm -f /etc/powerdns ; cp $PWD/config/powerdns /etc ; chown -R root: /etc/powerdns
+rm -f /etc/powerdns ; cp -r $PWD/config/powerdns /etc ; chown -R root: /etc/powerdns
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-host'     $DB_BIND_ADDR
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-user'     $CP_DB_NAME
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-dbname'   $CP_DB_NAME
@@ -257,7 +257,7 @@ chmod 0600 /etc/ssl/private/proftpd.key
 chmod 0640 /etc/ssl/private/proftpd.key
 
 rm -fr /etc/proftpd
-cp $PWD/config/proftpd /etc
+cp -r $PWD/config/proftpd /etc
 chown -R root: /etc/proftpd
 sed -i "s/DB_NAME/$CP_DB_NAME/" /etc/proftpd/conf.d/sql.conf
 sed -i "s/DB_PASS/$CP_DB_PASS/" /etc/proftpd/conf.d/sql.conf
