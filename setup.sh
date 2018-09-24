@@ -114,7 +114,7 @@ sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
 sed -i "s/[#]*Port [0-9]*/Port $SSH_PORT/" /etc/ssh/sshd_config
 sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
-
+systemctl restart ssh
 
 echo '- Configure MariaDB'
 #-----------------------------------------------------------------------------------------
