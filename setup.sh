@@ -230,7 +230,7 @@ echo '- Configure PowerDNS'
 # 09 - Configure PowerDNS Authorative
 #-----------------------------------------------------------------------------------------
 mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE DATABASE IF NOT EXISTS $CP_DB_NAME"
-mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE USER '$CP_DB_NAME'@'$DB_BIND_ADDR' IDENTIFIED BY '$CP_DB_PASS'"
+mysql -uroot -p"$DB_ROOT_PASS" -e "CREATE USER IF NOT EXISTS '$CP_DB_NAME'@'$DB_BIND_ADDR' IDENTIFIED BY '$CP_DB_PASS'"
 mysql -uroot -p"$DB_ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $CP_DB_NAME.* TO '$CP_DB_NAME'@'$DB_BIND_ADDR'"
 mysql -uroot -p"$DB_ROOT_PASS" -e "FLUSH PRIVILEGES"
 
