@@ -22,7 +22,7 @@ else
   echo "deb http://mirror.jaleco.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/lempstack.list
 fi
 
-if [ ! -f /etc/apt/sources.list.d/lempstack.list ]; then
+#if [ ! -f /etc/apt/sources.list.d/lempstack.list ]; then
   apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 #MariaDB
   curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc   | apt-key add -
   curl -sS https://nginx.org/keys/nginx_signing.key             | apt-key add -
@@ -30,7 +30,7 @@ if [ ! -f /etc/apt/sources.list.d/lempstack.list ]; then
   curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
   curl -sS https://repo.powerdns.com/FD380FBB-pub.asc           | apt-key add -
   echo -e "Package: pdns-*\nPin: origin repo.powerdns.com\nPin-Priority: 600" > /etc/apt/preferences.d/pdns
-fi
+#fi
 
 cat >> /etc/apt/sources.list.d/lempstack.list <<EOF
 deb [arch=amd64] https://repo.powerdns.com/debian `lsb_release -cs`-auth-41 main
