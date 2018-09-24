@@ -311,5 +311,8 @@ fi
 #-----------------------------------------------------------------------------------------
 # 13 - Configure Telegram Notification
 #-----------------------------------------------------------------------------------------
-cp $PWD/sshnotify.sh /etc/profile.d/sshnotify.sh ; chmod +x /etc/profile.d/sshnotify.sh
+cp $PWD/sshnotify.sh /usr/bin/sshnotify ; chmod a+x /usr/bin/sshnotify
+echo -e '#!/usr/bin/env bash\nbash /usr/bin/sshnotify' > /etc/profile.d/tg-alert.sh
 echo -e "USERID='$TELEGRAM_USERID'\nBOTKEY='$TELEGRAM_BOTKEY'" > /etc/sshnotify.conf
+
+echo '- Installation finish, congratulation!'
