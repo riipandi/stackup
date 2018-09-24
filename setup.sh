@@ -68,6 +68,10 @@ php7.2-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,zip} composer nginx nodejs
 letsencrypt optipng jpegoptim mariadb-{server,client} pdns-{server,backend-mysql} \
 proftpd-mod-mysql iptables iptables-persistent postgresql-{10,client-10}
 
+# Additional PHP
+apt install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,gmp,xmlrpc,readline} \
+php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,zip,mysql,pgsql}
+
 # Python Stack
 apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
 supervisor {python,python3}-{flaskext.wtf,flask-{migrate,restful,sqlalchemy,bcrypt}} \
@@ -135,6 +139,7 @@ echo '- Configure PHP-FPM'
 #-----------------------------------------------------------------------------------------
 # 05 - COnfigure PHP-FPM
 #-----------------------------------------------------------------------------------------
+crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php56-fpm.sock'
 crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php72-fpm.sock'
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize"     "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"      "300"' {} \;
@@ -153,7 +158,7 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.process_idle_timeout" "10s"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.status_path" "/status"' {} \;
 phpenmod curl opcache imagick fileinfo
-systemctl restart php7.2-fpm
+systemctl restart php{5.6,7.2}-fpm
 
 
 echo '- Configure Nginx'
