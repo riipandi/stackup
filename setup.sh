@@ -183,23 +183,25 @@ echo '- Configure Nginx Amplify'
 #-----------------------------------------------------------------------------------------
 # 07 - Configure Nginx Amplify
 #-----------------------------------------------------------------------------------------
-API_KEY=$AMPLIFY_KEY bash <(curl -sLo- https://git.io/fNWVx)
-crudini --set /etc/amplify-agent/agent.conf 'listener_syslog-default' '​address' '127.0.0.1:13579'
-crudini --set /etc/amplify-agent/agent.conf 'mysql' 'unix_socket' '/var/run/mysqld/mysqld.sock'
-crudini --set /etc/amplify-agent/agent.conf 'mysql' 'user' 'root'
-crudini --set /etc/amplify-agent/agent.conf 'mysql' 'password' $DB_ROOT_PASS
-crudini --set /etc/amplify-agent/agent.conf 'credentials' 'hostname' `hostname -f`
-crudini --set /etc/amplify-agent/agent.conf 'extensions' 'phpfpm' 'True'
-crudini --set /etc/amplify-agent/agent.conf 'extensions' 'mysql' 'True'
-systemctl restart amplify-agent
-
+if [ ! -f /etc/apt/sources.list.d/nginx-amplify.list ]; then
+  API_KEY=$AMPLIFY_KEY bash <(curl -sLo- https://git.io/fNWVx)
+  crudini --set /etc/amplify-agent/agent.conf 'listener_syslog-default' '​address' '127.0.0.1:13579'
+  crudini --set /etc/amplify-agent/agent.conf 'mysql' 'unix_socket' '/var/run/mysqld/mysqld.sock'
+  crudini --set /etc/amplify-agent/agent.conf 'mysql' 'user' 'root'
+  crudini --set /etc/amplify-agent/agent.conf 'mysql' 'password' $DB_ROOT_PASS
+  crudini --set /etc/amplify-agent/agent.conf 'credentials' 'hostname' `hostname -f`
+  crudini --set /etc/amplify-agent/agent.conf 'extensions' 'phpfpm' 'True'
+  crudini --set /etc/amplify-agent/agent.conf 'extensions' 'mysql' 'True'
+  systemctl restart amplify-agent
+fi
 
 echo '- Installing phpMyAdmin'
 #-----------------------------------------------------------------------------------------
 # 08 - Installing phpMyAdmin
 #-----------------------------------------------------------------------------------------
+if [ ! -d $PMA_DIR ]; then
 curl -fsSL https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-english.zip | bsdtar -xvf-
-rm -fr $PMA_DIR ; mv /tmp/phpMyAdmin*-english $PMA_DIR
+mv $PWD/phpMyAdmin*-english $PMA_DIR
 
 chmod -R 755 $PMA_DIR
 find $PMA_DIR/. -type d -exec chmod 0777 {} \;
@@ -221,7 +223,7 @@ cat > $PMA_DIR/config.inc.php <<EOF
 \$cfg['SendErrorReports']                = 'never';
 \$cfg['ShowDatabasesNavigationAsTree']   = false;
 EOF
-
+fi
 
 echo '- Configure PowerDNS'
 #-----------------------------------------------------------------------------------------
