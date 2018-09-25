@@ -14,9 +14,10 @@ if [ -n "$SSH_CLIENT" ]; then
 
   IPINFO="https://ipinfo.io/${CLIENT_IP}"
 
-  TEXT="Connection from *${CLIENT_IP}* as ${USER} on *${SRV_HOSTNAME}* (*${SRV_IP}*)
-  Date: ${DATE}
-  Info: [${IPINFO}](${IPINFO})"
+  TEXT="User ${USER} logged in to *${SRV_HOSTNAME}* (*${SRV_IP}*)
+From: *${CLIENT_IP}*
+Date: ${DATE}
+User info: [${IPINFO}](${IPINFO})"
 
   curl -s -d "chat_id=${USERID}&text=${TEXT}&disable_web_page_preview=true&parse_mode=markdown" $URL > /dev/null
 fi
