@@ -1,13 +1,7 @@
-#-server {
-#-    listen 80; server_name HOSTNAME;
-#-    return 301 https://$host$request_uri;
-#-    access_log off; error_log off;
-#-}
-
 server {
     listen 80;
     listen 443 ssl http2;
-    server_name HOSTNAME;
+    server_name HOSTNAME www.HOSTNAME;
 
     root /srv/HOSTNAME/public;
     access_log /var/log/nginx/HOSTNAME-access.log main;
@@ -16,6 +10,16 @@ server {
     ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
     #add_header Public-Key-Pins 'pin-sha256="HPKP_VALUE"; max-age=2592000;';
+
+    # redirect to non-www
+    if ($host = 'www.HOSTNAME') {
+        return 301 https://HOSTNAME$request_uri;
+    }
+
+    # force https-redirects
+    if ($scheme = http) {
+       return 301 https://$server_name$request_uri;
+    }
 
     include server.d/server.conf;
     include server.d/static.conf;
