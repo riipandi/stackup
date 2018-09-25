@@ -103,6 +103,7 @@ crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
 crudini --set /etc/sysctl.conf '' 'vm.swappiness' '10'
 
 # SSH Server
+figlet `hostname -f` > /etc/motd
 sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
 sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config
