@@ -66,7 +66,7 @@ libimage-exiftool-perl libarchive-tools sqlite3 mcrypt gamin gettext php-{imagic
 php7.2 php7.2-{common,cli,cgi,fpm,mbstring,opcache,gmp,xmlrpc,readline,mysql,pgsql} \
 php7.2-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,zip} composer nginx nodejs \
 letsencrypt optipng jpegoptim mariadb-{server,client} pdns-{server,backend-mysql} \
-proftpd-mod-mysql iptables iptables-persistent postgresql-{10,client-10}
+proftpd-mod-mysql iptables iptables-persistent postgresql-{10,client-10} figlet
 
 # Additional PHP
 apt install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,gmp,xmlrpc,readline} \
