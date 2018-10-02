@@ -8,13 +8,30 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 #-----------------------------------------------------------------------------------------
 # 00 - Setup Repositories
 #-----------------------------------------------------------------------------------------
+if [ "`cat /tmp/country`" == "ID" ] ; then
+  echo "deb http://mariadb.biz.net.id/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+elif [ "`cat /tmp/country`" == "SG" ] ; then
+  echo "deb http://download.nus.edu.sg/mirror/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+else
+  echo "deb http://mirror.jaleco.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+fi
 
+cat > /etc/apt/sources.list.d/lempstack.list <<EOF
+deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx
+deb https://deb.nodesource.com/node_8.x `lsb_release -cs` main
+deb https://packages.sury.org/php/ `lsb_release -cs` main
+EOF
+
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 #MariaDB
+curl -sS https://nginx.org/keys/nginx_signing.key             | apt-key add -
+curl -sS https://packages.sury.org/php/apt.gpg                | apt-key add -
+curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 #-----------------------------------------------------------------------------------------
 # 01 - Installing Packages
 #-----------------------------------------------------------------------------------------
-debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password `cat /tmp/ecp_dbname`"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password `cat /tmp/ecp_dbpass`"
 apt -y install nano gcc make cmake build-essential git whois nscd dh-autoreconf \
 binutils dnsutils resolvconf ftp zip unzip bsdtar rsync screen ca-certificates \
 software-properties-common debconf-utils screenfetch haveged nmap nikto sqlite3 \
@@ -24,15 +41,6 @@ php7.2 php7.2-{common,cli,cgi,fpm,mbstring,opcache,gmp,readlinezip,sqlite3,intl}
 php7.2-{bcmath,json,xml,xmlrpc,mysql,pgsql,imap,gd,curl,zip} nginx composer nodejs \
 letsencrypt mariadb-{server,client}
 
-# Additional PHP
-apt install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,gmp,xmlrpc,readline} \
-php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,zip,mysql,pgsql}
-
-# Python Stack
-apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
-supervisor {python,python3}-{flaskext.wtf,flask-{migrate,restful,sqlalchemy,bcrypt}} \
-python-{m2crypto,configparser} gunicorn gunicorn3
-
 # Extra Packages
 curl -L# https://git.io/vN3Ff -o /usr/bin/wp ; chmod a+x /usr/bin/wp
 curl -L# https://git.io/fAFyN -o /usr/bin/phpcs ; chmod a+x /usr/bin/phpcs
@@ -40,21 +48,35 @@ curl -L# https://git.io/fAFyb -o /usr/bin/phpcbf ; chmod a+x /usr/bin/phpcbf
 curl -L# https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o /usr/bin/php-cs-fixer
 chmod a+x /usr/bin/php-cs-fixer
 
+# Additional PHP
+echo -n "Do you want to install PHP 5.6 (y/n) ? " ; read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  apt -y install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,xmlrpc,gmp} \
+  php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,readline,zip,mysql,pgsql}
+  crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php56-fpm.sock'
+fi
+
+# Python Stack
+echo -n "Do you want to install Python Stack (y/n) ? " ; read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
+  supervisor {python,python3}-{flaskext.wtf,flask-{migrate,restful,sqlalchemy,bcrypt}} \
+  python-{m2crypto,configparser} gunicorn gunicorn3
+fi
+
 #-----------------------------------------------------------------------------------------
 # 02 - Configuring MySQL
 #-----------------------------------------------------------------------------------------
 sed -i "s/skip-external-locking//" /etc/mysql/my.cnf
-mysql -uroot -p"$DB_ROOT_PASS" -e "UPDATE mysql.user SET plugin='' WHERE User='root';"
-crudini --set /etc/mysql/conf.d/mariadb.cnf 'mysqld' 'bind-address' $DB_BIND_ADDR
-crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'     $DB_BIND_ADDR
-crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'password' $DB_ROOT_PASS
+mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "UPDATE mysql.user SET plugin='' WHERE User='root';"
+crudini --set /etc/mysql/conf.d/mariadb.cnf 'mysqld' 'bind-address' `cat /tmp/db_bindaddr`
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'     `cat /tmp/db_bindaddr`
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'password' `cat /tmp/ecp_dbpass`
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'user'     'root'
-
 
 #-----------------------------------------------------------------------------------------
 # 03 - Configuring PHP-FPM
 #-----------------------------------------------------------------------------------------
-crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php56-fpm.sock'
 crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php72-fpm.sock'
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize"     "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"      "300"' {} \;
@@ -73,7 +95,10 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.process_idle_timeout" "10s"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.status_path" "/status"' {} \;
 phpenmod curl opcache imagick fileinfo
-systemctl restart php{5.6,7.2}-fpm
+systemctl restart php7.2-fpm
+
+[[ ! -d "/etc/php/5.6" ]] || systemctl restart php5.6-fpm
+
 
 #-----------------------------------------------------------------------------------------
 # 04 - Configuring Nginx
@@ -84,8 +109,10 @@ curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 certbot certonly --standalone --rsa-key-size 4096 --agree-tos --register-unsafely-without-email -d "$(hostname -f)"
 
-rm -fr /etc/nginx ; cp -r $PWD/config/nginx /etc ; chown -R root: /etc/nginx
+rm -fr /etc/nginx
+cp -r $PARENT/config/nginx /etc
 cp /etc/nginx/manifest/default-hello.tpl /var/www/index.php
+chown -R root: /etc/nginx
 chown -R www-data: /var/www
 chmod -R 775 /var/www
 
@@ -99,18 +126,18 @@ systemctl restart nginx
 #-----------------------------------------------------------------------------------------
 # 05 - Configuring Nginx Amplify
 #-----------------------------------------------------------------------------------------
-if [ ! -f /etc/apt/sources.list.d/nginx-amplify.list ]; then
-  API_KEY=$NGX_AMPLIFY_KEY bash <(curl -sLo- https://git.io/fNWVx)
+if [ "`cat /tmp/install_amplify`" == "Yes" ]; then
+  API_KEY=`cat /tmp/amplify_key` bash <(curl -sLo- https://git.io/fNWVx)
   crudini --set /etc/amplify-agent/agent.conf 'listener_syslog-default' '​address' '127.0.0.1:13579'
   crudini --set /etc/amplify-agent/agent.conf 'mysql' 'unix_socket' '/var/run/mysqld/mysqld.sock'
   crudini --set /etc/amplify-agent/agent.conf 'mysql' 'user' 'root'
-  crudini --set /etc/amplify-agent/agent.conf 'mysql' 'password' $DB_ROOT_PASS
+  crudini --set /etc/amplify-agent/agent.conf 'mysql' 'password' `cat /tmp/ecp_dbpass`
   crudini --set /etc/amplify-agent/agent.conf 'credentials' 'hostname' `hostname -f`
   crudini --set /etc/amplify-agent/agent.conf 'extensions' 'phpfpm' 'True'
   crudini --set /etc/amplify-agent/agent.conf 'extensions' 'mysql' 'True'
+  mv /etc/nginx/conf.d/stub_status.{conf-disable,conf}
   systemctl restart amplify-agent
 fi
-
 
 #-----------------------------------------------------------------------------------------
 # 06 - Installing phpMyAdmin
@@ -131,7 +158,7 @@ cat > $PMA_DIR/config.inc.php <<EOF
 \$cfg['blowfish_secret'] = '`openssl rand -hex 16`';
 \$i = 0; \$i++;
 \$cfg['Servers'][\$i]['auth_type']       = 'cookie';
-\$cfg['Servers'][\$i]['host']            = '127.0.0.1';
+\$cfg['Servers'][\$i]['host']            = '`cat /tmp/db_bindaddr`';
 \$cfg['Servers'][\$i]['connect_type']    = 'tcp';
 \$cfg['Servers'][\$i]['AllowNoPassword'] = false;
 \$cfg['Servers'][\$i]['hide_db']         = '^(information_schema|performance_schema|mysql|phpmyadmin|sys)\$';
@@ -142,3 +169,9 @@ cat > $PMA_DIR/config.inc.php <<EOF
 \$cfg['ShowDatabasesNavigationAsTree']   = false;
 EOF
 fi
+
+#-----------------------------------------------------------------------------------------
+# 07 - Dumping Database Schema
+#-----------------------------------------------------------------------------------------
+mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "CREATE DATABASE IF NOT EXISTS `cat /tmp/ecp_dbname`"
+mysql -uroot -p"`cat /tmp/ecp_dbpass`" `cat /tmp/ecp_dbname` < $PWD/dbschema.sql
