@@ -16,4 +16,5 @@ liburi-perl libtest-nowarnings-perl libtest-deep-perl libtest-warn-perl
 
 cpanm Sys::MemInfo Data::Uniqid Mail::IMAPClient Email::Address JSON::WebToken
 git clone https://github.com/imapsync/imapsync.git /usr/src/imapsync
-cp /usr/src/imapsync/imapsync /usr/bin ; imapsync --testslive
+cp /usr/src/imapsync/imapsync /usr/bin
+# imapsync --testslive
