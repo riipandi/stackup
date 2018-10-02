@@ -76,16 +76,6 @@ else
   echo "127.0.0.1" > /tmp/db_bindaddr
 fi
 
-# Nginx Amplify
-read -e -p "Install Amplify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo Yes > /tmp/install_amplify
-  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
-  if [ "$amplify_key" != "" ] ;then
-    echo $amplify_key > /tmp/amplify_key
-  fi
-fi
-
 # Telegram Notification
 read -e -p "Telegram notify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -95,6 +85,16 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
   echo "USERID='$tg_userid'" > /etc/sshnotify.conf
   echo "BOTKEY='$tg_botkey'" >> /etc/sshnotify.conf
   chmod a+x /etc/profile.d/sshnotify.sh
+fi
+
+# Nginx Amplify
+read -e -p "Install Amplify    (y/n) : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  echo Yes > /tmp/install_amplify
+  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
+  if [ "$amplify_key" != "" ] ;then
+    echo $amplify_key > /tmp/amplify_key
+  fi
 fi
 
 #-----------------------------------------------------------------------------------------
