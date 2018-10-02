@@ -31,22 +31,53 @@ software-properties-common debconf-utils apt-transport-https
 curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 
 #-----------------------------------------------------------------------------------------
-# 02 - Basic Configuration
+# 02 - Ask the questions
 #-----------------------------------------------------------------------------------------
-perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
+
+read -e -p "Please specify SSH port  : " -i "22" ssh_port
+cat $ssh_port > /tmp/ssh_port
+
+read -e -p "Disable IPv6       (y/n) : " -i "y" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/disable_ipv6 ;fi
+
+read -e -p "Install PostgreSQL   y/n : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_pgsql ;fi
+
+read -e -p "Install Redis Server y/n : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_redis ;fi
+
+read -e -p "Install FTP Server   y/n : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_ftpd ;fi
+
+read -e -p "Install DNS Server   y/n : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_pdns ;fi
+
+read -e -p "Install IMAP Sync    y/n : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_imaps ;fi
+
+read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
+if [ "$db_bindaddr" != "" ] ;then
+  echo "$db_bindaddr" > /tmp/db_bindaddr
+else
+  echo "127.0.0.1" > /tmp/db_bindaddr
+fi
+
+#-----------------------------------------------------------------------------------------
+# 03 - Basic Configuration
+#-----------------------------------------------------------------------------------------
 
 # Server Timezone
 read -e -p "Please specify time zone : " -i "Asia/Jakarta" timezone
-if [ "$timezone" != "" ] ;then
-  timedatectl set-timezone $timezone
+if [ "`cat /tmp/country`" != "ID" ] || [ "`cat /tmp/country`" != "SG" ] ; then
   ntpdate -u pool.ntp.org
 else
-  timedatectl set-timezone Asia/Jakarta
   ntpdate -u 0.asia.pool.ntp.org
 fi
+timedatectl set-timezone $timezone
 
 # SSH Server
 figlet `hostname -f` > /etc/motd
+perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
 sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config
@@ -56,14 +87,8 @@ sed -i "s|\("^PermitRootLogin" * *\).*|\1no|" /etc/ssh/sshd_config
 sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
+sed -i "s/[#]*Port [0-9]*/Port $(cat /tmp/ssh_port)/" /etc/ssh/sshd_config
 sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
-
-read -e -p "Please specify SSH port  : " -i "22" ssh_port
-if [ "$ssh_port" != "" ] ;then
-  sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
-else
-  sed -i "s/[#]*Port [0-9]*/Port 22/" /etc/ssh/sshd_config
-fi
 systemctl restart ssh
 
 # Sysctl configuration
@@ -72,9 +97,8 @@ crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
 crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
 sysctl -p
 
-# Disable IPv6 + Swapfile
-read -e -p "Disable IPv6       (y/n) : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+# Disable IPv6
+if [ "`cat /tmp/disable_ipv6`" == "Yes" ] ;then
   sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
@@ -84,7 +108,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 fi
 
 #-----------------------------------------------------------------------------------------
-# 03 - Configure Telegram Notification
+# 04 - Configure Telegram Notification
 #-----------------------------------------------------------------------------------------
 read -e -p "Telegram notify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -97,7 +121,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 fi
 
 #-----------------------------------------------------------------------------------------
-# 04 - Begin installation process
+# 05 - Begin installation process
 #-----------------------------------------------------------------------------------------
 read -e -p "Install Amplify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -108,13 +132,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
   fi
 fi
 
-read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
-if [ "$db_bindaddr" != "" ] ;then
-  echo "$db_bindaddr" > /tmp/db_bindaddr
-else
-  echo "127.0.0.1" > /tmp/db_bindaddr
-fi
-
 # Database name and password for eCP
 echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
 echo `pwgen -1 12` > /tmp/ecp_dbpass
@@ -122,36 +139,22 @@ echo `pwgen -1 12` > /tmp/ecp_dbpass
 source $PWD/installer/webserver.sh
 
 #-----------------------------------------------------------------------------------------
-# 05 - Additional components
+# 06 - Additional components
 #-----------------------------------------------------------------------------------------
 
-read -e -p "Install PostgreSQL   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  source $PWD/installer/postgresql.sh
-fi
+[[ "`cat /tmp/install_pgsql`" != "Yes" ]] || source $PWD/installer/postgresql.sh
 
-read -e -p "Install Redis Server y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  source $PWD/installer/rediscache.sh
-fi
+[[ "`cat /tmp/install_redis`" != "Yes" ]] || source $PWD/installer/rediscache.sh
 
-read -e -p "Install FTP Server   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  source $PWD/installer/ftpserver.sh
-fi
+[[ "`cat /tmp/install_ftpd`" != "Yes" ]] || source $PWD/installer/ftpserver.sh
 
-read -e -p "Install DNS Server   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  source $PWD/installer/powerdns.sh
-fi
+[[ "`cat /tmp/install_pdns`" != "Yes" ]] || source $PWD/installer/powerdns.sh
 
-read -e -p "Install IMAP Sync    y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  source $PWD/installer/imapsync.sh
-fi
+[[ "`cat /tmp/install_imaps`" != "Yes" ]] || source $PWD/installer/imapsync.sh
+
 
 #-----------------------------------------------------------------------------------------
-# 06 - Cleanup
+# 07 - Cleanup
 #-----------------------------------------------------------------------------------------
 apt -y autoremove
 
