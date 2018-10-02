@@ -49,16 +49,14 @@ curl -L# https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o /usr/bin/php
 chmod a+x /usr/bin/php-cs-fixer
 
 # Additional PHP
-read -e -p "Install PHP v5.6     y/n : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+if [ "`cat /tmp/install_php56`" == "Yes" ] ;then
   apt -y install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,xmlrpc,gmp} \
   php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,readline,zip,mysql,pgsql}
   crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php56-fpm.sock'
 fi
 
 # Python Stack
-read -e -p "Install Python Stack y/n : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+if [ "`cat /tmp/install_python`" == "Yes" ] ;then
   apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
   supervisor {python,python3}-{flaskext.wtf,flask-{migrate,restful,sqlalchemy,bcrypt}} \
   python-{m2crypto,configparser} gunicorn gunicorn3
@@ -97,8 +95,7 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.sta
 phpenmod curl opcache imagick fileinfo
 systemctl restart php7.2-fpm
 
-[[ ! -d "/etc/php/5.6" ]] || systemctl restart php5.6-fpm
-
+if [ "`cat /tmp/install_php56`" == "Yes" ] ;then systemctl restart php5.6-fpm ; fi
 
 #-----------------------------------------------------------------------------------------
 # 04 - Configuring Nginx
