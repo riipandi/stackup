@@ -11,11 +11,11 @@ if [ "$country" == "ID" ] ; then
   echo "deb http://kebo.pens.ac.id/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
   echo "deb http://kebo.pens.ac.id/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
 elif [ "$country" == "SG" ] ; then
-  echo "deb http://sgp1.mirrors.digitalocean.com/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
-  echo "deb http://sgp1.mirrors.digitalocean.com/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
+  echo "deb http://ftp.sg.debian.org/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
+  echo "deb http://ftp.sg.debian.org/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
 else
-  echo "deb http://debian-archive.trafficmanager.net/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
-  echo "deb http://debian-archive.trafficmanager.net/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
+  echo "deb http://mirror.0x.sg/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
+  echo "deb http://mirror.0x.sg/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
 fi
 echo "deb http://debian-archive.trafficmanager.net/debian-security `lsb_release -cs`/updates main contrib non-free" >> /etc/apt/sources.list
 
