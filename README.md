@@ -4,7 +4,7 @@ Debian LEMP Stack installer script.
 
 ## Usage
 
-Clone this repo and run `setup.sh`.
+Clone this repo, run `setup.sh`, and answer the questions.
 
 ```bash
 apt -y install git
@@ -14,7 +14,7 @@ git clone https://github.com/riipandi/debian-lempstack /usr/src/lempstack ; cd $
 find . -type f -name '*.sh' -exec chmod +x {} \;
 find . -type f -name '.git*' -exec rm -fr {} \;
 
-./setup.sh
+bash setup.sh
 ```
 
 ## License
