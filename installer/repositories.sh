@@ -24,4 +24,4 @@ else
   echo "deb http://debian-archive.trafficmanager.net/debian-security `lsb_release -cs`/updates main contrib non-free" >> /etc/apt/sources.list
 fi
 
-echo 'Repository has been configured'
+echo "Repository has been configured"
