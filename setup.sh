@@ -36,7 +36,7 @@ curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 
 # Server Timezone
-echo -n "Please specify time zone (Asia/Jakarta) : " ; read timezone
+read -e -p "Please specify time zone : " -i "Asia/Jakarta" timezone
 if [ "$timezone" != "" ] ;then
   timedatectl set-timezone $timezone
   ntpdate -u pool.ntp.org
@@ -58,7 +58,7 @@ sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
 sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
 
-echo -n "Please specify SSH server port number (default 22) : " ; read ssh_port
+read -e -p "Please specify SSH port  : " -i "22" ssh_port
 if [ "$ssh_port" != "" ] ;then
   sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
 else
@@ -73,7 +73,8 @@ crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
 sysctl -p
 
 # Disable IPv6 + Swapfile
-echo -n "Do you want to disable IPv6 (y/n) ? " ; read answer
+read -e -p "Disable IPv6       (y/n) : " -i "y" answer
+echo -n "Do you want to  " ; read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
@@ -86,10 +87,10 @@ fi
 #-----------------------------------------------------------------------------------------
 # 03 - Configure Telegram Notification
 #-----------------------------------------------------------------------------------------
-echo -n "Do you want to enable Telegram notification (y/n) ? " ; read answer
+read -e -p "Telegram notify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo -n "Telegram Chat ID : " ; read tg_userid
-  echo -n "Telegram Bot Key : " ; read tg_botkey
+  read -e -p "Telegram Chat ID         : " -i "" tg_userid
+  read -e -p "Telegram Bot Key         : " -i "" tg_userid
   cp $PWD/scripts/sshnotify.sh /etc/profile.d/
   echo "USERID='$tg_userid'" > /etc/sshnotify.conf
   echo "BOTKEY='$tg_botkey'" >> /etc/sshnotify.conf
@@ -99,16 +100,16 @@ fi
 #-----------------------------------------------------------------------------------------
 # 04 - Begin installation process
 #-----------------------------------------------------------------------------------------
-echo -n "Do you want to install Nginx Amplify (y/n) ? " ; read answer
+read -e -p "Install Amplify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   echo Yes > /tmp/install_amplify
-  echo -n "Nginx Amplify API Key : " ; read amplify_key
+  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
   if [ "$amplify_key" != "" ] ;then
     echo $amplify_key > /tmp/amplify_key
   fi
 fi
 
-echo -n "Database Server Bind Address (127.0.0.1) : " ; read db_bindaddr
+read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
 if [ "$db_bindaddr" != "" ] ;then
   echo "$db_bindaddr" > /tmp/db_bindaddr
 else
@@ -125,26 +126,27 @@ source $PWD/installer/webserver.sh
 # 05 - Additional components
 #-----------------------------------------------------------------------------------------
 
-echo -n "Do you want to install PostgreSQL (y/n) ? " ; read answer
+read -e -p "Install PostgreSQL   y/n : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/postgresql.sh
 fi
 
-echo -n "Do you want to install Redis Server (y/n) ? " ; read answer
+read -e -p "Install Redis Server y/n : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/rediscache.sh
 fi
 
-echo -n "Do you want to install FTP Server (y/n) ? " ; read answer
+read -e -p "Install FTP Server   y/n : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/ftpserver.sh
 fi
 
-echo -n "Do you want to install DNS Server (y/n) ? " ; read answer
+read -e -p "Install DNS Server   y/n : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/powerdns.sh
 fi
 
+read -e -p "Install IMAP Sync    y/n : " -i "n" answer
 echo -n "Do you want to install IMAPSync (y/n) ? " ; read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/imapsync.sh
@@ -162,5 +164,5 @@ echo -e "Control Panel DB: `cat /tmp/ecp_dbname`"
 echo -e "DB Root Password: `cat /tmp/ecp_dbpass`"
 echo -e "\n"
 
-echo -n "Do you want to reboot (y/n) ? " ; read answer
+read -e -p "Reboot the server    y/n : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi

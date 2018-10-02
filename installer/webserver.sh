@@ -49,7 +49,7 @@ curl -L# https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o /usr/bin/php
 chmod a+x /usr/bin/php-cs-fixer
 
 # Additional PHP
-echo -n "Do you want to install PHP 5.6 (y/n) ? " ; read answer
+read -e -p "Install PHP v5.6     y/n : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   apt -y install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,xmlrpc,gmp} \
   php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,readline,zip,mysql,pgsql}
@@ -57,7 +57,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 fi
 
 # Python Stack
-echo -n "Do you want to install Python Stack (y/n) ? " ; read answer
+read -e -p "Install Python Stack y/n : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
   supervisor {python,python3}-{flaskext.wtf,flask-{migrate,restful,sqlalchemy,bcrypt}} \
