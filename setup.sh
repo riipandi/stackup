@@ -24,7 +24,7 @@ apt update ; apt -y full-upgrade
 #-----------------------------------------------------------------------------------------
 # 01 - Installing Packages
 #-----------------------------------------------------------------------------------------
-apt -y install figlet elinks pwgen curl crudini lsof ntp perl
+apt -y install figlet elinks pwgen curl crudini lsof ntp ntpdate perl
 curl -L# https://semut.org/gdrive -o /usr/bin/gdrive
 chmod a+x /usr/bin/gdrive
 
