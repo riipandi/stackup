@@ -1,8 +1,5 @@
 #!/bin/bash
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname $PWD)
-
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
 #-----------------------------------------------------------------------------------------
@@ -107,7 +104,7 @@ curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /
 certbot certonly --standalone --rsa-key-size 4096 --agree-tos --register-unsafely-without-email -d "$(hostname -f)"
 
 rm -fr /etc/nginx
-cp -r $PARENT/config/nginx /etc
+cp -r $PWD/config/nginx /etc
 cp /etc/nginx/manifest/default-hello.tpl /var/www/index.php
 chown -R root: /etc/nginx
 chown -R www-data: /var/www

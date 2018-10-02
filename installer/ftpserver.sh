@@ -1,8 +1,5 @@
 #!/bin/bash
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname $PWD)
-
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
 #-----------------------------------------------------------------------------------------
@@ -29,7 +26,7 @@ chmod 0600 /etc/ssl/private/proftpd.key
 chmod 0640 /etc/ssl/private/proftpd.key
 
 rm -fr /etc/proftpd
-cp -r $PARENT/config/proftpd /etc
+cp -r $PWD/config/proftpd /etc
 chown -R root: /etc/proftpd
 sed -i "s/DB_NAME/$(cat /tmp/ecp_dbname)/"  /etc/proftpd/conf.d/sql.conf
 sed -i "s/DB_PASS/$(cat /tmp/ecp_dbpass)/"  /etc/proftpd/conf.d/sql.conf

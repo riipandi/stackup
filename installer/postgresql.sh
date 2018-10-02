@@ -1,10 +1,6 @@
 #!/bin/bash
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname $PWD)
-
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
-
 
 #-----------------------------------------------------------------------------------------
 # Setup PostgreSQL

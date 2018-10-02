@@ -35,7 +35,7 @@ curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 #-----------------------------------------------------------------------------------------
 
 read -e -p "Please specify SSH port  : " -i "22" ssh_port
-cat $ssh_port > /tmp/ssh_port
+echo $ssh_port > /tmp/ssh_port
 
 read -e -p "Disable IPv6       (y/n) : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/disable_ipv6 ;fi
