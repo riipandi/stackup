@@ -146,7 +146,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 fi
 
 read -e -p "Install IMAP Sync    y/n : " -i "n" answer
-echo -n "Do you want to install IMAPSync (y/n) ? " ; read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   source $PWD/installer/imapsync.sh
 fi
