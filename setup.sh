@@ -34,6 +34,14 @@ curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 # 02 - Ask the questions
 #-----------------------------------------------------------------------------------------
 
+read -s -p "Enter new root password  : " rootpass
+usermod root -p `openssl passwd -1 "$rootpass"`
+
+read -e -p "Enter new user fullname  : " -i "John Doe" fullname
+read -e -p "Enter new user username  : " -i "john" username
+read -s -p "Enter new user password  : " userpass
+useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
+
 read -e -p "Please specify SSH port  : " -i "22" ssh_port
 echo $ssh_port > /tmp/ssh_port
 
