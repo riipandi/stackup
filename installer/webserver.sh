@@ -32,13 +32,14 @@ curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 #-----------------------------------------------------------------------------------------
 debconf-set-selections <<< "mysql-server mysql-server/root_password password `cat /tmp/ecp_dbname`"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password `cat /tmp/ecp_dbpass`"
-apt -y install gcc make cmake build-essential whois nscd dh-autoreconf binutils \
-dnsutils resolvconf ftp zip unzip bsdtar rsync screen screenfetch ca-certificates \
-haveged nmap nikto sqlite3 speedtest-cli xmlstarlet {libpng,libssl,libffi}-dev \
-libarchive-tools gamin mcrypt imagemagick gettext libimage-exiftool-perl optipng \
-jpegoptim php-{imagick,pear} php7.2 php7.2-{common,cli,cgi,fpm,mbstring,opcache} \
-php7.2-{bcmath,json,gmp,readlinezip,sqlite3,intl,xml,xmlrpc,mysql,pgsql,imap,gd} \
-php7.2-{curl,zip} nginx composer nodejs letsencrypt mariadb-{server,client}
+apt update ; apt -y install gcc make cmake build-essential whois nscd binutils \
+dnsutils dh-autoreconf resolvconf ftp zip unzip bsdtar rsync screen screenfetch \
+ca-certificates haveged nmap nikto sqlite3 xmlstarlet {libpng,libssl,libffi}-dev \
+libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
+gettext optipng jpegoptim php-{imagick,pear} php7.2 php7.2-{common,cli,cgi,fpm} \
+php7.2-{bcmath,mbstring,opcache,json,gmp,readlinezip,sqlite3,intl,xml,xmlrpc} \
+php7.2-{curl,zip,mysql,pgsql,imap,gd} nginx composer nodejs letsencrypt \
+mariadb-{server,client}
 
 # Extra Packages
 curl -L# https://git.io/vN3Ff -o /usr/bin/wp ; chmod a+x /usr/bin/wp
