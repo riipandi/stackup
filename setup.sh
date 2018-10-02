@@ -95,6 +95,15 @@ fi
 #-----------------------------------------------------------------------------------------
 # 04 - Begin installation process
 #-----------------------------------------------------------------------------------------
+echo -n "Do you want to install Nginx Amplify (y/n) ? " ; read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  echo Yes > /tmp/install_amplify
+  echo -n "Nginx Amplify API Key : " ; read amplify_key
+  if [ "$amplify_key" != "" ] ;then
+    echo $amplify_key > /tmp/amplify_key
+  fi
+fi
+
 echo -n "Database Server Bind Address (127.0.0.1) : " ; read db_bindaddr
 if [ "$db_bindaddr" != "" ] ;then
   echo "$db_bindaddr" > /tmp/db_bindaddr
@@ -105,15 +114,6 @@ fi
 # Database name and password for eCP
 echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
 echo `pwgen -1 12` > /tmp/ecp_dbpass
-
-echo -n "Do you want to install Nginx Amplify (y/n) ? " ; read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo Yes > /tmp/install_amplify
-  echo -n "Nginx Amplify API Key : " ; read amplify_key
-  if [ "$amplify_key" != "" ] ;then
-    echo $amplify_key > /tmp/amplify_key
-  fi
-fi
 
 source $PWD/installer/webserver.sh
 
