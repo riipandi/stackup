@@ -74,7 +74,6 @@ sysctl -p
 
 # Disable IPv6 + Swapfile
 read -e -p "Disable IPv6       (y/n) : " -i "y" answer
-echo -n "Do you want to  " ; read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
