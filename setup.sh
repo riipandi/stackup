@@ -62,6 +62,27 @@ else
   echo "127.0.0.1" > /tmp/db_bindaddr
 fi
 
+# Nginx Amplify
+read -e -p "Install Amplify    (y/n) : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  echo Yes > /tmp/install_amplify
+  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
+  if [ "$amplify_key" != "" ] ;then
+    echo $amplify_key > /tmp/amplify_key
+  fi
+fi
+
+# Telegram Notification
+read -e -p "Telegram notify    (y/n) : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+  read -e -p "Telegram Chat ID         : " -i "" tg_userid
+  read -e -p "Telegram Bot Key         : " -i "" tg_userid
+  cp $PWD/scripts/sshnotify.sh /etc/profile.d/
+  echo "USERID='$tg_userid'" > /etc/sshnotify.conf
+  echo "BOTKEY='$tg_botkey'" >> /etc/sshnotify.conf
+  chmod a+x /etc/profile.d/sshnotify.sh
+fi
+
 #-----------------------------------------------------------------------------------------
 # 03 - Basic Configuration
 #-----------------------------------------------------------------------------------------
@@ -108,29 +129,8 @@ if [ "`cat /tmp/disable_ipv6`" == "Yes" ] ;then
 fi
 
 #-----------------------------------------------------------------------------------------
-# 04 - Configure Telegram Notification
+# 04 - Begin installation process
 #-----------------------------------------------------------------------------------------
-read -e -p "Telegram notify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  read -e -p "Telegram Chat ID         : " -i "" tg_userid
-  read -e -p "Telegram Bot Key         : " -i "" tg_userid
-  cp $PWD/scripts/sshnotify.sh /etc/profile.d/
-  echo "USERID='$tg_userid'" > /etc/sshnotify.conf
-  echo "BOTKEY='$tg_botkey'" >> /etc/sshnotify.conf
-  chmod a+x /etc/profile.d/sshnotify.sh
-fi
-
-#-----------------------------------------------------------------------------------------
-# 05 - Begin installation process
-#-----------------------------------------------------------------------------------------
-read -e -p "Install Amplify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo Yes > /tmp/install_amplify
-  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
-  if [ "$amplify_key" != "" ] ;then
-    echo $amplify_key > /tmp/amplify_key
-  fi
-fi
 
 # Database name and password for eCP
 echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
@@ -139,7 +139,7 @@ echo `pwgen -1 12` > /tmp/ecp_dbpass
 source $PWD/installer/webserver.sh
 
 #-----------------------------------------------------------------------------------------
-# 06 - Additional components
+# 05 - Additional components
 #-----------------------------------------------------------------------------------------
 
 [[ "`cat /tmp/install_pgsql`" != "Yes" ]] || source $PWD/installer/postgresql.sh
@@ -154,7 +154,7 @@ source $PWD/installer/webserver.sh
 
 
 #-----------------------------------------------------------------------------------------
-# 07 - Cleanup
+# 06 - Cleanup
 #-----------------------------------------------------------------------------------------
 apt -y autoremove
 
