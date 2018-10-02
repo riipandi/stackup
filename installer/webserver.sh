@@ -30,7 +30,7 @@ curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 #-----------------------------------------------------------------------------------------
 # 01 - Installing Packages
 #-----------------------------------------------------------------------------------------
-debconf-set-selections <<< "mysql-server mysql-server/root_password password `cat /tmp/ecp_dbname`"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password `cat /tmp/ecp_dbpass`"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password `cat /tmp/ecp_dbpass`"
 apt update ; apt -y install gcc make cmake build-essential whois nscd binutils \
 dnsutils dh-autoreconf resolvconf ftp zip unzip bsdtar rsync screen screenfetch \
