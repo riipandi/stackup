@@ -37,7 +37,7 @@ dnsutils dh-autoreconf resolvconf ftp zip unzip bsdtar rsync screen screenfetch 
 ca-certificates haveged nmap nikto sqlite3 xmlstarlet {libpng,libssl,libffi}-dev \
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
 gettext optipng jpegoptim php-{imagick,pear} php7.2 php7.2-{common,cli,cgi,fpm} \
-php7.2-{bcmath,mbstring,opcache,json,gmp,readlinezip,sqlite3,intl,xml,xmlrpc} \
+php7.2-{bcmath,mbstring,opcache,json,gmp,readline,zip,sqlite3,intl,xml,xmlrpc} \
 php7.2-{curl,zip,mysql,pgsql,imap,gd} nginx composer nodejs letsencrypt \
 mariadb-{server,client}
 
