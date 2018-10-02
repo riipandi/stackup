@@ -49,13 +49,17 @@ fi
 crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1'
 crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
 crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
+sysctl -p
 
 # Disable IPv6 + Swapfile
 echo -n "Do you want to disable IPv6 (y/n) ? " ; read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
+  sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
+  echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/50forceipv4
+  sysctl -p
 fi
 
 # SSH Server

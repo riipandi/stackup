@@ -17,7 +17,7 @@ if [ "$country" == "ID" ] ; then
 elif [ "$country" == "SG" ] ; then
   echo "deb http://sgp1.mirrors.digitalocean.com/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
   echo "deb http://sgp1.mirrors.digitalocean.com/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
-  echo "deb http://security.debian.org/debian-security `lsb_release -cs`/updates main contrib non-free" >> /etc/apt/sources.list
+  echo "deb http://cdn-fastly.deb.debian.org/debian-security `lsb_release -cs`/updates main contrib non-free" >> /etc/apt/sources.list
 else
   echo "deb http://debian-archive.trafficmanager.net/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
   echo "deb http://debian-archive.trafficmanager.net/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
