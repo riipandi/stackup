@@ -20,13 +20,15 @@ echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 # Upgrade basic system packages
 source $PWD/installer/repositories.sh
 apt update ; apt -y full-upgrade
+apt -y autoremove
 
 #-----------------------------------------------------------------------------------------
 # 01 - Installing Packages
 #-----------------------------------------------------------------------------------------
-apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp ntpdate perl
-curl -L# https://semut.org/gdrive -o /usr/bin/gdrive
-chmod a+x /usr/bin/gdrive
+apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp ntpdate perl dirmngr \
+software-properties-common debconf-utils
+
+curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 
 #-----------------------------------------------------------------------------------------
 # 02 - Basic Configuration
@@ -93,8 +95,6 @@ fi
 #-----------------------------------------------------------------------------------------
 # 04 - Begin installation process
 #-----------------------------------------------------------------------------------------
-echo -e "" ; read -p "Press enter to continue" ; echo -e "\n"
-
 echo -n "Database Server Bind Address (127.0.0.1) : " ; read db_bindaddr
 if [ "$db_bindaddr" != "" ] ;then
   echo "$db_bindaddr" > /tmp/db_bindaddr
