@@ -58,7 +58,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
   crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
-  echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/50forceipv4
+  echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99forceipv4
   sysctl -p
 fi
 
