@@ -32,7 +32,7 @@ curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 #-----------------------------------------------------------------------------------------
 debconf-set-selections <<< "mysql-server mysql-server/root_password password `cat /tmp/ecp_dbname`"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password `cat /tmp/ecp_dbpass`"
-apt -y install nano gcc make cmake build-essential git whois nscd dh-autoreconf \
+apt -y install gcc make cmake build-essential whois nscd dh-autoreconf \
 binutils dnsutils resolvconf ftp zip unzip bsdtar rsync screen ca-certificates \
 software-properties-common debconf-utils screenfetch haveged nmap nikto sqlite3 \
 speedtest-cli xmlstarlet {libpng,libssl,libffi}-dev libarchive-tools gamin mcrypt \
