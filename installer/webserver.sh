@@ -11,7 +11,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 if [ "`cat /tmp/country`" == "ID" ] ; then
   echo "deb http://mariadb.biz.net.id/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 elif [ "`cat /tmp/country`" == "SG" ] ; then
-  echo "deb http://download.nus.edu.sg/mirror/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+  echo "deb [arch=amd64,i386,ppc64el] http://sgp1.mirrors.digitalocean.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 else
   echo "deb http://mirror.jaleco.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 fi
