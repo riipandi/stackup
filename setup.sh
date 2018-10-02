@@ -26,7 +26,7 @@ apt -y autoremove
 # 01 - Installing Packages
 #-----------------------------------------------------------------------------------------
 apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp ntpdate perl dirmngr \
-software-properties-common debconf-utils
+software-properties-common debconf-utils apt-transport-https
 
 curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
 
