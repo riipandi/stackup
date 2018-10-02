@@ -78,6 +78,21 @@ else
   echo "127.0.0.1" > /tmp/db_bindaddr
 fi
 
+# Database name and password for eCP
+read -e -p "eCP database name        : " -i "auto" ecp_dbname
+if [ "$ecp_dbname" == "auto" ] ;then
+  echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
+else
+  echo $ecp_dbname > /tmp/ecp_dbname
+fi
+
+read -e -p "eCP database password    : " -i "auto" ecp_dbpass
+if [ "$ecp_dbpass" == "auto" ] ;then
+  echo `pwgen -1 12` > /tmp/ecp_dbpass
+else
+  echo $ecp_dbpass > /tmp/ecp_dbpass
+fi
+
 # Telegram Notification
 read -e -p "Telegram notify    (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -148,15 +163,7 @@ fi
 # 04 - Begin installation process
 #-----------------------------------------------------------------------------------------
 
-# Database name and password for eCP
-echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
-echo `pwgen -1 12` > /tmp/ecp_dbpass
-
 source $PWD/installer/webserver.sh
-
-#-----------------------------------------------------------------------------------------
-# 05 - Additional components
-#-----------------------------------------------------------------------------------------
 
 [[ "`cat /tmp/install_pgsql`" != "Yes" ]] || source $PWD/installer/postgresql.sh
 
@@ -170,7 +177,7 @@ source $PWD/installer/webserver.sh
 
 
 #-----------------------------------------------------------------------------------------
-# 06 - Cleanup
+# 05 - Cleanup
 #-----------------------------------------------------------------------------------------
 apt -y autoremove
 
