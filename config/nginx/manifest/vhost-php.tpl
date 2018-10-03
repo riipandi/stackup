@@ -16,11 +16,6 @@ server {
         return 301 https://HOSTNAME$request_uri;
     }
 
-    # force https-redirects
-    if ($scheme = http) {
-       return 301 https://$server_name$request_uri;
-    }
-
     # Hotlinking Protection
     location ~ .(gif|png|jpe?g)$ {
         valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME;
