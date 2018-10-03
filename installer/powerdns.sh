@@ -23,10 +23,6 @@ CP_DB_NAME=`cat /tmp/ecp_dbname`
 CP_DB_PASS=`cat /tmp/ecp_dbpass`
 DB_BINDADR=`cat /tmp/db_bindaddr`
 
-mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "CREATE USER IF NOT EXISTS '$CP_DB_NAME'@'$DB_BINDADR' IDENTIFIED BY '$CP_DB_PASS'"
-mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "GRANT ALL PRIVILEGES ON $CP_DB_NAME.* TO '$CP_DB_NAME'@'$DB_BINDADR'"
-mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "FLUSH PRIVILEGES"
-
 rm -fr /etc/powerdns ; cp -r $PWD/config/powerdns /etc ; chown -R root: /etc/powerdns
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-host'     $DB_BINDADR
 crudini --set /etc/powerdns/pdns.d/pdns.local.conf  '' 'gmysql-user'     $CP_DB_NAME

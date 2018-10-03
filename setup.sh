@@ -188,5 +188,5 @@ echo -e "Control Panel DB : `cat /tmp/ecp_dbname`"
 echo -e "DB Root Password : `cat /tmp/ecp_dbpass`"
 echo -e "\n"
 
-read -e -p "Reboot the server    y/n : " -i "y" answer
+read -e -p "Reboot the server    y/n : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi
