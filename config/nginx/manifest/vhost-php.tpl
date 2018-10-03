@@ -21,6 +21,12 @@ server {
        return 301 https://$server_name$request_uri;
     }
 
+    # Hotlinking Protection
+    location ~ .(gif|png|jpe?g)$ {
+        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME;
+        if ($invalid_referer) { return 403; }
+    }
+
     include server.d/server.conf;
     include server.d/static.conf;
 
