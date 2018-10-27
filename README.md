@@ -17,6 +17,32 @@ find . -type f -name '.git*' -exec rm -fr {} \;
 bash setup.sh
 ```
 
+## Create MySQL Database
+
+```bash
+mysql -uroot -e "CREATE DATABASE IF NOT EXISTS dbname"
+mysql -uroot -e "CREATE USER IF NOT EXISTS 'dbname'@'127.0.0.1' IDENTIFIED BY 'dbpass'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbname'@'127.0.0.1'; FLUSH PRIVILEGES"
+```
+
+## Create Nginx vHost
+
+```bash
+# Virtual Host Configuration
+cp /etc/nginx/manifest/vhost-php.tpl /etc/nginx/vhost.d/domain.tld.conf
+sed -i "s/HOSTNAME/domain.tld/" /etc/nginx/vhost.d/domain.tld.conf
+
+# Generet SSL Certificate
+systemctl stop nginx ; certbot certonly --standalone --rsa-key-size 4096 \
+ --agree-tos --register-unsafely-without-email \
+ -d domain.tld -d www.domain.tld
+
+# Set Permission File dan Folder
+find . -type d -exec chmod 0777 {} \;
+find . -type f -exec chmod 0775 {} \;
+find . -exec chown -R www-data: {} \;
+```
+
 ## License
 
-MIT
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
