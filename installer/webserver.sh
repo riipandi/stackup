@@ -69,6 +69,10 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'     `cat /tmp/db_bindad
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'password' `cat /tmp/ecp_dbpass`
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'user'     'root'
 
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'host'     `cat /tmp/db_bindaddr`
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password' `cat /tmp/ecp_dbpass`
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'user'     'root'
+
 #-----------------------------------------------------------------------------------------
 # 03 - Configuring PHP-FPM
 #-----------------------------------------------------------------------------------------
