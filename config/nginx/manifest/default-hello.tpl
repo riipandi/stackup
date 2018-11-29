@@ -32,7 +32,7 @@
       v<?=(float)phpversion()?> by default, but you always can change the version
       as you want. If you can read this page, it means that the web server
       installed and working properly. You should replace this file
-      (<tt>located at: <?=realpath(__FILE__)?></tt>) before continuing to operate
+      [<tt><?=realpath(__FILE__)?></tt>] before continuing to operate
       your web server.
     </p>
     <p>
