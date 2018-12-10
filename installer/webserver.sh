@@ -8,14 +8,14 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 if [ "`cat /tmp/country`" == "ID" ] ; then
   echo "deb http://mariadb.biz.net.id/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 elif [ "`cat /tmp/country`" == "SG" ] ; then
-  echo "deb [arch=amd64,i386,ppc64el] http://sgp1.mirrors.digitalocean.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+  echo "deb [arch=amd64,i386] http://sgp1.mirrors.digitalocean.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 else
   echo "deb http://mirror.jaleco.com/mariadb/repo/10.3/debian `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
 fi
 
 cat > /etc/apt/sources.list.d/lempstack.list <<EOF
 deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx
-deb https://deb.nodesource.com/node_8.x `lsb_release -cs` main
+deb https://deb.nodesource.com/node_10.x `lsb_release -cs` main
 deb https://packages.sury.org/php/ `lsb_release -cs` main
 EOF
 
@@ -33,9 +33,9 @@ apt update ; apt -y install gcc make cmake build-essential whois nscd binutils \
 dnsutils dh-autoreconf resolvconf ftp zip unzip bsdtar rsync screen screenfetch \
 ca-certificates haveged nmap nikto sqlite3 xmlstarlet {libpng,libssl,libffi}-dev \
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
-gettext optipng jpegoptim php-{imagick,pear} php7.2 php7.2-{common,cli,cgi,fpm} \
-php7.2-{bcmath,mbstring,opcache,json,gmp,readline,zip,sqlite3,intl,xml,xmlrpc} \
-php7.2-{curl,zip,mysql,pgsql,imap,gd} nginx composer nodejs letsencrypt \
+gettext optipng jpegoptim php-{imagick,pear} php7.3 php7.3-{common,cli,cgi,fpm} \
+php7.3-{bcmath,mbstring,opcache,json,gmp,readline,zip,sqlite3,intl,xml,xmlrpc} \
+php7.3-{curl,zip,mysql,pgsql,imap,gd} nginx composer nodejs letsencrypt \
 mariadb-{server,client}
 
 # Extra Packages
@@ -50,6 +50,13 @@ if [ "`cat /tmp/install_php56`" == "Yes" ] ;then
   apt -y install php5.6 php5.6-{common,cli,cgi,fpm,mbstring,opcache,xmlrpc,gmp} \
   php5.6-{bcmath,zip,sqlite3,intl,json,xml,imap,gd,curl,readline,zip,mysql,pgsql}
   crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php56-fpm.sock'
+fi
+
+# Additional PHP
+if [ "`cat /tmp/install_php72`" == "Yes" ] ;then
+  apt -y install php7.2 php7.2-{common,cli,cgi,fpm,bcmath,mbstring,opcache,json} \
+  php7.2-{gmp,readline,zip,sqlite3,intl,xml,xmlrpc,curl,zip,mysql,pgsql,imap,gd}
+  crudini --set /etc/php/5.6/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php72-fpm.sock'
 fi
 
 # Python Stack
@@ -76,7 +83,7 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'user'     'root'
 #-----------------------------------------------------------------------------------------
 # 03 - Configuring PHP-FPM
 #-----------------------------------------------------------------------------------------
-crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php72-fpm.sock'
+crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php73-fpm.sock'
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize"     "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"      "300"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_input_time"          "300"' {} \;

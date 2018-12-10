@@ -53,6 +53,9 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/disable_ipv6 ;fi
 read -e -p "Install PHP v5.6     y/n : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_php56 ;fi
 
+read -e -p "Install PHP v7.2     y/n : " -i "y" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_php72 ;fi
+
 read -e -p "Install Python Stack y/n : " -i "y" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_python ;fi
 
@@ -188,5 +191,6 @@ echo -e "Control Panel DB : `cat /tmp/ecp_dbname`"
 echo -e "DB Root Password : `cat /tmp/ecp_dbpass`"
 echo -e "\n"
 
-read -e -p "Reboot the server    y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi
+netstat -pltn && echo -e "Congratulation, you can reboot server now if you want.."
+# read -e -p "Reboot the server    y/n : " -i "n" answer
+# if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi
