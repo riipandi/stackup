@@ -1,45 +1,39 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-PWD=$(dirname "$(readlink -f "$0")")
+ROOT=$(dirname "$(readlink -f "$0")")
 
 # Check if this script running as root
 if [[ $EUID -ne 0 ]]; then
-  echo -e 'This script must be run as root' ; exit 1
+    echo -e 'This script must be run as root' ; exit 1
 else
-  read -p "Press enter to continue ..."
+    read -p "Press enter to continue ..."
 fi
 
 #-----------------------------------------------------------------------------------------
-# 00 - Initial Setup
+# Initial Setup
 #-----------------------------------------------------------------------------------------
-
-# Configure Resolver
-# echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
-# echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
+rm -f /etc/resolv.conf
+echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
+echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
+chattr +i /etc/resolv.conf
 
 # Upgrade basic system packages
-source $PWD/installer/repositories.sh
+source $ROOT/installer/repositories.sh
 apt update ; apt -y full-upgrade
-apt -y autoremove
+apt -y autoremove ; apt clean
+
+# Install basic packages
+source $ROOT/installer/basepkg.sh
 
 #-----------------------------------------------------------------------------------------
-# 01 - Installing Packages
+# User account
 #-----------------------------------------------------------------------------------------
-apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp ntpdate perl dirmngr \
-software-properties-common debconf-utils apt-transport-https
-
-curl -L# https://semut.org/gdrive -o /usr/bin/gdrive ; chmod a+x /usr/bin/gdrive
-
-#-----------------------------------------------------------------------------------------
-# 02 - Ask the questions
-#-----------------------------------------------------------------------------------------
-
 read -s -p "Enter new root password  : " rootpass
 usermod root -p `openssl passwd -1 "$rootpass"`
 
 echo -e "\n"
-read -e -p "Enter new user fullname  : " -i "John Doe" fullname
-read -e -p "Enter new user username  : " -i "john" username
+read -e -p "Enter new user fullname  : " -i "Admin Sistem" fullname
+read -e -p "Enter new user username  : " -i "admin" username
 read -s -p "Enter new user password  : " userpass
 useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
 
@@ -47,91 +41,27 @@ echo -e "\n"
 read -e -p "Please specify SSH port  : " -i "22" ssh_port
 echo $ssh_port > /tmp/ssh_port
 
-read -e -p "Disable IPv6       (y/n) : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/disable_ipv6 ;fi
-
-read -e -p "Install PHP v5.6     y/n : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_php56 ;fi
-
-read -e -p "Install PHP v7.2     y/n : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_php72 ;fi
-
-read -e -p "Install Python Stack y/n : " -i "y" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_python ;fi
-
-read -e -p "Install PostgreSQL   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_pgsql ;fi
-
-read -e -p "Install Redis Server y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_redis ;fi
-
-read -e -p "Install FTP Server   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_ftpd ;fi
-
-read -e -p "Install DNS Server   y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_pdns ;fi
-
-read -e -p "Install IMAP Sync    y/n : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo Yes > /tmp/install_imaps ;fi
-
-read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
-if [ "$db_bindaddr" != "" ] ;then
-  echo "$db_bindaddr" > /tmp/db_bindaddr
-else
-  echo "127.0.0.1" > /tmp/db_bindaddr
-fi
-
-# Database name and password for eCP
-read -e -p "eCP database name        : " -i "auto" ecp_dbname
-if [ "$ecp_dbname" == "auto" ] ;then
-  echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
-else
-  echo $ecp_dbname > /tmp/ecp_dbname
-fi
-
-read -e -p "eCP database password    : " -i "auto" ecp_dbpass
-if [ "$ecp_dbpass" == "auto" ] ;then
-  echo `pwgen -1 12` > /tmp/ecp_dbpass
-else
-  echo $ecp_dbpass > /tmp/ecp_dbpass
-fi
-
-# Telegram Notification
-read -e -p "Telegram notify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  read -e -p "Telegram Chat ID         : " -i "" tg_userid
-  read -e -p "Telegram Bot Key         : " -i "" tg_userid
-  cp $PWD/scripts/sshnotify.sh /etc/profile.d/
-  echo "USERID='$tg_userid'" > /etc/sshnotify.conf
-  echo "BOTKEY='$tg_botkey'" >> /etc/sshnotify.conf
-  chmod a+x /etc/profile.d/sshnotify.sh
-fi
-
-# Nginx Amplify
-read -e -p "Install Amplify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo Yes > /tmp/install_amplify
-  read -e -p "Nginx Amplify Key        : " -i "" amplify_key
-  if [ "$amplify_key" != "" ] ;then
-    echo $amplify_key > /tmp/amplify_key
-  fi
-fi
-
-#-----------------------------------------------------------------------------------------
-# 03 - Basic Configuration
-#-----------------------------------------------------------------------------------------
-
-# Server Timezone
+echo -e "\n"
 read -e -p "Please specify time zone : " -i "Asia/Jakarta" timezone
+echo $timezone > /tmp/timezone
+
+read -e -p "Disable IPv6       (y/n) : " -i "n" answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then echo No > /tmp/disable_ipv6 ;fi
+
+echo -e "\n"
+read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
+echo $db_bindaddr > /tmp/db_bindaddr
+
+#-----------------------------------------------------------------------------------------
+# Basic server configuration
+#-----------------------------------------------------------------------------------------
 if [ "`cat /tmp/country`" != "ID" ] || [ "`cat /tmp/country`" != "SG" ] ; then
-  ntpdate -u pool.ntp.org
+    ntpdate -u pool.ntp.org
 else
-  ntpdate -u 0.asia.pool.ntp.org
+    ntpdate -u 0.asia.pool.ntp.org
 fi
-timedatectl set-timezone $timezone
 
 # SSH Server
-figlet `hostname -f` > /etc/motd
 perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
@@ -144,6 +74,8 @@ sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
 sed -i "s/[#]*Port [0-9]*/Port $(cat /tmp/ssh_port)/" /etc/ssh/sshd_config
 sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
+timedatectl set-timezone `cat /tmp/timezone`
+figlet `hostname -s` > /etc/motd
 systemctl restart ssh
 
 # Sysctl configuration
@@ -154,43 +86,81 @@ sysctl -p
 
 # Disable IPv6
 if [ "`cat /tmp/disable_ipv6`" == "Yes" ] ;then
-  sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
-  crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
-  crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
-  crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
-  echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-  sysctl -p
+    sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
+    echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+    sysctl -p
 fi
 
 #-----------------------------------------------------------------------------------------
-# 04 - Begin installation process
+# Setup wizard
 #-----------------------------------------------------------------------------------------
 
-source $PWD/installer/webserver.sh
+setupCP() {
+    PMA_DIR="/var/www/myadmin"
+    echo "ecp_`pwgen -1 -A 8`" > /tmp/ecp_dbname
+    echo `pwgen -1 12` > /tmp/ecp_dbpass
 
-[[ "`cat /tmp/install_pgsql`" != "Yes" ]] || source $PWD/installer/postgresql.sh
+    CP_DB_NAME=`cat /tmp/ecp_dbname`
+    CP_DB_PASS=`cat /tmp/ecp_dbpass`
+    DB_BINDADR=`cat /tmp/db_bindaddr`
 
-[[ "`cat /tmp/install_redis`" != "Yes" ]] || source $PWD/installer/rediscache.sh
+    mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "CREATE DATABASE IF NOT EXISTS `cat /tmp/ecp_dbname`"
+    mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "CREATE USER IF NOT EXISTS '$CP_DB_NAME'@'$DB_BINDADR' IDENTIFIED BY '$CP_DB_PASS'"
+    mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "GRANT ALL PRIVILEGES ON $CP_DB_NAME.* TO '$CP_DB_NAME'@'$DB_BINDADR'"
+    mysql -uroot -p"`cat /tmp/ecp_dbpass`" -e "FLUSH PRIVILEGES"
+    mysql -uroot -p"`cat /tmp/ecp_dbpass`" `cat /tmp/ecp_dbname` < $ROOT/dbschema.sql
+    perl -pi -e 's#(.*host.*= )(.*)#${1}"'`cat /tmp/db_bindaddr`'";#' $PMA_DIR/config.inc.php
+}
 
-[[ "`cat /tmp/install_ftpd`" != "Yes" ]] || source $PWD/installer/ftpserver.sh
+customInstall() {
+    source $ROOT/custom.sh
+}
 
-[[ "`cat /tmp/install_pdns`" != "Yes" ]] || source $PWD/installer/powerdns.sh
+compactInstall() {
+    source $ROOT/webserver.sh
+    source $ROOT/ngamplify.sh
+    source $ROOT/telegramnotif.sh
+}
 
-[[ "`cat /tmp/install_imaps`" != "Yes" ]] || source $PWD/installer/imapsync.sh
+fullInstall() {
+    compactInstall
+    source $ROOT/ngamplify.sh
+    source $ROOT/telegramnotif.sh
+}
 
+# Ask the questions
+setupMenu() {
+    echo -e "1 : Full installation     [all packages will be installed]"
+    echo -e "2 : Compact installation  [nginx, php, mariadb, nodejs, yarn]"
+    echo -e "3 : Custom installation   [it's according to your choice]\n"
+
+    read -e -p "Choose components  (1/2/3) : " -i "1" answer
+    if [ $answer == 1 ] ;then
+        fullInstall
+    elif [ $answer == 2 ] ;then
+        compactInstall
+    elif [ $answer == 3 ] ;then
+        customInstall
+    elif ! [[ $answer =~ ^[1-3]+$ ]] ;then
+        clear &&  echo -e "Please choose the right option!"
+        setupMenu
+    fi
+}
+clear && setupMenu
 
 #-----------------------------------------------------------------------------------------
-# 05 - Cleanup
+# Cleanup
 #-----------------------------------------------------------------------------------------
 apt -y autoremove
 
 echo -e "\n" && netstat -pltn && echo -e "\n"
-
 echo -e "Server stack has been installed.\n"
 echo -e "Control Panel DB : `cat /tmp/ecp_dbname`"
-echo -e "DB Root Password : `cat /tmp/ecp_dbpass`"
-echo -e "\n"
+echo -e "DB Root Password : `cat /tmp/ecp_dbpass`\n"
 
-netstat -pltn && echo -e "Congratulation, you can reboot server now if you want.."
+echo -e "Congratulation, you can reboot server now if you want.."
 # read -e -p "Reboot the server    y/n : " -i "n" answer
 # if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi

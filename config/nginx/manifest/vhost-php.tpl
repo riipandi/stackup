@@ -30,7 +30,7 @@ server {
     location @rewrite { rewrite ^/(.*)$ /index.php?q=$1; }
 
     location ~ \.php(/|$) {
-        fastcgi_pass unix:/var/run/php/php72-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php73-fpm.sock;
         include server.d/phpfpm.conf;
     }
 }
