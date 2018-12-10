@@ -25,6 +25,9 @@ apt -y autoremove ; apt clean
 # Install basic packages
 source $ROOT/installer/basepkg.sh
 
+# Get Country Code
+curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2 > /tmp/country
+
 #-----------------------------------------------------------------------------------------
 # User account
 #-----------------------------------------------------------------------------------------
