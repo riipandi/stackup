@@ -53,9 +53,11 @@ curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
   -o /etc/ssl/certs/chain.pem
 
 # Generate SSL certificates for default vhost
-certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
-  --register-unsafely-without-email --preferred-challenges http \
-  -d "$(hostname -f)"
+if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
+  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
+    --register-unsafely-without-email --preferred-challenges http \
+    -d "$(hostname -f)"
+fi
 
 rm -fr /etc/nginx
 cp -r $PARENT/config/nginx /etc
