@@ -15,7 +15,6 @@ fi
 rm -f /etc/resolv.conf
 echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
 echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
-chattr +i /etc/resolv.conf
 
 # Upgrade basic system packages
 source $ROOT/installer/repositories.sh
@@ -40,18 +39,15 @@ read -e -p "Enter new user username  : " -i "admin" username
 read -s -p "Enter new user password  : " userpass
 useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
 
-echo -e "\n"
 read -e -p "Please specify SSH port  : " -i "22" ssh_port
 echo $ssh_port > /tmp/ssh_port
 
-echo -e "\n"
 read -e -p "Please specify time zone : " -i "Asia/Jakarta" timezone
 echo $timezone > /tmp/timezone
 
 read -e -p "Disable IPv6       (y/n) : " -i "n" answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then echo No > /tmp/disable_ipv6 ;fi
 
-echo -e "\n"
 read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
 echo $db_bindaddr > /tmp/db_bindaddr
 

@@ -5,6 +5,11 @@ PARENT=$(dirname "$CURRENT")
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
+function getbin(){
+  curl -L# $1 -o $2
+  chmod a+x $2
+}
+
 #-----------------------------------------------------------------------------------------
 # Setup Repositories
 #-----------------------------------------------------------------------------------------
@@ -24,12 +29,11 @@ php7.3-{fpm,bcmath,mbstring,opcache,json,gmp,readline,zip,sqlite3,intl,xml,xmlrp
 php7.3-{curl,zip,mysql,pgsql,imap,gd} nginx composer
 
 # Extra Packages
-wget dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
-curl -L# https://git.io/vN3Ff -o /usr/bin/wp ; chmod a+x /usr/bin/wp
-curl -L# https://git.io/fAFyN -o /usr/bin/phpcs ; chmod a+x /usr/bin/phpcs
-curl -L# https://git.io/fAFyb -o /usr/bin/phpcbf ; chmod a+x /usr/bin/phpcbf
-curl -L# https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o /usr/bin/php-cs-fixer
-chmod a+x /usr/bin/php-cs-fixer
+getbin https://dl.eff.org/certbot-auto /usr/bin/certbot
+getbin https://git.io/vN3Ff /usr/bin/wp
+getbin https://git.io/fAFyN /usr/bin/phpcs
+getbin https://git.io/fAFyb /usr/bin/phpcbf
+getbin https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar /usr/bin/php-cs-fixer
 
 # Configure php-fpm
 crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php73-fpm.sock'
