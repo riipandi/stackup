@@ -41,7 +41,7 @@ phpenmod curl opcache imagick fileinfo && systemctl restart php7.3-fpm
 
 # Configure PHP-FPM
 echo -e "Configuring PHP-FPM"
-source $CURRENT/phpcfg.sh
+source $ROOT/snippets/phpconfig.sh
 
 #-----------------------------------------------------------------------------------------
 # Configure Nginx
