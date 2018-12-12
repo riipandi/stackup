@@ -36,10 +36,11 @@ getbin https://git.io/fAFyb /usr/bin/phpcbf
 getbin https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar /usr/bin/php-cs-fixer
 
 # Configure php-fpm
-crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php73-fpm.sock'
+crudini --set /etc/php/7.3/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php73-fpm.sock'
 phpenmod curl opcache imagick fileinfo && systemctl restart php7.3-fpm
 
 # Configure PHP-FPM
+echo -e "Configuring PHP-FPM"
 source $CURRENT/phpcfg.sh
 
 #-----------------------------------------------------------------------------------------
