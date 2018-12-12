@@ -51,7 +51,7 @@ echo -e "" && read -p "Press enter to continue ..."
 # Basic server configuration
 #-----------------------------------------------------------------------------------------
 curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2 > /tmp/country
-source $ROOT/snippets/disable_ipv6.sh
+[[ "`cat /tmp/install_imaps`" != "Yes" ]] || source $ROOT/snippets/disable_ipv6.sh
 source $ROOT/snippets/sysctl_cfg.sh
 source $ROOT/snippets/netconfig.sh
 
