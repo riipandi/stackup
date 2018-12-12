@@ -9,10 +9,10 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 # Setup Repositories
 #-----------------------------------------------------------------------------------------
 echo "deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx" > /etc/apt/sources.list.d/nginx.list
-echo "deb https://packages.sury.org/php/ `lsb_release -cs` main" > /etc/apt/sources.list.d/phpsuryorg.list
-
 curl -sS https://nginx.org/keys/nginx_signing.key | apt-key add -
-curl -sS https://packages.sury.org/php/apt.gpg    | apt-key add -
+
+echo "deb https://packages.sury.xyz/php/ `lsb_release -cs` main" > /etc/apt/sources.list.d/sury-php.list
+curl -sS https://packages.sury.xyz/php/apt.gpg    | apt-key add -
 
 #-----------------------------------------------------------------------------------------
 # Installing Packages
@@ -23,10 +23,8 @@ gettext optipng jpegoptim sqlite3 php-{imagick,pear} php7.3 php7.3-{common,cli,c
 php7.3-{fpm,bcmath,mbstring,opcache,json,gmp,readline,zip,sqlite3,intl,xml,xmlrpc} \
 php7.3-{curl,zip,mysql,pgsql,imap,gd} nginx composer
 
-# Certbot
-wget dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
-
 # Extra Packages
+wget dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 curl -L# https://git.io/vN3Ff -o /usr/bin/wp ; chmod a+x /usr/bin/wp
 curl -L# https://git.io/fAFyN -o /usr/bin/phpcs ; chmod a+x /usr/bin/phpcs
 curl -L# https://git.io/fAFyb -o /usr/bin/phpcbf ; chmod a+x /usr/bin/phpcbf
