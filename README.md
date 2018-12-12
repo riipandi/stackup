@@ -4,17 +4,10 @@ Another LEMP Stack installer script.
 
 ## Usage
 
-Clone this repo, run `setup.sh`, and answer the questions.
+Just run this command:
 
 ```bash
-apt -y install git curl
-
-git clone https://github.com/riipandi/lempstack /usr/src/lempstack ; cd $_
-
-find . -type f -name '*.sh' -exec chmod +x {} \;
-find . -type f -name '.git*' -exec rm -fr {} \;
-
-bash setup.sh
+bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ```
 
 ## Create MySQL Database
