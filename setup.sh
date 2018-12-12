@@ -59,16 +59,14 @@ source $ROOT/snippets/netconfig.sh
 # Setup wizard
 #-----------------------------------------------------------------------------------------
 compactInstall() {
-    source $ROOT/02-mariadb.sh
-    source $ROOT/03-webserver.sh
-    source $ROOT/92-ngamplify.sh
-    source $ROOT/telegramnotif.sh
+    source $ROOT/installer/02-mariadb.sh
+    source $ROOT/installer/03-webserver.sh
 }
 
 fullInstall() {
     compactInstall
-    source $ROOT/ngamplify.sh
-    source $ROOT/telegramnotif.sh
+    source $ROOT/installer/92-ngamplify.sh
+    source $ROOT/installer/91-tgnotif.sh
 }
 
 # Ask the questions
@@ -82,6 +80,8 @@ setupMenu() {
         fullInstall
     elif [ $answer == 2 ] ;then
         compactInstall
+        source $ROOT/installer/92-ngamplify.sh
+        source $ROOT/installer/91-tgnotif.sh
     elif [ $answer == 3 ] ;then
         source $ROOT/custom.sh
     elif ! [[ $answer =~ ^[1-3]+$ ]] ;then
