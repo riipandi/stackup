@@ -75,7 +75,7 @@ setupMenu() {
     echo -e "2 : Compact installation  [nginx, php, mariadb, nodejs, yarn]"
     echo -e "3 : Custom installation   [it's according to your choice]\n"
 
-    read -e -p "Choose components  (1/2/3) : " -i "1" answer
+    read -e -p "Choose components  (1/2/3) : " -i "2" answer
     if [ $answer == 1 ] ;then
         fullInstall
     elif [ $answer == 2 ] ;then
