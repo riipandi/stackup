@@ -27,12 +27,12 @@ source $ROOT/installer/01-basepkg.sh
 #-----------------------------------------------------------------------------------------
 read -s -p "Enter new root password  : " rootpass
 usermod root -p `openssl passwd -1 "$rootpass"`
-
+echo -e ""
 read -e -p "Enter new user fullname  : " -i "Admin Sistem" fullname
 read -e -p "Enter new user username  : " -i "admin" username
 read -s -p "Enter new user password  : " userpass
 useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
-
+echo -e ""
 read -e -p "Please specify SSH port  : " -i "22" ssh_port
 echo $ssh_port > /tmp/ssh_port
 
@@ -44,6 +44,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then echo No > /tmp/disable_ipv6 ;fi
 
 read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
 echo $db_bindaddr > /tmp/db_bindaddr
+
+read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
 # Basic server configuration
@@ -96,8 +98,7 @@ apt -y autoremove
 
 echo -e "\n" && netstat -pltn && echo -e "\n"
 echo -e "Server stack has been installed.\n"
-echo -e "Control Panel DB : `cat /tmp/ecp_dbname`"
-echo -e "DB Root Password : `cat /tmp/ecp_dbpass`\n"
+echo -e "DB Root Password : `cat /tmp/rootdbpass`\n"
 
 echo -e "Congratulation, you can reboot server now if you want.."
 # read -e -p "Reboot the server    y/n : " -i "n" answer
