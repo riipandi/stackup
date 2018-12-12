@@ -17,5 +17,4 @@ git clone https://github.com/riipandi/lempstack /usr/src/lempstack ; cd $_
 find . -type f -name '*.sh' -exec chmod +x {} \;
 find . -type f -name '.git*' -exec rm -fr {} \;
 
-echo -e "\n"
 bash $PWD/install.sh
