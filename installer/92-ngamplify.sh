@@ -4,8 +4,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 
 # Nginx Amplify
 read -e -p "Install Amplify    (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-  echo Yes > /tmp/install_amplify
+if [ "$answer" == "${answer#[Yy]}" ] ;then
   read -e -p "Nginx Amplify Key        : " -i "" amplify_key
   if [ "$amplify_key" != "" ] ;then
     echo $amplify_key > /tmp/amplify_key

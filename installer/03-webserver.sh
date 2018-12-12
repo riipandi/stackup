@@ -52,13 +52,6 @@ curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
   -o /etc/ssl/certs/chain.pem
 
-# Generate SSL certificates for default vhost
-if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
-    --register-unsafely-without-email --preferred-challenges http \
-    -d "$(hostname -f)"
-fi
-
 rm -fr /etc/nginx
 cp -r $PARENT/config/nginx /etc
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
@@ -71,6 +64,14 @@ sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.con
 sed -i "s/IPADDRESS/$(curl -s v4.ifconfig.co)/" /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
+
+# Generate SSL certificates for default vhost
+if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
+  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
+    --register-unsafely-without-email --preferred-challenges http \
+    -d "$(hostname -f)"
+fi
+
 systemctl restart nginx
 
 #-----------------------------------------------------------------------------------------
