@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+PWD=$(dirname "$(readlink -f "$0")")
+
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
 apt update
@@ -15,4 +17,4 @@ git clone https://github.com/riipandi/lempstack /usr/src/lempstack ; cd $_
 find . -type f -name '*.sh' -exec chmod +x {} \;
 find . -type f -name '.git*' -exec rm -fr {} \;
 
-bash install.sh
+bash $PWD/install.sh
