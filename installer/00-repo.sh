@@ -2,8 +2,7 @@
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
-country=`cat /tmp/country`
-
+# country=`cat /tmp/country`
 # if [ "$country" == "ID" ] ; then
 #   echo "deb http://kebo.pens.ac.id/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
 #   echo "deb http://kebo.pens.ac.id/debian `lsb_release -cs`-updates main contrib non-free" >> /etc/apt/sources.list
