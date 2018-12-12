@@ -99,7 +99,6 @@ apt -y autoremove
 echo -e "\n" && netstat -pltn && echo -e "\n"
 echo -e "Server stack has been installed.\n"
 echo -e "DB Root Password : `cat /tmp/rootdbpass`\n"
-
-echo -e "Congratulation, you can reboot server now if you want.."
+echo -e "Congratulation, you can reboot server now if you want...\n"
 # read -e -p "Reboot the server    y/n : " -i "n" answer
 # if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi
