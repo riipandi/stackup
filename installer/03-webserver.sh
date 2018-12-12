@@ -44,39 +44,9 @@ echo -e "Configuring PHP-FPM"
 source $ROOT/snippets/phpconfig.sh
 
 #-----------------------------------------------------------------------------------------
-# Configure Nginx
-#-----------------------------------------------------------------------------------------
-mkdir -p /var/www ; systemctl enable --now haveged ; systemctl stop nginx
-
-curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
-curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
-  -o /etc/ssl/certs/chain.pem
-
-rm -fr /etc/nginx
-cp -r $PARENT/config/nginx /etc
-cp /etc/nginx/manifest/default.tpl /var/www/index.php
-chown -R root: /etc/nginx
-chown -R www-data: /var/www
-chmod -R 775 /var/www
-
-sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
-sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
-sed -i "s/IPADDRESS/$(curl -s v4.ifconfig.co)/" /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
-
-# Generate SSL certificates for default vhost
-if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
-    --register-unsafely-without-email --preferred-challenges http \
-    -d "$(hostname -f)"
-fi
-
-systemctl restart nginx
-
-#-----------------------------------------------------------------------------------------
 # Installing phpMyAdmin
 #-----------------------------------------------------------------------------------------
+mkdir -p /var/www
 PMA_DIR="/var/www/myadmin"
 
 if [ ! -d $PMA_DIR ]; then
@@ -104,3 +74,34 @@ cat > $PMA_DIR/config.inc.php <<EOF
 \$cfg['ShowDatabasesNavigationAsTree']   = false;
 EOF
 fi
+
+#-----------------------------------------------------------------------------------------
+# Configure Nginx
+#-----------------------------------------------------------------------------------------
+systemctl enable --now haveged ; systemctl stop nginx
+curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
+curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
+  -o /etc/ssl/certs/chain.pem
+
+rm -fr /etc/nginx
+cp -r $PARENT/config/nginx /etc
+cp /etc/nginx/manifest/default.tpl /var/www/index.php
+chown -R root: /etc/nginx
+chown -R www-data: /var/www
+chmod -R 775 /var/www
+
+sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
+sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
+sed -i "s/IPADDRESS/$(curl -s v4.ifconfig.co)/" /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
+
+# Generate SSL certificates for default vhost
+if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
+  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
+    --register-unsafely-without-email --preferred-challenges http \
+    -d "$(hostname -f)"
+fi
+
+systemctl restart nginx
+
