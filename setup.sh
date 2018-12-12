@@ -45,7 +45,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then echo No > /tmp/disable_ipv6 ;fi
 read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
 echo $db_bindaddr > /tmp/db_bindaddr
 
-read -p "Press enter to continue ..."
+echo -e "" && read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
 # Basic server configuration
