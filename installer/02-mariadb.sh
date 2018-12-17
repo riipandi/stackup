@@ -17,7 +17,7 @@ apt update ; apt -y install mariadb-server mariadb-client
 # 02 - Configuring MySQL
 #-----------------------------------------------------------------------------------------
 sed -i "s/skip-external-locking//" /etc/mysql/my.cnf
-mysql -uroot -p$rootdbpass" -e "UPDATE mysql.user SET plugin='' WHERE User='root';"
+mysql -uroot -p$rootdbpass -e "UPDATE mysql.user SET plugin='' WHERE User='root';"
 crudini --set /etc/mysql/conf.d/mariadb.cnf 'mysqld' 'bind-address' $bind_address
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'     $bind_address
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'password' $rootdbpass
