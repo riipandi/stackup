@@ -27,34 +27,34 @@ source $ROOT/installer/01-basepkg.sh
 #-----------------------------------------------------------------------------------------
 SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
 
-read -s -p "Enter new root password     : " rootpass
+read -s -p "Enter new root password          : " rootpass
 SetConfigSetup system rootpass `openssl passwd -1 "$rootpass"`
 
 echo -e ""
-read -e -p "Enter new user fullname     : " -i "Admin Sistem" fullname
+read -e -p "Enter new user fullname          : " -i "Admin Sistem" fullname
 SetConfigSetup system fullname $fullname
 
-read -e -p "Enter new user username     : " -i "admin" username
+read -e -p "Enter new user username          : " -i "admin" username
 SetConfigSetup system username $username
 
-read -s -p "Enter new user password     : " userpass
+read -s -p "Enter new user password          : " userpass
 SetConfigSetup system userpass `openssl passwd -1 "$userpass"`
 
 echo -e ""
-read -e -p "Please specify SSH port     : " -i "22" ssh_port
+read -e -p "Please specify SSH port          : " -i "22" ssh_port
 SetConfigSetup system ssh_port $ssh_port
 
-read -e -p "Please specify time zone    : " -i "Asia/Jakarta" timezone
+read -e -p "Please specify time zone         : " -i "Asia/Jakarta" timezone
 SetConfigSetup system timezone $timezone
 
-read -e -p "Disable IPv6       (yes/no) : " -i "no" disable_ipv6
+read -e -p "Disable IPv6            (yes/no) : " -i "no" disable_ipv6
 SetConfigSetup system disable_ipv6 $disable_ipv6
 
 #-----------------------------------------------------------------------------------------
 # Packages setup
 #-----------------------------------------------------------------------------------------
 echo -e ""
-read -e -p "Use Telegram Notif     (yes/no)  : " -i "no" tgnotif_install
+read -e -p "Use Telegram Notif      (yes/no) : " -i "no" tgnotif_install
 SetConfigSetup tgnotif install $tgnotif_install
 if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     read -e -p "Telegram Bot Key                 : " -i "" tgnotif_bot_key
@@ -63,7 +63,7 @@ if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     SetConfigSetup tgnotif bot_key $tgnotif_chat_id
 fi
 
-read -e -p "Install Nginx Amplify  (yes/no)   : " -i "no" amplify_install
+read -e -p "Install Nginx Amplify   (yes/no) : " -i "no" amplify_install
 SetConfigSetup nginx amplify $amplify_install
 if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
     read -e -p "Nginx Amplify API Key            : " -i "" amplify_api
@@ -128,8 +128,6 @@ echo -e "" && read -p "Press enter to continue ..."
 #-----------------------------------------------------------------------------------------
 # Basic server configuration
 #-----------------------------------------------------------------------------------------
-[[ GetConfigSetup system disable_ipv6 != "yes" ]] || source $ROOT/snippets/disable_ipv6.sh
-source $ROOT/snippets/sysctl_cfg.sh
 source $ROOT/snippets/netconfig.sh
 
 #-----------------------------------------------------------------------------------------
@@ -137,7 +135,7 @@ source $ROOT/snippets/netconfig.sh
 #-----------------------------------------------------------------------------------------
 apt -y autoremove && apt clean
 
-if [[ GetConfigSetup system reboot == "yes" ]] ; then
+if [[ `crudini --get $ROOT/install.ini system reboot` == "yes" ]] ; then
     shutdown -r now
 else
     echo -e "\n" && netstat -pltn && echo -e "\n"
