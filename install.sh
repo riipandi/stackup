@@ -104,7 +104,7 @@ SetConfigSetup extras php56 $php56_install
 read -e -p "Install python          (yes/no) : " -i "no" python_install
 SetConfigSetup extras python $python_install
 
-read -e -p "Install IMAPSync        (yes/no) : " -i "no" imapsync_install
+read -e -p "Install IMAPSync        (yes/no) : " -i "yes" imapsync_install
 SetConfigSetup extras imapsync $imapsync_install
 
 read -e -p "Install PowerDNS        (yes/no) : " -i "no" powerdns_install
