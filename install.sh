@@ -34,7 +34,7 @@ echo -e ""
 read -e -p "Enter new user fullname          : " -i "Admin Sistem" fullname
 read -e -p "Enter new user username          : " -i "admin" username
 read -s -p "Enter new user password          : " userpass
-useradd -mg sudo -s `which bash` $username -c "$fullname" -p "$userpass"
+useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
 
 echo -e ""
 read -e -p "Please specify SSH port          : " -i "22" ssh_port
@@ -95,10 +95,10 @@ fi
 read -e -p "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
-read -e -p "Install PHP 7.2         (yes/no) : " -i "no" php72_install
+read -e -p "Install PHP 7.2         (yes/no) : " -i "yes" php72_install
 SetConfigSetup extras php72 $php72_install
 
-read -e -p "Install PHP 5.6         (yes/no) : " -i "no" php56_install
+read -e -p "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
 SetConfigSetup extras php56 $php56_install
 
 read -e -p "Install Python3         (yes/no) : " -i "no" python_install
