@@ -21,4 +21,9 @@ deb http://deb.debian.org/debian stable-updates main contrib non-free
 deb http://deb.debian.org/debian-security stable/updates main contrib non-free
 EOF
 
+apt update
+apt -y full-upgrade
+apt -y autoremove
+apt clean
+
 echo "Repository has been configured"

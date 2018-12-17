@@ -9,6 +9,8 @@ else
     read -p "Press enter to continue ..."
 fi
 
+source $ROOT/snippets/helpers.sh
+
 #-----------------------------------------------------------------------------------------
 # Initial Setup
 #-----------------------------------------------------------------------------------------
@@ -18,87 +20,127 @@ echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 
 # Upgrade basic system packages
 source $ROOT/installer/00-repo.sh
-apt update ; apt -y full-upgrade
-apt -y autoremove ; apt clean
 source $ROOT/installer/01-basepkg.sh
 
 #-----------------------------------------------------------------------------------------
-# User account
+# System setup
 #-----------------------------------------------------------------------------------------
-read -s -p "Enter new root password  : " rootpass
-usermod root -p `openssl passwd -1 "$rootpass"`
+SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
+
+read -s -p "Enter new root password     : " rootpass
+SetConfigSetup system rootpass `openssl passwd -1 "$rootpass"`
+
 echo -e ""
-read -e -p "Enter new user fullname  : " -i "Admin Sistem" fullname
-read -e -p "Enter new user username  : " -i "admin" username
-read -s -p "Enter new user password  : " userpass
-useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
+read -e -p "Enter new user fullname     : " -i "Admin Sistem" fullname
+SetConfigSetup system fullname $fullname
+
+read -e -p "Enter new user username     : " -i "admin" username
+SetConfigSetup system username $username
+
+read -s -p "Enter new user password     : " userpass
+SetConfigSetup system userpass `openssl passwd -1 "$userpass"`
+
 echo -e ""
-read -e -p "Please specify SSH port  : " -i "22" ssh_port
-echo $ssh_port > /tmp/ssh_port
+read -e -p "Please specify SSH port     : " -i "22" ssh_port
+SetConfigSetup system ssh_port $ssh_port
 
-read -e -p "Please specify time zone : " -i "Asia/Jakarta" timezone
-echo $timezone > /tmp/timezone
+read -e -p "Please specify time zone    : " -i "Asia/Jakarta" timezone
+SetConfigSetup system timezone $timezone
 
-read -e -p "Disable IPv6       (y/n) : " -i "n" answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then echo No > /tmp/disable_ipv6 ;fi
+read -e -p "Disable IPv6       (yes/no) : " -i "no" disable_ipv6
+SetConfigSetup system disable_ipv6 $disable_ipv6
 
-read -e -p "Database Bind Address    : " -i "127.0.0.1" db_bindaddr
-echo $db_bindaddr > /tmp/db_bindaddr
+#-----------------------------------------------------------------------------------------
+# Packages setup
+#-----------------------------------------------------------------------------------------
+echo -e ""
+read -e -p "Use Telegram Notif     (yes/no)  : " -i "no" tgnotif_install
+SetConfigSetup tgnotif install $tgnotif_install
+if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
+    read -e -p "Telegram Bot Key                 : " -i "" tgnotif_bot_key
+    SetConfigSetup tgnotif bot_key $tgnotif_bot_key
+    read -e -p "Telegram User Chat ID            : " -i "" tgnotif_chat_id
+    SetConfigSetup tgnotif bot_key $tgnotif_chat_id
+fi
+
+read -e -p "Install Nginx Amplify  (yes/no)   : " -i "no" amplify_install
+SetConfigSetup nginx amplify $amplify_install
+if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
+    read -e -p "Nginx Amplify API Key            : " -i "" amplify_api
+    SetConfigSetup nginx api_key $amplify_api
+fi
+
+read -e -p "Install Database Engine (yes/no) : " -i "yes" db_install
+SetConfigSetup mysql install $db_install
+if [[ "${db_install,,}" =~ ^(yes|y)$ ]] ; then
+    read -e -p "Database Engine  (mariadb/mysql) : " -i "mariadb" db_engine
+    SetConfigSetup mysql engine $db_engine
+    read -e -p "Database Bind Address            : " -i "127.0.0.1" bind_address
+    SetConfigSetup mysql bind_address $bind_address
+    read -e -p "Database Root Password           : "  -i "auto" root_pass
+    if [[ "$root_pass" == "auto" ]] ; then
+        SetConfigSetup mysql root_pass `pwgen -1 12`
+    else
+        SetConfigSetup mysql root_pass $root_pass
+    fi
+fi
+
+read -e -p "Install PostgreSQL      (yes/no) : " -i "no" pgsql_install
+SetConfigSetup postgres install $pgsql_install
+if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
+    read -e -p "PostgreSQL Root Password         : "  -i "auto" root_pass
+    if [[ "$root_pass" == "auto" ]] ; then
+        SetConfigSetup postgres root_pass `pwgen -1 12`
+    else
+        SetConfigSetup postgres root_pass $root_pass
+    fi
+fi
+
+read -e -p "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
+SetConfigSetup extras nodejs $nodejs_install
+
+read -e -p "Install PHP 7.2         (yes/no) : " -i "no" php72_install
+SetConfigSetup extras php72 $php72_install
+
+read -e -p "Install PHP 5.6         (yes/no) : " -i "no" php56_install
+SetConfigSetup extras php56 $php56_install
+
+read -e -p "Install Python3         (yes/no) : " -i "no" python_install
+SetConfigSetup extras python3 $python_install
+
+read -e -p "Install IMAPSync        (yes/no) : " -i "no" imapsync_install
+SetConfigSetup extras imapsync $imapsync_install
+
+read -e -p "Install PowerDNS        (yes/no) : " -i "no" powerdns_install
+SetConfigSetup powerdns install $powerdns_install
+
+read -e -p "Install FTP Server      (yes/no) : " -i "no" ftpserver_install
+SetConfigSetup ftpserver install $powerdns_install
+
+read -e -p "Install Mail Server     (yes/no) : " -i "no" mailserver_install
+SetConfigSetup mailserver install $powerdns_install
+
+read -e -p "Reboot after install    (yes/no) : " -i "no" reboot_after
+SetConfigSetup system reboot $reboot_after
 
 echo -e "" && read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
 # Basic server configuration
 #-----------------------------------------------------------------------------------------
-curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2 > /tmp/country
-[[ "`cat /tmp/disable_ipv6`" != "Yes" ]] || source $ROOT/snippets/disable_ipv6.sh
+[[ GetConfigSetup system disable_ipv6 != "yes" ]] || source $ROOT/snippets/disable_ipv6.sh
 source $ROOT/snippets/sysctl_cfg.sh
 source $ROOT/snippets/netconfig.sh
 
 #-----------------------------------------------------------------------------------------
-# Setup wizard
-#-----------------------------------------------------------------------------------------
-compactInstall() {
-    source $ROOT/installer/02-mariadb.sh
-    source $ROOT/installer/03-webserver.sh
-}
-
-fullInstall() {
-    compactInstall
-    source $ROOT/installer/92-ngamplify.sh
-    source $ROOT/installer/91-tgnotif.sh
-}
-
-# Ask the questions
-setupMenu() {
-    echo -e "1 : Full installation     [all packages will be installed]"
-    echo -e "2 : Compact installation  [nginx, php, mariadb, nodejs, yarn]"
-    echo -e "3 : Custom installation   [it's according to your choice]\n"
-
-    read -e -p "Choose components  (1/2/3) : " -i "2" answer
-    if [ $answer == 1 ] ;then
-        fullInstall
-    elif [ $answer == 2 ] ;then
-        compactInstall
-        source $ROOT/installer/92-ngamplify.sh
-        source $ROOT/installer/91-tgnotif.sh
-    elif [ $answer == 3 ] ;then
-        source $ROOT/custom.sh
-    elif ! [[ $answer =~ ^[1-3]+$ ]] ;then
-        clear &&  echo -e "Please choose the right option!"
-        setupMenu
-    fi
-}
-clear && setupMenu
-
-#-----------------------------------------------------------------------------------------
 # Cleanup
 #-----------------------------------------------------------------------------------------
-apt -y autoremove
+apt -y autoremove && apt clean
 
-echo -e "\n" && netstat -pltn && echo -e "\n"
-echo -e "Server stack has been installed.\n"
-echo -e "DB Root Password : `cat /tmp/rootdbpass`\n"
-echo -e "Congratulation, you can reboot server now if you want...\n"
-# read -e -p "Reboot the server    y/n : " -i "n" answer
-# if [ "$answer" != "${answer#[Yy]}" ] ;then shutdown -r now ; fi
+if [[ GetConfigSetup system reboot == "yes" ]] ; then
+    shutdown -r now
+else
+    echo -e "\n" && netstat -pltn && echo -e "\n"
+    echo -e "Server stack has been installed.\n"
+    echo -e "Congratulation, you can reboot server now if you want...\n"
+fi
