@@ -101,8 +101,8 @@ SetConfigSetup extras php72 $php72_install
 read -e -p "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
 SetConfigSetup extras php56 $php56_install
 
-read -e -p "Install Python3         (yes/no) : " -i "no" python_install
-SetConfigSetup extras python3 $python_install
+read -e -p "Install python         (yes/no) : " -i "no" python_install
+SetConfigSetup extras python $python_install
 
 read -e -p "Install IMAPSync        (yes/no) : " -i "no" imapsync_install
 SetConfigSetup extras imapsync $imapsync_install
@@ -122,9 +122,26 @@ SetConfigSetup system reboot $reboot_after
 echo -e "" && read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
-# Basic server configuration
+# Server configuration and install packages
 #-----------------------------------------------------------------------------------------
 source $ROOT/snippets/netconfig.sh
+source $ROOT/installer/03-webserver.sh
+
+[[ `crudini --get $ROOT/install.ini extras nodejs` != "yes" ]] || source $ROOT/installer/04-nodejs.sh
+[[ `crudini --get $ROOT/install.ini extras php72` != "yes" ]] || source $ROOT/installer/82-php72.sh
+[[ `crudini --get $ROOT/install.ini extras php56` != "yes" ]] || source $ROOT/installer/81-php56.sh
+[[ `crudini --get $ROOT/install.ini extras python` != "yes" ]] || source $ROOT/installer/83-python.sh
+
+# Setup MySQL / MariaDB
+if [[ `crudini --get $ROOT/install.ini mysql install` == "yes" ]] ; then
+    if [[ `crudini --get $ROOT/install.ini mysql engine` == "mariadb" ]] ; then
+        source $ROOT/installer/02-mariadb.sh
+    else
+        source $ROOT/installer/85-mysql80.sh
+    fi
+fi
+
+[[ `crudini --get $ROOT/install.ini extras imapsync` != "yes" ]] || source $ROOT/installer/86-imapsync.sh
 
 #-----------------------------------------------------------------------------------------
 # Cleanup
