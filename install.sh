@@ -28,17 +28,13 @@ source $ROOT/installer/01-basepkg.sh
 SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
 
 read -s -p "Enter new root password          : " rootpass
-SetConfigSetup system rootpass `openssl passwd -1 "$rootpass"`
+usermod root --password `openssl passwd -1 "$rootpass"`
 
 echo -e ""
 read -e -p "Enter new user fullname          : " -i "Admin Sistem" fullname
-SetConfigSetup system fullname $fullname
-
 read -e -p "Enter new user username          : " -i "admin" username
-SetConfigSetup system username $username
-
 read -s -p "Enter new user password          : " userpass
-SetConfigSetup system userpass `openssl passwd -1 "$userpass"`
+useradd -mg sudo -s `which bash` $username -c "$fullname" -p "$userpass"
 
 echo -e ""
 read -e -p "Please specify SSH port          : " -i "22" ssh_port
