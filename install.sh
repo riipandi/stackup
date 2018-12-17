@@ -101,7 +101,7 @@ SetConfigSetup extras php72 $php72_install
 read -e -p "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
 SetConfigSetup extras php56 $php56_install
 
-read -e -p "Install python         (yes/no) : " -i "no" python_install
+read -e -p "Install python          (yes/no) : " -i "no" python_install
 SetConfigSetup extras python $python_install
 
 read -e -p "Install IMAPSync        (yes/no) : " -i "no" imapsync_install

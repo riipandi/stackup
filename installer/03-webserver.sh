@@ -83,8 +83,8 @@ curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
   -o /etc/ssl/certs/chain.pem
 
-rm -fr /etc/nginx
-cp -r $PARENT/config/nginx /etc
+rm -fr /etc/nginx/*
+cp -r $ROOT/config/nginx/* /etc/nginx/.
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
 chown -R root: /etc/nginx
 chown -R www-data: /var/www
