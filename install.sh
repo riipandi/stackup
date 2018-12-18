@@ -45,7 +45,7 @@ echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
 echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 
 # Upgrade basic system packages
-read -ep "Change default repository   (yes/no) : " -i "no" changrepo
+read -ep "Change default repository mirror?  (yes/no) : " -i "no" changrepo
 if [[ "${changrepo,,}" =~ ^(yes|y)$ ]] ; then source $ROOT/system/repository.sh ; fi
 source $ROOT/system/basicpkg.sh
 
