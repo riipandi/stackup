@@ -34,4 +34,3 @@ server {
         include server.d/phpfpm.conf;
     }
 }
-

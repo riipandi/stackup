@@ -213,6 +213,5 @@ echo -e "\nCongratulation, server stack has been installed.\n"
 
 if [[ `crudini --get $ROOT/config.ini system reboot` == "yes" ]] ; then
     echo "System will reboot in:"
-    countdown "00:00:05"
-    shutdown -r now
+    countdown "00:00:05" ; shutdown -r now
 fi
