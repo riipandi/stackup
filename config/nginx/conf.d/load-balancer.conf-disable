@@ -1,6 +1,0 @@
-upstream backend {
-   ip_hash;
-   server 192.168.1.232 weight=4;
-   server 192.168.1.233 weight=3;
-   server 192.168.1.234 weight=1;
-}
