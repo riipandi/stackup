@@ -5,8 +5,8 @@ PWD=$(dirname "$(readlink -f "$0")")
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
 apt update -qq
-apt -y full-upgrade
-apt -y install git curl
+apt -yqq full-upgrade
+apt -yqq install git curl
 
 cd /usr/src
 rm -fr /usr/src/lempstack
