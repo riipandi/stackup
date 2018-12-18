@@ -6,3 +6,5 @@ apt -yqq install php7.2 php7.2-{common,cli,cgi,fpm,bcmath,mbstring,opcache,json}
 php7.2-{gmp,readline,zip,sqlite3,intl,xml,xmlrpc,curl,zip,mysql,pgsql,imap,gd}
 
 crudini --set /etc/php/7.2/fpm/php-fpm.conf  'www' 'listen' '/var/run/php/php72-fpm.sock'
+
+systemctl restart php7.2-fpm

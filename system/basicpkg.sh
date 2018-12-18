@@ -2,6 +2,11 @@
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
+GetBin(){
+    curl -L# $1 -o $2
+    chmod a+x $2
+}
+
 # country=`cat /tmp/country`
 # if [ "$country" == "ID" ] ; then
 #   echo "deb http://kebo.pens.ac.id/debian `lsb_release -cs` main contrib non-free" > /etc/apt/sources.list
@@ -23,7 +28,19 @@ EOF
 
 apt update
 apt -y full-upgrade
-apt -y autoremove
-apt clean
 
-echo "Repository has been configured"
+apt -yqq install sudo nano figlet elinks pwgen curl crudini lsof ntp \
+ntpdate whois perl dirmngr software-properties-common debconf-utils \
+apt-transport-https gcc make cmake build-essential binutils dnsutils \
+nscd dh-autoreconf ftp zip unzip bsdtar rsync screen screenfetch \
+ca-certificates resolvconf
+
+apt -y autoremove
+
+# Extra Packages
+GetBin https://semut.org/gdrive /usr/bin/gdrive
+GetBin https://dl.eff.org/certbot-auto /usr/bin/certbot
+GetBin https://git.io/vN3Ff /usr/bin/wp
+GetBin https://git.io/fAFyN /usr/bin/phpcs
+GetBin https://git.io/fAFyb /usr/bin/phpcbf
+GetBin https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar /usr/bin/php-cs-fixer

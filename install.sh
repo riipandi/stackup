@@ -45,8 +45,7 @@ echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
 echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 
 # Upgrade basic system packages
-source $ROOT/installer/00-repo.sh
-source $ROOT/installer/01-basepkg.sh
+source $ROOT/system/basicpkg.sh
 
 #-----------------------------------------------------------------------------------------
 # System setup
@@ -92,19 +91,15 @@ if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
     SetConfigSetup nginx api_key $amplify_api
 fi
 
-read -ep "Install Database Engine (yes/no) : " -i "yes" db_install
-SetConfigSetup mysql install $db_install
-if [[ "${db_install,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Database Engine  (mariadb/mysql) : " -i "mariadb" db_engine
-    SetConfigSetup mysql engine $db_engine
-    read -ep "Database Bind Address            : " -i "127.0.0.1" bind_address
-    SetConfigSetup mysql bind_address $bind_address
-    read -ep "Database Root Password           : "  -i "auto" root_pass
-    if [[ "$root_pass" == "auto" ]] ; then
-        SetConfigSetup mysql root_pass `pwgen -1 12`
-    else
-        SetConfigSetup mysql root_pass $root_pass
-    fi
+read -ep "Database Engine  (mariadb/mysql) : " -i "mariadb" db_engine
+SetConfigSetup mysql engine $db_engine
+read -ep "Database Bind Address            : " -i "127.0.0.1" bind_address
+SetConfigSetup mysql bind_address $bind_address
+read -ep "Database Root Password           : "  -i "auto" root_pass
+if [[ "$root_pass" == "auto" ]] ; then
+    SetConfigSetup mysql root_pass `pwgen -1 12`
+else
+    SetConfigSetup mysql root_pass $root_pass
 fi
 
 read -ep "Install PostgreSQL      (yes/no) : " -i "no" pgsql_install
@@ -157,26 +152,35 @@ echo -e "" && read -p "Press enter to continue ..."
 #-----------------------------------------------------------------------------------------
 # Server configuration and install packages
 #-----------------------------------------------------------------------------------------
-source $ROOT/snippets/netconfig.sh
+InstallPackage swap enable $ROOT/system/swap.sh
 
-source $ROOT/installer/03-webserver.sh
+InstallPackage tgnotif install $ROOT/system/tgnotif.sh
+source $ROOT/system/netconfig.sh
 
-InstallPackage swap enable $ROOT/snippets/swap.sh
-InstallPackage extras nodejs $ROOT/installer/04-nodejs.sh
-InstallPackage extras php72 $ROOT/installer/82-php72.sh
-InstallPackage extras php56 $ROOT/installer/81-php56.sh
-InstallPackage extras python $ROOT/installer/83-python.sh
-InstallPackage extras python $ROOT/installer/83-python.sh
-InstallPackage extras imapsync $ROOT/installer/86-imapsync.sh
+source $ROOT/php/setup73.sh
+InstallPackage extras php72 $ROOT/php/setup72.sh
+InstallPackage extras php56 $ROOT/php/setup56.sh
+source $ROOT/php/configure.sh
 
-# Setup MySQL / MariaDB
-if [[ `crudini --get $ROOT/config.ini mysql install` == "yes" ]] ; then
-    if [[ `crudini --get $ROOT/config.ini mysql engine` == "mariadb" ]] ; then
-        source $ROOT/installer/02-mariadb.sh
-    else
-        source $ROOT/installer/85-mysql80.sh
-    fi
+source $ROOT/nginx/setup.sh
+source $ROOT/nginx/phpmy.sh
+InstallPackage nginx amplify $ROOT/nginx/amplify.sh
+
+# Setup MySQL / MariaDB Database
+if [[ `crudini --get $ROOT/config.ini mysql engine` == "mariadb" ]] ; then
+    source $ROOT/mysql/mariadb.sh
+    source $ROOT/mysql/configure.sh
+else
+    source $ROOT/mysql/mysql80.sh
 fi
+
+InstallPackage postgres install $ROOT/postgres/setup.sh
+InstallPackage extras nodejs $ROOT/nodejs/setup.sh
+InstallPackage extras python $ROOT/python/setup.sh
+
+# InstallPackage powerdns install $ROOT/powerdns/setup.sh
+InstallPackage mailserver install $ROOT/mailsuite/mailserver.sh
+InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 
 #-----------------------------------------------------------------------------------------
 # Cleanup
