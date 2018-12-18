@@ -78,6 +78,10 @@ fi
 # Upgrade basic system packages
 source $ROOT/system/basicpkg.sh
 
+# Determine country code for server location
+country=`curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
+crudini --set $ROOT/config.ini 'system' 'country' $country
+
 # Print welcome message
 figlet "Hello there!"
 read -p "Press enter to continue ..."
@@ -85,8 +89,6 @@ read -p "Press enter to continue ..."
 #-----------------------------------------------------------------------------------------
 # System and packages setup
 #-----------------------------------------------------------------------------------------
-SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
-
 read -ep "Please specify SSH port          : " -i "22" ssh_port
 SetConfigSetup system ssh_port $ssh_port
 
