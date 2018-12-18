@@ -8,13 +8,14 @@ apt update -qq
 apt -yqq full-upgrade
 apt -yqq install git curl
 
-cd /usr/src
-rm -fr /usr/src/lempstack
-rm -fr /etc/apt/sources.list.d/*
+outputdir="/usr/src/lempstack"
 
-git clone https://github.com/riipandi/lempstack /usr/src/lempstack ; cd $_
-
-find . -type f -name '*.sh' -exec chmod +x {} \;
-find . -type f -name '.git*' -exec rm -fr {} \;
-
-bash $PWD/install.sh
+if [[ ! -d $outputdir ]]; then
+    git clone https://github.com/riipandi/lempstack $outputdir ; cd $_
+    find . -type f -name '*.sh' -exec chmod +x {} \;
+    find . -type f -name '.git*' -exec rm -fr {} \;
+    rm -fr /etc/apt/sources.list.d/*
+    bash $PWD/install.sh
+else
+    echo -e "Directory $outputdir already exists, please remove first!"
+fi
