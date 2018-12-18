@@ -1,0 +1,6 @@
+error_page 403 /etc/nginx/errorpage/403.html;
+error_page 404 /etc/nginx/errorpage/404.html;
+error_page 500 /etc/nginx/errorpage/500.html;
+error_page 503 /etc/nginx/errorpage/503.html;
+error_page 504 /etc/nginx/errorpage/504.html;
+

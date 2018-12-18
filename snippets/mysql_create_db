@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
+
+# Database name and user
+read -e -p "Database Name     : " -i "auto" ask_db_name
+if [ "$ask_db_name" == "auto" ] ;then
+  db_name=`pwgen -1 -A 12`
+else
+  db_name=$ask_db_name
+fi
+
+# Check if database already exist
+RESULT=`mysqlshow -u root $db_name | grep -v Wildcard | grep -o $db_name`
+if [ "$RESULT" == "$db_name" ]; then
+    echo "Database $db_name already exists!"
+    exit 0
+fi
+
+# Database password
+read -e -p "Database Password : " -i "auto" ask_db_pass
+if [ "$ask_db_pass" == "auto" ] ;then
+  db_pass=`pwgen -1 -A 12`
+else
+  db_pass=$ask_db_name
+fi
+
+read -e -p "Database Address  : " -i "127.0.0.1" db_addr
+
+# Create database and user
+mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $db_name"
+mysql -uroot -e "CREATE USER IF NOT EXISTS '$db_name'@'$db_addr' IDENTIFIED BY '$db_pass'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON $db_name.* TO '$db_name'@'$db_addr'"
+mysql -uroot -e "FLUSH PRIVILEGES"
+
+echo -e "\nDatabase $db_name created with username $db_name and password $db_pass\n"
