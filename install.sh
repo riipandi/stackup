@@ -116,6 +116,13 @@ SetConfigSetup ftpserver install $powerdns_install
 read -e -p "Install Mail Server     (yes/no) : " -i "no" mailserver_install
 SetConfigSetup mailserver install $powerdns_install
 
+read -e -p "Do you want to use Swap (yes/no) : " -i "no" swap_enable
+SetConfigSetup swap enable $swap_enable
+if [[ "${enabled,,}" =~ ^(yes|y)$ ]] ; then
+    read -e -p "Size of Swap (in megabyte)       : "  -i "2048" swap_size
+    SetConfigSetup swap size $swap_size
+fi
+
 read -e -p "Reboot after install    (yes/no) : " -i "no" reboot_after
 SetConfigSetup system reboot $reboot_after
 
@@ -127,6 +134,7 @@ echo -e "" && read -p "Press enter to continue ..."
 source $ROOT/snippets/netconfig.sh
 source $ROOT/installer/03-webserver.sh
 
+[[ `crudini --get $ROOT/install.ini swap enable` != "yes" ]] || source $ROOT/snippets/swap.sh
 [[ `crudini --get $ROOT/install.ini extras nodejs` != "yes" ]] || source $ROOT/installer/04-nodejs.sh
 [[ `crudini --get $ROOT/install.ini extras php72` != "yes" ]] || source $ROOT/installer/82-php72.sh
 [[ `crudini --get $ROOT/install.ini extras php56` != "yes" ]] || source $ROOT/installer/81-php56.sh
