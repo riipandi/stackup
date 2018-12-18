@@ -1,4 +1,4 @@
-# Another LEMP Stack installer script.
+# Another LEMP Stack Installer.
 
 The LEMP software stack is a group of software that can be used to
 serve dynamic web pages and web applications. This is an acronym
