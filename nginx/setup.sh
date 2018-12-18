@@ -11,7 +11,7 @@ apt update ; apt -yqq install haveged nmap nikto xmlstarlet {libpng,libssl,libff
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
 gettext optipng jpegoptim sqlite3 nginx augeas-lenses libaugeas0 libexpat1-dev \
 libpython-dev libpython2.7 libpython2.7-dev virtualenv python-dev python-pip-whl \
-python-virtualenv python2.7-dev python3-virtualenv
+python-virtualenv python2.7-dev python3-virtualenv openssl
 
 # Latest Certbot
 wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
