@@ -7,7 +7,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 echo "deb https://nginx.org/packages/debian/ `lsb_release -cs` nginx" > /etc/apt/sources.list.d/nginx.list
 curl -sS https://nginx.org/keys/nginx_signing.key | apt-key add -
 
-apt update ; apt -y install haveged nmap nikto xmlstarlet {libpng,libssl,libffi}-dev \
+apt update ; apt -yqq install haveged nmap nikto xmlstarlet {libpng,libssl,libffi}-dev \
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
 gettext optipng jpegoptim sqlite3 nginx augeas-lenses libaugeas0 libexpat1-dev \
 libpython-dev libpython2.7 libpython2.7-dev virtualenv python-dev python-pip-whl \
