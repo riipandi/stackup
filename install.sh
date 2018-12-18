@@ -158,6 +158,7 @@ echo -e "" && read -p "Press enter to continue ..."
 # Server configuration and install packages
 #-----------------------------------------------------------------------------------------
 source $ROOT/snippets/netconfig.sh
+
 source $ROOT/installer/03-webserver.sh
 
 InstallPackage swap enable $ROOT/snippets/swap.sh
