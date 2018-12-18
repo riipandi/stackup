@@ -181,14 +181,12 @@ fi
 # Cleanup
 #-----------------------------------------------------------------------------------------
 cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission
-apt -yqq autoremove && apt clean
+echo "" && apt -yqq autoremove && apt clean && netstat -pltn
 
-echo -e "Server stack has been installed.\n"
+echo -e "\nCongratulation, server stack has been installed.\n"
+
 if [[ `crudini --get $ROOT/config.ini system reboot` == "yes" ]] ; then
     echo "System will reboot in:"
     countdown "00:00:05"
     shutdown -r now
-else
-    netstat -pltn
-    echo -e "\nCongratulation, you can reboot server now if you want...\n"
 fi
