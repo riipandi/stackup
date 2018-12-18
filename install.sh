@@ -55,7 +55,7 @@ SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{pr
 ChangeRootPass() {
     read -sp "Enter new root password          : " rootpass
     if [[ "$rootpass" == "" ]] ; then
-        ChangeRootPass
+        echo -e "" && ChangeRootPass
     else
         usermod root --password `openssl passwd -1 "$rootpass"`
     fi
@@ -69,7 +69,7 @@ read -ep "Enter new user username          : " -i "admin" username
 ChangeUserPass() {
     read -sp "Enter new user password          : " userpass
     if [[ "$userpass" == "" ]] ; then
-        ChangeUserPass
+        echo -e "" && ChangeUserPass
     else
         useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
     fi

@@ -27,9 +27,9 @@ deb http://deb.debian.org/debian-security stable/updates main contrib non-free
 EOF
 
 apt update
-apt full-upgrade -y
+apt full-upgrade -yqq
 
-apt install -y sudo nano figlet elinks pwgen curl crudini lsof ntp \
+apt install -yqq sudo nano figlet elinks pwgen curl crudini lsof ntp \
 ntpdate whois perl dirmngr software-properties-common debconf-utils \
 apt-transport-https gcc make cmake build-essential binutils dnsutils \
 nscd dh-autoreconf ftp zip unzip bsdtar rsync screen screenfetch \
