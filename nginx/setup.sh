@@ -22,9 +22,12 @@ systemctl stop nginx
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
-rm -fr /etc/nginx/* && cp -r $ROOT/nginx/config/* /etc/nginx/.
-cp /etc/nginx/manifest/default.tpl /var/www/index.php
+mkdir -p /var/www
+rm -fr /etc/nginx/*
+cp -r $ROOT/nginx/config/* /etc/nginx/.
 chown -R root: /etc/nginx
+
+cp /etc/nginx/manifest/default.tpl /var/www/index.php
 chown -R www-data: /var/www
 chmod -R 0775 /var/www
 
