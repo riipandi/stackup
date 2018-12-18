@@ -9,8 +9,11 @@ curl -sS https://nginx.org/keys/nginx_signing.key | apt-key add -
 
 apt update ; apt -y install haveged nmap nikto xmlstarlet {libpng,libssl,libffi}-dev \
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
-gettext optipng jpegoptim sqlite3 nginx
+gettext optipng jpegoptim sqlite3 nginx augeas-lenses libaugeas0 libexpat1-dev \
+libpython-dev libpython2.7 libpython2.7-dev virtualenv python-dev python-pip-whl \
+python-virtualenv python2.7-dev python3-virtualenv
 
+# Latest Certbot
 wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 
 systemctl enable --now haveged
