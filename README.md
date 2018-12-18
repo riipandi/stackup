@@ -10,15 +10,17 @@ Just run this command:
 bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ```
 
-## Create MySQL Database
+## Commands
+
+### Create MySQL Database
 
 ```bash
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS dbname"
-mysql -uroot -e "CREATE USER IF NOT EXISTS 'dbname'@'127.0.0.1' IDENTIFIED BY 'dbpass'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbname'@'127.0.0.1'; FLUSH PRIVILEGES"
+mysql -uroot -e "CREATE USER IF NOT EXISTS 'dbuser'@'127.0.0.1' IDENTIFIED BY 'dbpass'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbuser'@'127.0.0.1'; FLUSH PRIVILEGES"
 ```
 
-## Create Nginx vHost
+### Create Nginx vHost
 
 ```bash
 # Web directory
@@ -32,8 +34,7 @@ sed -i "s/HOSTNAME/domain.tld/" /etc/nginx/vhost.d/domain.tld.conf
 
 # Generet SSL Certificate
 systemctl stop nginx ; certbot certonly --standalone --rsa-key-size 4096 \
- --agree-tos --register-unsafely-without-email \
- -d domain.tld -d www.domain.tld
+ --agree-tos --register-unsafely-without-email -d domain.tld -d www.domain.tld
 
 # Set Permission File dan Folder
 cd /srv/domain.tld
