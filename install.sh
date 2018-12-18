@@ -68,7 +68,7 @@ read -ep "Enter new user username          : " -i "admin" username
 
 ChangeUserPass() {
     read -sp "Enter new user password          : " userpass
-    if [[ "$rootpass" == "" ]] ; then
+    if [[ "$userpass" == "" ]] ; then
         ChangeUserPass
     else
         useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
