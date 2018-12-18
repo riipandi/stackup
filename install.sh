@@ -60,7 +60,7 @@ read -ep "Change root password?      yes/no : " -i "no" changerootpass
 if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then ChangeRootPass ; fi
 
 ChangeUserPass() {
-    read -sp "Enter new user password          : " userpass
+    read -sp "Enter new user password           : " userpass
     if [[ "$userpass" == "" ]] ; then
         echo -e "" && ChangeUserPass
     else
@@ -68,11 +68,10 @@ ChangeUserPass() {
     fi
 }
 
-read -ep "Create a new user?        yes/no : " -i "yes" createuser
+read -ep "Create a new user?         yes/no : " -i "yes" createuser
 if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
-    echo -e ""
-    read -ep "Enter new user fullname          : " -i "Admin Sistem" fullname
-    read -ep "Enter new user username          : " -i "admin" username
+    read -ep "Enter new user fullname           : " -i "Admin Sistem" fullname
+    read -ep "Enter new user username           : " -i "admin" username
     ChangeUserPass
 fi
 
