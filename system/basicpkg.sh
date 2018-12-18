@@ -24,15 +24,15 @@ deb http://deb.debian.org/debian-security stable/updates main contrib non-free
 EOF
 
 apt update
-apt -y full-upgrade
+apt full-upgrade -y
 
-apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp \
+apt install -y sudo nano figlet elinks pwgen curl crudini lsof ntp \
 ntpdate whois perl dirmngr software-properties-common debconf-utils \
 apt-transport-https gcc make cmake build-essential binutils dnsutils \
 nscd dh-autoreconf ftp zip unzip bsdtar rsync screen screenfetch \
 ca-certificates resolvconf
 
-apt -y autoremove
+apt autoremove -y
 
 echo -e "\nDownloading extra utilities...\n"
 GetBin https://semut.org/gdrive /usr/bin/gdrive
