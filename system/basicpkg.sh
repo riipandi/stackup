@@ -2,7 +2,10 @@
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
-GetBin() { curl -L# $1 -o $2 && chmod a+x $2 }
+GetBin() {
+    curl -L# $1 -o $2
+    chmod a+x $2
+}
 
 # country=`cat /tmp/country`
 # if [ "$country" == "ID" ] ; then
