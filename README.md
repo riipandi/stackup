@@ -3,12 +3,14 @@
 The LEMP software stack is a group of software that can be used to
 serve dynamic web pages and web applications. This is an acronym
 that describes a Linux operating system, with an Nginx web server.
-The backend data is stored in the MySQL/MariaDB database and the
-dynamic processing is handled by PHP and or Python.
+The backend data is stored in the MySQL/MariaDB database and or
+PostgreSQL as optional, and the dynamic processing is handled by
+PHP and or Python.
 
 ## Prerequisites
 
-You will need a fresh installed Debian 9 server with a root user.
+- Fresh installed Debian 9 server with a root user.
+- Domain with already pointed IP address to that server.
 
 ## Usage
 
