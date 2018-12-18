@@ -52,14 +52,29 @@ source $ROOT/system/basicpkg.sh
 #-----------------------------------------------------------------------------------------
 SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
 
-read -sp "Enter new root password          : " rootpass
-usermod root --password `openssl passwd -1 "$rootpass"`
+ChangeRootPass() {
+    read -sp "Enter new root password          : " rootpass
+    if [[ "$rootpass" == "" ]] ; then
+        ChangeRootPass
+    else
+        usermod root --password `openssl passwd -1 "$rootpass"`
+    fi
+}
+ChangeRootPass
 
 echo -e ""
 read -ep "Enter new user fullname          : " -i "Admin Sistem" fullname
 read -ep "Enter new user username          : " -i "admin" username
-read -sp "Enter new user password          : " userpass
-useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
+
+ChangeUserPass() {
+    read -sp "Enter new user password          : " userpass
+    if [[ "$rootpass" == "" ]] ; then
+        ChangeUserPass
+    else
+        useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
+    fi
+}
+ChangeUserPass
 
 echo -e ""
 read -ep "Please specify SSH port          : " -i "22" ssh_port
