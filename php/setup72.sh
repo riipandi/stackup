@@ -4,6 +4,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 
 echo "deb https://packages.sury.xyz/php/ `lsb_release -cs` main" > /etc/apt/sources.list.d/sury-php.list
 curl -sS https://packages.sury.xyz/php/apt.gpg | apt-key add -
+
 apt update
 
 apt -y install php7.2 php7.2-{common,cli,cgi,fpm,bcmath,mbstring,opcache,json} \
