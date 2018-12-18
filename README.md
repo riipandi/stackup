@@ -45,10 +45,7 @@ systemctl stop nginx ; certbot certonly --standalone --rsa-key-size 4096 \
  --agree-tos --register-unsafely-without-email -d domain.tld -d www.domain.tld
 
 # Set Permission File dan Folder
-cd /srv/domain.tld
-find . -type d -exec chmod 0777 {} \;
-find . -type f -exec chmod 0775 {} \;
-find . -exec chown -R www-data: {} \;
+fix-permission /srv/domain.tld www-data:
 ```
 
 ## License

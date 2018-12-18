@@ -23,6 +23,20 @@ InstallPackage() {
     fi
 }
 
+countdown()
+(
+    IFS=:
+    set -- $*
+    secs=$(( ${1#0} * 3600 + ${2#0} * 60 + ${3#0} ))
+    while [ $secs -gt 0 ] ; do
+        sleep 1 &
+        printf "\r%02d:%02d:%02d" $((secs/3600)) $(( (secs/60)%60)) $((secs%60))
+        secs=$(( $secs - 1 ))
+        wait
+    done
+    echo
+)
+
 #-----------------------------------------------------------------------------------------
 # Initial Setup
 #-----------------------------------------------------------------------------------------
@@ -166,12 +180,15 @@ fi
 #-----------------------------------------------------------------------------------------
 # Cleanup
 #-----------------------------------------------------------------------------------------
-apt -y autoremove && apt clean
+cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission
+apt -yqq autoremove && apt clean
 
+echo -e "Server stack has been installed.\n"
 if [[ `crudini --get $ROOT/config.ini system reboot` == "yes" ]] ; then
+    echo "System will reboot in:"
+    countdown "00:00:05"
     shutdown -r now
 else
-    echo -e "\n" && netstat -pltn && echo -e "\n"
-    echo -e "Server stack has been installed.\n"
-    echo -e "Congratulation, you can reboot server now if you want...\n"
+    netstat -pltn
+    echo -e "\nCongratulation, you can reboot server now if you want...\n"
 fi
