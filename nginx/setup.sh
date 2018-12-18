@@ -19,7 +19,7 @@ wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/ce
 systemctl enable --now haveged
 systemctl stop nginx
 
-curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam.pem
+curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
 mkdir -p /var/www
@@ -39,7 +39,7 @@ sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
 
 # Generate SSL certificates for default vhost
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
+  certbot certonly --standalone --agree-tos --rsa-key-size 2048 \
     --register-unsafely-without-email --preferred-challenges http \
     -d "$(hostname -f)"
 fi

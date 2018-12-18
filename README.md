@@ -38,7 +38,7 @@ vhost-create domain.tld
 
 # Generet SSL Certificate
 systemctl stop nginx
-certbot certonly --standalone --rsa-key-size 4096 \
+certbot certonly --standalone --rsa-key-size 2048 \
   --agree-tos --register-unsafely-without-email \
   -d domain.tld -d www.domain.tld
 
