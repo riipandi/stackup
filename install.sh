@@ -47,6 +47,10 @@ echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 # Upgrade basic system packages
 source $ROOT/system/basicpkg.sh
 
+echo ""
+read -p "Press enter to continue ..."
+echo ""
+
 #-----------------------------------------------------------------------------------------
 # System setup
 #-----------------------------------------------------------------------------------------
@@ -131,8 +135,8 @@ fi
 read -ep "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
-read -ep "Install PHP 7.2         (yes/no) : " -i "yes" php72_install
-SetConfigSetup extras php72 $php72_install
+read -ep "Install PHP 7.3         (yes/no) : " -i "yes" php73_install
+SetConfigSetup extras php73 $php72_install
 
 read -ep "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
 SetConfigSetup extras php56 $php56_install
@@ -172,8 +176,8 @@ InstallPackage swap enable $ROOT/system/swap.sh
 InstallPackage tgnotif install $ROOT/system/tgnotif.sh
 source $ROOT/system/netconfig.sh
 
-source $ROOT/php/setup73.sh
-InstallPackage extras php72 $ROOT/php/setup72.sh
+source $ROOT/php/setup72.sh
+InstallPackage extras php73 $ROOT/php/setup73.sh
 InstallPackage extras php56 $ROOT/php/setup56.sh
 source $ROOT/php/configure.sh
 

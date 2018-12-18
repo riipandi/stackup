@@ -19,3 +19,5 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max_requests"         "256"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.process_idle_timeout" "10s"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.status_path" "/status"' {} \;
+
+phpenmod curl opcache imagick fileinfo
