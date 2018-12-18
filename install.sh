@@ -136,7 +136,7 @@ read -ep "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
 read -ep "Install PHP 7.3         (yes/no) : " -i "yes" php73_install
-SetConfigSetup extras php73 $php72_install
+SetConfigSetup extras php73 $php73_install
 
 read -ep "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
 SetConfigSetup extras php56 $php56_install
