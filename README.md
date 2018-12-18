@@ -36,14 +36,17 @@ mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbuser'@'127.0.0.1'; FLUSH
 # Create virtualhost
 vhost-create domain.tld
 
+# Set Permission File dan Folder
+fix-permission /srv/domain.tld www-data:
+
 # Generet SSL Certificate
 systemctl stop nginx
 certbot certonly --standalone --rsa-key-size 2048 \
   --agree-tos --register-unsafely-without-email \
   -d domain.tld -d www.domain.tld
 
-# Set Permission File dan Folder
-fix-permission /srv/domain.tld www-data:
+# Revoke SSL Certificate
+certbot revoke --cert-path /etc/letsencrypt/live/domain.tld/fullchain.pem
 ```
 
 ## License

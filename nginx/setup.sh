@@ -19,6 +19,7 @@ wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/ce
 systemctl enable --now haveged
 systemctl stop nginx
 
+echo -e "Downloading dhparam and trusted certificates..."
 curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam.pem
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
@@ -27,15 +28,16 @@ rm -fr /etc/nginx/*
 cp -r $ROOT/nginx/config/* /etc/nginx/.
 chown -R root: /etc/nginx
 
+sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
+sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
+
+sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
+
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
 chown -R www-data: /var/www
 chmod -R 0775 /var/www
-
-sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
-sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
-sed -i "s/IPADDRESS/$(curl -s v4.ifconfig.co)/" /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
 
 # Generate SSL certificates for default vhost
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
