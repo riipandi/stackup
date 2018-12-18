@@ -20,5 +20,3 @@ deb http://deb.debian.org/debian stable main contrib non-free
 deb http://deb.debian.org/debian stable-updates main contrib non-free
 deb http://deb.debian.org/debian-security stable/updates main contrib non-free
 EOF
-
-echo -e "\nDefault repository changed..\n"
