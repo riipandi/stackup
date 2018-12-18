@@ -81,7 +81,6 @@ source $ROOT/system/basicpkg.sh
 # Print welcome message
 figlet "Hello there!"
 read -p "Press enter to continue ..."
-echo -e "\n"
 
 #-----------------------------------------------------------------------------------------
 # System and packages setup
