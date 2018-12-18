@@ -18,4 +18,5 @@ if [[ ! -d $outputdir ]]; then
     bash $PWD/install.sh
 else
     echo -e "Directory $outputdir already exists, please remove first!"
+    exit 1;
 fi
