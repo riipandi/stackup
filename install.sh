@@ -47,7 +47,7 @@ echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 # Upgrade basic system packages
 source $ROOT/system/basicpkg.sh
 
-echo ""
+figlet "Hello there!"
 read -p "Press enter to continue ..."
 echo ""
 
