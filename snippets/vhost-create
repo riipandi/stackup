@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Check if running by root
+if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+# Virtual Host Configuration
+cp /etc/nginx/manifest/vhost-php.tpl /etc/nginx/vhost.d/$1.conf
+sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
+sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
+
+# Create Web directory
+mkdir -p /srv/$1/public
+cp /etc/nginx/manifest/welcome.tpl /srv/$1/public/index.php
+chown -R www-data: /srv/$1
+chmod -R 00775 /srv/$1

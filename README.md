@@ -31,14 +31,8 @@ mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbuser'@'127.0.0.1'; FLUSH
 ### Create Nginx vHost
 
 ```bash
-# Create Web directory
-mkdir -p /srv/domain.tld/public
-cp /etc/nginx/manifest/welcome.tpl /srv/domain.tld/public/index.php
-chown -R www-data: /srv/domain.tld
-
-# Virtual Host Configuration
-cp /etc/nginx/manifest/vhost-php.tpl /etc/nginx/vhost.d/domain.tld.conf
-sed -i "s/HOSTNAME/domain.tld/" /etc/nginx/vhost.d/domain.tld.conf
+# Create virtualhost
+vhost-create domain.tld
 
 # Generet SSL Certificate
 systemctl stop nginx ; certbot certonly --standalone --rsa-key-size 4096 \
