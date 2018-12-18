@@ -2,7 +2,7 @@
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
-apt update ; apt -yqq install postfix postfix-mysql ; systemctl enable --now postfix
+apt update ; apt -y install postfix postfix-mysql ; systemctl enable --now postfix
 
 postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
 postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf

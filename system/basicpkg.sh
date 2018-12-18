@@ -29,7 +29,7 @@ EOF
 apt update
 apt -y full-upgrade
 
-apt -yqq install sudo nano figlet elinks pwgen curl crudini lsof ntp \
+apt -y install sudo nano figlet elinks pwgen curl crudini lsof ntp \
 ntpdate whois perl dirmngr software-properties-common debconf-utils \
 apt-transport-https gcc make cmake build-essential binutils dnsutils \
 nscd dh-autoreconf ftp zip unzip bsdtar rsync screen screenfetch \
@@ -37,7 +37,7 @@ ca-certificates resolvconf
 
 apt -y autoremove
 
-# Extra Packages
+echo -e "\nDownloading extra utilities...\n"
 GetBin https://semut.org/gdrive /usr/bin/gdrive
 GetBin https://dl.eff.org/certbot-auto /usr/bin/certbot
 GetBin https://git.io/vN3Ff /usr/bin/wp

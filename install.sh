@@ -188,7 +188,7 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission
 cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create
 
-echo "" && apt -yqq autoremove && apt clean && netstat -pltn
+echo "" && apt -y autoremove && apt clean && netstat -pltn
 
 echo -e "\nCongratulation, server stack has been installed.\n"
 

@@ -8,7 +8,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 
 debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
 debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
-apt update ; apt -yqq install proftpd-mod-mysql iptables iptables-persistent
+apt update ; apt -y install proftpd-mod-mysql iptables iptables-persistent
 
 #-----------------------------------------------------------------------------------------
 # Configure ProFTPd

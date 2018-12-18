@@ -12,7 +12,7 @@ curl -sS https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add -
 
 debconf-set-selections <<< "pdns-backend-mysql pdns-backend-mysql/dbconfig-install boolean false"
 
-apt update ; apt -yqq install pdns-{server,backend-mysql}
+apt update ; apt -y install pdns-{server,backend-mysql}
 
 
 #-----------------------------------------------------------------------------------------

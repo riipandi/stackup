@@ -16,5 +16,5 @@ apt update -qq
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $password"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $password"
 
-apt -yqq install mariadb-server mariadb-client
+apt -y install mariadb-server mariadb-client
 
