@@ -44,33 +44,20 @@ rm -f /etc/resolv.conf
 echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
 echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 
-# Upgrade basic system packages
-read -ep "Change default repository mirror?  yes/no : " -i "yes" changrepo
+# Change default repository mirror
+read -ep "Change repository mirror?  yes/no : " -i "yes" changrepo
 if [[ "${changrepo,,}" =~ ^(yes|y)$ ]] ; then source $ROOT/system/repository.sh ; fi
-source $ROOT/system/basicpkg.sh
-
-figlet "Hello there!"
-read -p "Press enter to continue ..."
-echo ""
-
-#-----------------------------------------------------------------------------------------
-# System setup
-#-----------------------------------------------------------------------------------------
-SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
 
 ChangeRootPass() {
-    read -sp "Enter new root password          : " rootpass
+    read -sp "Enter new root password           : " rootpass
     if [[ "$rootpass" == "" ]] ; then
         echo -e "" && ChangeRootPass
     else
         usermod root --password `openssl passwd -1 "$rootpass"`
     fi
 }
-ChangeRootPass
-
-echo -e ""
-read -ep "Enter new user fullname          : " -i "Admin Sistem" fullname
-read -ep "Enter new user username          : " -i "admin" username
+read -ep "Change root password?      yes/no : " -i "no" changerootpass
+if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then ChangeRootPass ; fi
 
 ChangeUserPass() {
     read -sp "Enter new user password          : " userpass
@@ -80,9 +67,28 @@ ChangeUserPass() {
         useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
     fi
 }
-ChangeUserPass
 
-echo -e ""
+read -ep "Create a new user?        yes/no : " -i "yes" createuser
+if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then
+    echo -e ""
+    read -ep "Enter new user fullname          : " -i "Admin Sistem" fullname
+    read -ep "Enter new user username          : " -i "admin" username
+    ChangeUserPass
+fi
+
+# Upgrade basic system packages
+source $ROOT/system/basicpkg.sh
+
+# Print welcome message
+figlet "Hello there!"
+read -p "Press enter to continue ..."
+echo -e "\n"
+
+#-----------------------------------------------------------------------------------------
+# System and packages setup
+#-----------------------------------------------------------------------------------------
+SetConfigSetup system country `curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' -f2`
+
 read -ep "Please specify SSH port          : " -i "22" ssh_port
 SetConfigSetup system ssh_port $ssh_port
 
@@ -92,10 +98,6 @@ SetConfigSetup system timezone $timezone
 read -ep "Disable IPv6            (yes/no) : " -i "no" disable_ipv6
 SetConfigSetup system disable_ipv6 $disable_ipv6
 
-#-----------------------------------------------------------------------------------------
-# Packages setup
-#-----------------------------------------------------------------------------------------
-echo -e ""
 read -ep "Use Telegram Notif      (yes/no) : " -i "no" tgnotif_install
 SetConfigSetup tgnotif install $tgnotif_install
 if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
