@@ -69,7 +69,7 @@ ChangeUserPass() {
 }
 
 read -ep "Create a new user?        yes/no : " -i "yes" createuser
-if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then
+if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
     echo -e ""
     read -ep "Enter new user fullname          : " -i "Admin Sistem" fullname
     read -ep "Enter new user username          : " -i "admin" username
