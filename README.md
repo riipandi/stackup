@@ -1,10 +1,18 @@
-# Linux Nginx PHP Stack
+# Another LEMP Stack installer script.
 
-Another LEMP Stack installer script.
+The LEMP software stack is a group of software that can be used to
+serve dynamic web pages and web applications. This is an acronym
+that describes a Linux operating system, with an Nginx web server.
+The backend data is stored in the MySQL/MariaDB database and the
+dynamic processing is handled by PHP and or Python.
+
+## Prerequisites
+
+You will need a fresh installed Debian 9 server with a root user.
 
 ## Usage
 
-Just run this command:
+Just run this command and follow the wizard:
 
 ```bash
 bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
@@ -23,7 +31,7 @@ mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbuser'@'127.0.0.1'; FLUSH
 ### Create Nginx vHost
 
 ```bash
-# Web directory
+# Create Web directory
 mkdir -p /srv/domain.tld/public
 cp /etc/nginx/manifest/welcome.tpl /srv/domain.tld/public/index.php
 chown -R www-data: /srv/domain.tld
