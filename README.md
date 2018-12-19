@@ -41,7 +41,7 @@ fix-permission /srv/domain.tld www-data:
 
 # Generet SSL Certificate
 systemctl stop nginx
-certbot certonly --standalone --rsa-key-size 3072 \
+certbot certonly --standalone --rsa-key-size 4096 \
   --agree-tos --register-unsafely-without-email \
   -d domain.tld -d www.domain.tld
 
