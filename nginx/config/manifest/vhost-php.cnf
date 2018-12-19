@@ -10,8 +10,9 @@ server {
     ssl_dhparam          /etc/ssl/certs/dhparam-3072.pem;
     ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
+
     #add_header Public-Key-Pins 'pin-sha256="HPKP_VALUE"; max-age=5184000;';
-    #add_header Public-Key-Pins 'pin-sha256="Hash1"; pin-sha256="Hash2"; pin-sha256="Hash3"; pin-sha256="Hash4"; pin-sha256="Hash5"; max-age=60;';
+    #add_header Public-Key-Pins 'pin-sha256="Hash1"; pin-sha256="Hash2"; pin-sha256="Hash3"; max-age=5184000;';
 
     # redirect to non-www
     if ($host = 'www.HOSTNAME') {
@@ -29,8 +30,8 @@ server {
     include server.d/static.conf;
 
     # php-fpm handler
-    location / { try_files $uri $uri/ @rewrite; }
-    location @rewrite { rewrite ^/(.*)$ /index.php?q=$1; }
+    location / { try_files $uri $uri/ @php; }
+    location @php { rewrite ^/(.*)$ /index.php?q=$1; }
 
     location ~ \.php(/|$) {
         fastcgi_pass unix:/var/run/php/php72-fpm.sock;
