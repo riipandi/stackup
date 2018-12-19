@@ -20,8 +20,7 @@ iptables -A INPUT -p tcp -m tcp --dport 50000:50100 -j ACCEPT
 netfilter-persistent save
 netfilter-persistent reload
 
-curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/private/proftpd-dhparam.pem
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt -subj "/CN=$(hostname -f)"
+openssl req -x509 -nodes -days 365 -newkey rsa:3072 -keyout /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt -subj "/CN=$(hostname -f)"
 chmod 0600 /etc/ssl/private/proftpd.key
 chmod 0640 /etc/ssl/private/proftpd.key
 

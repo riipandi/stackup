@@ -14,14 +14,12 @@ libpython-dev libpython2.7 libpython2.7-dev virtualenv python-dev python-pip-whl
 python-virtualenv python2.7-dev python3-virtualenv openssl
 
 # Latest Certbot
+echo -e "Downloading certbot and trusted certificates..."
 wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
+curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
 systemctl enable --now haveged
 systemctl stop nginx
-
-echo -e "Downloading dhparam and trusted certificates..."
-curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam.pem
-curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
 mkdir -p /var/www
 rm -fr /etc/nginx/*
@@ -32,8 +30,8 @@ sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.con
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"  /etc/nginx/server.d/server.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/server.d/server.conf
 
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
 chown -R www-data: /var/www
@@ -41,7 +39,7 @@ chmod -R 0775 /var/www
 
 # Generate SSL certificates for default vhost
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 2048 \
+  certbot certonly --standalone --agree-tos --rsa-key-size 3072 \
     --register-unsafely-without-email --preferred-challenges http \
     -d "$(hostname -f)"
 fi
