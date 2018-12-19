@@ -59,20 +59,24 @@ ChangeRootPass() {
 read -ep "Change root password?      yes/no : " -i "no" changerootpass
 if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then ChangeRootPass ; fi
 
-ChangeUserPass() {
-    read -sp "Enter new user password           : " userpass
-    if [[ "$userpass" == "" ]] ; then
-        echo -e "" && ChangeUserPass
-    else
-        useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass"`
-    fi
+CreateNewUser() {
+    while true; do
+        echo
+        read -sp "Enter new user password           : " userpass1
+        [ "$userpass1" == "" ] && CreateNewUser
+        echo
+        read -sp "Enter new user password (again)   : " userpass2
+        [ "$userpass1" = "$userpass2" ] && break
+    done
+    useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass1"`
+    echo
 }
 
 read -ep "Create a new user?         yes/no : " -i "yes" createuser
 if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter new user fullname           : " -i "Admin Sistem" fullname
     read -ep "Enter new user username           : " -i "admin" username
-    ChangeUserPass
+    CreateNewUser
 fi
 
 # Upgrade basic system packages
