@@ -25,9 +25,13 @@ bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ### Create MySQL Database
 
 ```bash
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS dbname"
-mysql -uroot -e "CREATE USER IF NOT EXISTS 'dbuser'@'127.0.0.1' IDENTIFIED BY 'dbpass'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON dbname.* TO 'dbuser'@'127.0.0.1'; FLUSH PRIVILEGES"
+export dbname="xxxxxxxxxxxxx"  # <-- change this variable
+export dbuser="xxxxxxxxxxxxx"  # <-- change this variable
+export dbpass="`pwgen -1 12`"  # <-- keep this variable
+
+mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $dbname"
+mysql -uroot -e "CREATE USER IF NOT EXISTS '$dbuser'@'127.0.0.1' IDENTIFIED BY '$dbpass'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'127.0.0.1'; FLUSH PRIVILEGES"
 ```
 
 ### Create Nginx vHost
