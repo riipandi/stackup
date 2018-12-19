@@ -43,5 +43,7 @@ sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
-figlet `hostname -s` > /etc/motd
+
+echo -e "$(figlet server://`hostname -s`)\n" > /etc/motd
+
 systemctl restart ssh
