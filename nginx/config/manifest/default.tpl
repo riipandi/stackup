@@ -1,47 +1,38 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="robots" content="all, noindex, nofollow">
-  <meta name="googlebot" content="all, noindex, nofollow">
-  <meta name="author" content="Aris Ripandi">
-  <title>Default Web Page</title>
-  <style>
-    body{height:100%;background:#fafafa;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:#777;font-weight:300}
-    div.logo {opacity:.08;position:absolute;top: 50%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);}
-    h1{font-weight:bold;letter-spacing:.8px;font-size:2.6rem;margin-top:20px;margin-bottom:0;color:#222}
-    .wrap{max-width:768px;margin:6% auto;padding:2rem;background:#fff;text-align:center;border:1px solid #efefef;border-radius:.5rem;position:relative}
-    .version{margin-top:10px;color:#999} .guide{margin-top:1rem;text-align:left} pre{white-space:normal;margin-top:1.5rem}
-    code{background:#fafafa;border:1px solid #efefef;padding:.5rem 1rem;border-radius:5px;display:block}
-    p{margin-top:1rem; line-height:1.4rem;} .text-center {text-align: center;} .text-justify {text-align: justify;}
-    a:active,a:link,a:visited{color:#dd4814;text-decoration:none;} .previous {padding-top: 0.6em;}
-    .footer{margin-top:2rem;border-top:1px solid #efefef;padding:2em 2em 0;font-size:85%;color:#999}
-    @media (max-width: 768px) { .wrap{max-width:400px;} }
-  </style>
-</head>
-<body>
-<div class="wrap">
-  <h1>Hello.</h1>
-  <div class="logo">
-    <svg viewBox="0 0 64 64" width="260px" height="260px" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="32" cy="32" fill="#4F5D73" r="32"/><path d="M26,52.735c0,1.398-1.119,2.531-2.5,2.531l0,0c-1.381,0-2.5-1.133-2.5-2.531V19.265  c0-1.398,1.119-2.531,2.5-2.531l0,0c1.381,0,2.5,1.133,2.5,2.531V52.735z" fill="#231F20" opacity="0.2"/><path d="M43,52.735c0,1.398-1.119,2.531-2.5,2.531l0,0c-1.381,0-2.5-1.133-2.5-2.531V19.265  c0-1.398,1.119-2.531,2.5-2.531l0,0c1.381,0,2.5,1.133,2.5,2.531V52.735z" fill="#231F20" opacity="0.2"/><path d="M26,51c0,1.398-1.119,2.531-2.5,2.531l0,0c-1.381,0-2.5-1.133-2.5-2.531V17.531C21,16.133,22.119,14,23.5,14  l0,0c1.381,0,2.5,2.133,2.5,3.531V51z" fill="#E0E0D1"/><path d="M43,51c0,1.398-1.119,2.531-2.5,2.531l0,0c-1.381,0-2.5-1.133-2.5-2.531V17.531C38,16.133,39.119,14,40.5,14  l0,0c1.381,0,2.5,2.133,2.5,3.531V51z" fill="#E0E0D1"/><path d="M38,43.031C38,46.328,35.314,49,32,49l0,0c-3.314,0-6-2.672-6-5.969V16c0-3.297,2.686-9,6-9l0,0  c3.314,0,6,5.703,6,9V43.031z" fill="#E0995E"/><path d="M34.563,51c0,1.105-0.895,2-2,2H21c-1.105,0-3-0.895-3-2v-3c0-1.105,1.823-2.216,3-3  c6-4,6-12,6-12c1.105,0,7.563,4.895,7.563,6V51z" fill="#231F20" opacity="0.2"/><path d="M29.437,51c0,1.105,0.895,2,2,2H43c1.105,0,3-0.895,3-2v-3c0-1.105-1.823-2.216-3-3  c-6-4-6-12-6-12c-1.105,0-7.563,4.895-7.563,6L29.437,51z" fill="#231F20" opacity="0.2"/><path d="M37,54.469C37,55.867,34.761,57,32,57l0,0c-2.761,0-5-1.133-5-2.531V24c0-1.398,2.239-7,5-7  l0,0c2.761,0,5,5.602,5,7V54.469z" fill="#231F20" opacity="0.2"/><path d="M34.563,47c0,1.105-0.895,2-2,2H21c-1.105,0-3-0.895-3-2v-3c0-1.105,1.823-2.216,3-3  c6-4,6-12,6-12c1.105,0,7.563,4.895,7.563,6V47z" fill="#231F20" opacity="0.2"/><path d="M29.437,47c0,1.105,0.895,2,2,2H43c1.105,0,3-0.895,3-2v-3c0-1.105-1.823-2.216-3-3  c-6-4-6-12-6-12c-1.105,0-7.563,4.895-7.563,6L29.437,47z" fill="#231F20" opacity="0.2"/><g opacity="0.2"><path d="M26,51V17.531c0-0.825-0.396-2.069-1-2.531v38.013C25.604,52.551,26,51.825,26,51z" fill="#231F20"/><path d="M38,17.531V51c0,0.825,0.396,1.551,1,2.013V15C38.396,15.462,38,16.706,38,17.531z" fill="#231F20"/></g><path d="M34.563,49c0,1.105-0.895,2-2,2H21c-1.105,0-3-0.895-3-2v-3c0-1.105,1.823-2.216,3-3c6-4,6-12,6-12  c1.105,0,7.563,4.895,7.563,6V49z" fill="#E0E0D1"/><path d="M29.437,49c0,1.105,0.895,2,2,2H43c1.105,0,3-0.895,3-2v-3c0-1.105-1.823-2.216-3-3c-6-4-6-12-6-12  c-1.105,0-7.563,4.895-7.563,6L29.437,49z" fill="#E0E0D1"/><path d="M37,52.469C37,53.867,34.761,55,32,55l0,0c-2.761,0-5-1.133-5-2.531V22c0-1.398,2.239-7,5-7l0,0  c2.761,0,5,5.602,5,7V52.469z" fill="#FFFFFF"/></svg>
-  </div>
-  <div class="guide text-justify">
-    <p>
-      This is the default page used to test the correct operation of the
-      web server installation and you are using PHP v<?=(float)phpversion()?>.
-      If you can read this page, it means that the web server installed and
-      working properly. You should replace this index file before continuing
-      to operate your website.
-    </p>
-    <p>
-      If you are a normal user of this web site and don't know what this page is about,
-      this probably means that the site is currently unavailable due to maintenance.
-    </p>
-    <p class="previous text-center">
-      &laquo;&nbsp;<a href="javascript:window.history.back();">back to previous page</a>&nbsp;&raquo;
-    </p>
-  </div>
-  <div class="footer">Thank you for creating with us.</div>
-</div>
-</body>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Default Web Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="all, noindex, nofollow">
+        <meta name="googlebot" content="all, noindex, nofollow">
+        <link rel="icon" type="image/x-icon" href="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjMycHgiIHZpZXdCb3g9Ii0zMSAwIDQ2MyA0NjQiIHdpZHRoPSIzMnB4Ij48cGF0aCBkPSJtMzAuMjE4NzUgMTEwLjkyOTY4OCAyNy43MjI2NTYgMTZjMi40NzY1NjMgMS40NDkyMTggNS41MzkwNjMgMS40NjQ4NDMgOC4wMjczNDQuMDM1MTU2IDIuNDkyMTg4LTEuNDI5Njg4IDQuMDIzNDM4LTQuMDg1OTM4IDQuMDE1NjI1LTYuOTU3MDMyLS4wMDM5MDYtMi44NzEwOTMtMS41NDY4NzUtNS41MTU2MjQtNC4wNDI5NjktNi45Mzc1bC0yNy43MjI2NTYtMTZjLTMuODIwMzEyLTIuMTcxODc0LTguNjgzNTk0LS44NTE1NjItMTAuODgyODEyIDIuOTU3MDMyLTIuMTk1MzEzIDMuODA4NTk0LS45MTAxNTcgOC42NzU3ODEgMi44ODI4MTIgMTAuOTAyMzQ0em0wIDAiIGZpbGw9IiMwMDZERjAiLz48cGF0aCBkPSJtNTcuOTQxNDA2IDI3My4wNzAzMTItMjcuNzIyNjU2IDE2Yy0yLjQ5NjA5NCAxLjQyMTg3Ni00LjAzOTA2MiA0LjA2NjQwNy00LjA0Mjk2OSA2LjkzNzUtLjAwNzgxMiAyLjg3MTA5NCAxLjUyMzQzOCA1LjUyNzM0NCA0LjAxNTYyNSA2Ljk1NzAzMiAyLjQ4ODI4MiAxLjQyOTY4NyA1LjU1MDc4MiAxLjQxNDA2MiA4LjAyNzM0NC0uMDM1MTU2bDI3LjcyMjY1Ni0xNmMyLjQ5NjA5NC0xLjQyMTg3NiA0LjAzOTA2My00LjA2NjQwNyA0LjA0Mjk2OS02LjkzNzUuMDA3ODEzLTIuODcxMDk0LTEuNTIzNDM3LTUuNTI3MzQ0LTQuMDE1NjI1LTYuOTU3MDMyLTIuNDg4MjgxLTEuNDI5Njg3LTUuNTUwNzgxLTEuNDE0MDYyLTguMDI3MzQ0LjAzNTE1NnptMCAwIiBmaWxsPSIjMDA2REYwIi8+PHBhdGggZD0ibTM3MC43ODEyNSAyODkuMDcwMzEyLTI3LjcyMjY1Ni0xNmMtMi40NzY1NjMtMS40NDkyMTgtNS41MzkwNjMtMS40NjQ4NDMtOC4wMjczNDQtLjAzNTE1Ni0yLjQ5MjE4OCAxLjQyOTY4OC00LjAyMzQzOCA0LjA4NTkzOC00LjAxNTYyNSA2Ljk1NzAzMi4wMDM5MDYgMi44NzEwOTMgMS41NDY4NzUgNS41MTU2MjQgNC4wNDI5NjkgNi45Mzc1bDI3LjcyMjY1NiAxNmMyLjQ3NjU2MiAxLjQ0OTIxOCA1LjUzOTA2MiAxLjQ2NDg0MyA4LjAyNzM0NC4wMzUxNTYgMi40OTIxODctMS40Mjk2ODggNC4wMjM0MzctNC4wODU5MzggNC4wMTU2MjUtNi45NTcwMzItLjAwMzkwNy0yLjg3MTA5My0xLjU0Njg3NS01LjUxNTYyNC00LjA0Mjk2OS02LjkzNzV6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0zMzkuMDY2NDA2IDEyOGMxLjQwNjI1LjAwMzkwNiAyLjc4NTE1Ni0uMzY3MTg4IDQtMS4wNzAzMTJsMjcuNzIyNjU2LTE2YzIuNDk2MDk0LTEuNDIxODc2IDQuMDM5MDYzLTQuMDY2NDA3IDQuMDQyOTY5LTYuOTM3NS4wMDc4MTMtMi44NzEwOTQtMS41MjM0MzctNS41MjczNDQtNC4wMTE3MTktNi45NTcwMzItMi40OTIxODctMS40Mjk2ODctNS41NTQ2ODctMS40MTQwNjItOC4wMzEyNS4wMzUxNTZsLTI3LjcyMjY1NiAxNmMtMy4xMzI4MTIgMS44MTI1LTQuNjY0MDYyIDUuNTAzOTA3LTMuNzI2NTYyIDkgLjkzNzUgMy40OTYwOTQgNC4xMDkzNzUgNS45Mjk2ODggNy43MjY1NjIgNS45Mjk2ODh6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0yNzYuNSA2OC4zNjcxODhjMy44MjgxMjUgMi4yMTA5MzcgOC43MTg3NS44OTg0MzcgMTAuOTI5Njg4LTIuOTI1NzgybDE2LTI3LjcyMjY1NmMyLjE3MTg3NC0zLjgyMDMxMi44NTE1NjItOC42ODM1OTQtMi45NTcwMzItMTAuODgyODEyLTMuODA4NTk0LTIuMTk1MzEzLTguNjc1NzgxLS45MTAxNTctMTAuOTAyMzQ0IDIuODgyODEybC0xNiAyNy43MjI2NTZjLTIuMjA3MDMxIDMuODI0MjE5LS44OTQ1MzEgOC43MTg3NSAyLjkyOTY4OCAxMC45MjU3ODJ6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0yMDAuNSA0OGM0LjQxNzk2OSAwIDgtMy41ODIwMzEgOC04di0zMmMwLTQuNDE3OTY5LTMuNTgyMDMxLTgtOC04cy04IDMuNTgyMDMxLTggOHYzMmMwIDQuNDE3OTY5IDMuNTgyMDMxIDggOCA4em0wIDAiIGZpbGw9IiMwMDZERjAiLz48cGF0aCBkPSJtMTEzLjU3MDMxMiA2NS40NDE0MDZjMS40MjE4NzYgMi40OTYwOTQgNC4wNjY0MDcgNC4wMzkwNjMgNi45Mzc1IDQuMDQyOTY5IDIuODcxMDk0LjAwNzgxMyA1LjUyNzM0NC0xLjUyMzQzNyA2Ljk1NzAzMi00LjAxNTYyNSAxLjQyOTY4Ny0yLjQ4ODI4MSAxLjQxNDA2Mi01LjU1MDc4MS0uMDM1MTU2LTguMDI3MzQ0bC0xNi0yNy43MjI2NTZjLTIuMjI2NTYzLTMuNzkyOTY5LTcuMDkzNzUtNS4wNzgxMjUtMTAuOTAyMzQ0LTIuODgyODEyLTMuODA4NTk0IDIuMTk5MjE4LTUuMTI4OTA2IDcuMDYyNS0yLjk1NzAzMiAxMC44ODI4MTJ6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im00OC41IDIwMGMwLTQuNDE3OTY5LTMuNTgyMDMxLTgtOC04aC0zMmMtNC40MTc5NjkgMC04IDMuNTgyMDMxLTggOHMzLjU4MjAzMSA4IDggOGgzMmM0LjQxNzk2OSAwIDgtMy41ODIwMzEgOC04em0wIDAiIGZpbGw9IiMwMDZERjAiLz48cGF0aCBkPSJtMzkyLjUgMTkyaC0zMmMtNC40MTc5NjkgMC04IDMuNTgyMDMxLTggOHMzLjU4MjAzMSA4IDggOGgzMmM0LjQxNzk2OSAwIDgtMy41ODIwMzEgOC04cy0zLjU4MjAzMS04LTgtOHptMCAwIiBmaWxsPSIjMDA2REYwIi8+PHBhdGggZD0ibTI0MC41IDM3NmgtODB2MTYuNDI1NzgxYzExLjY2NDA2Mi0uMzA0Njg3IDM0LjM5ODQzOC0uMjI2NTYyIDgwIDB6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0yNDAuNSA0MDguNDA2MjVjLTI4LjQ3MjY1Ni0uMTE3MTg4LTY0LjY0ODQzOC0uMjIyNjU2LTgwLS4xMjV2MTUuNzE4NzVoODB6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0xNzYuNSA0NDBjMCAxMy4yNTM5MDYgMTAuNzQ2MDk0IDI0IDI0IDI0czI0LTEwLjc0NjA5NCAyNC0yNHptMCAwIiBmaWxsPSIjMDA2REYwIi8+PHBhdGggZD0ibTI1OS44NzUgMzA0LjI3MzQzOGM0Ny4yNzczNDQtMjYuOTEwMTU3IDcwLjU0Mjk2OS04Mi4yNTc4MTMgNTYuNjgzNTk0LTEzNC44NTkzNzYtMTMuODU1NDY5LTUyLjYwNTQ2OC02MS4zNjcxODgtODkuMzA4NTkzLTExNS43NjU2MjUtODkuNDMzNTkzLTU0LjQwMjM0NC0uMTI1LTEwMi4wNzgxMjUgMzYuMzYzMjgxLTExNi4xNzU3ODEgODguOTAyMzQzLTE0LjA5NzY1NyA1Mi41NDI5NjkgOC45MTQwNjIgMTA3Ljk5MjE4OCA1Ni4wNjY0MDYgMTM1LjExNzE4OCA4Ljk5MjE4NyA1LjIxMDkzOCAxNS41NzgxMjUgMTMuNzQ2MDk0IDE4LjMzNTkzNyAyMy43Njk1MzFsODIuODYzMjgxLjIzMDQ2OWMyLjU3ODEyNi0xMCA5LjA1ODU5NC0xOC41NDY4NzUgMTcuOTkyMTg4LTIzLjcyNjU2MnptLTgzLjM3NS0zMi4yNzM0MzhjLTIuMTIxMDk0IDAtNC4xNTYyNS0uODQzNzUtNS42NTYyNS0yLjM0Mzc1bC00NS4yNTM5MDYtNDUuMjU3ODEyYy0zLjAzNTE1Ni0zLjEzNjcxOS0yLjk5MjE4OC04LjEyODkwNy4wOTM3NS0xMS4yMTQ4NDQgMy4wODU5MzctMy4wODU5MzggOC4wNzgxMjUtMy4xMjg5MDYgMTEuMjE0ODQ0LS4wOTM3NWwzOS42MDE1NjIgMzkuNTk3NjU2IDg0Ljg0NzY1Ni04NC44NTU0NjljMy4xMjUtMy4xMjUgOC4xOTUzMTMtMy4xMjUgMTEuMzIwMzEzIDBzMy4xMjUgOC4xOTUzMTMgMCAxMS4zMjAzMTNsLTkwLjUxMTcxOSA5MC41MDM5MDZjLTEuNSAxLjUtMy41MzUxNTYgMi4zNDM3NS01LjY1NjI1IDIuMzQzNzV6bTAgMCIgZmlsbD0iIzAwNkRGMCIvPjxwYXRoIGQ9Im0yNDAuNSAzNDMuOTg0Mzc1LTgwLS4xOTkyMTl2MTYuMjE0ODQ0aDgwem0wIDAiIGZpbGw9IiMwMDZERjAiLz48L3N2Zz4K">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Muli:300,400">
+        <style>html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body,html{height:100%}body{text-align:justify;margin:0;padding:41.88678px;box-sizing:border-box;font-family: 'Muli', sans-serif;font-weight:300;font-size:12px;line-height:1.5;background:#f0efe8;color:#474747;-webkit-transition:all .3s ease;transition:all .3s ease}body:before{position:absolute;display:block;top:0;left:0;width:100%;height:9.88875px;content:'';background:#2f3c4e}a:link,a:visited{text-decoration:none;background-color:transparent;color:#16a085;-webkit-transition:color .2s linear;transition:color .2s linear}a:active,a:focus,a:hover{color:#107360}h1{margin:0 0 1rem;font-size:38px;font-weight:400;line-height:1.2}strong{font-weight:400}p{margin:1rem 0;font-size:20px}.container{display:table;margin:0 auto;height:100%;max-width:752px}.content{display:table-cell;vertical-align:middle}.email:before{content:attr(data-domain) "@" attr(data-local);unicode-bidi:bidi-override;direction:rtl}@media (max-width:599px){body{padding:24px}h1{font-size:28px}p{font-size:16px}}@media (max-width:374px){body{padding:32px 16px}strong:before{content:'\a';white-space:pre}}::-moz-selection{background:#16a085;color:#fff}::selection{background:#16a085;color:#fff}.footer{text-align: center; margin-top: -30px; font-size: 14px;}</style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="content">
+                <h1>Hello there!</h1>
+                <p>
+                    This is the default page used to test the correct operation of the
+                    web server installation and you are using PHP v<?=(float)phpversion()?>.
+                    If you can read this page, it means that the web server installed and
+                    working properly. You should replace this index file before continuing
+                    to operate your website.
+                </p>
+                <p>
+                    If you are a normal user of this web site and don't know what this page
+                    is about, this probably means that the site is currently unavailable due
+                    to maintenance.
+                </p>
+                <p>
+                    Or, you can back to <a href="javascript:window.history.back();">previous page &raquo;</a>
+                </p>
+            </div>
+        </div>
+        <div class="footer">
+            <a href="//www.digitalocean.com/?refcode=5c4f2a9f0908" target="_blank">Get free $100 credit from DigitalOcean</a>
+        </div>
+    </body>
 </html>

@@ -11,33 +11,17 @@ fi
 
 # Virtual Host Configuration
 if [[ ! -f "/etc/nginx/vhost.d/$1.conf" ]]; then
-    cp /etc/nginx/manifest/vhost-php.cnf /etc/nginx/vhost.d/$1.conf
+    cp /etc/nginx/manifest/vhost-php.tpl /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 fi
-
-#hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$1/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
-#sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/vhost.d/$1.conf
 
 # Create Web directory
 mkdir -p /srv/$1/public
 
 if [[ ! -f "/srv/$1/public/index.php" ]]; then
-    cp /etc/nginx/manifest/welcome.tpl /srv/$1/public/index.php
+    cp /etc/nginx/manifest/default.tpl /srv/$1/public/index.php
 fi
 
 chown -R www-data: /srv/$1
 chmod -R 00775 /srv/$1
-
-# Ask to generate LetsEncrypt certificate
-read -ep "Do you want to generate SSL certificate?  yes/no : " answer
-
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    systemctl stop nginx
-    certbot certonly --standalone --rsa-key-size 4096 --agree-tos \
-    --register-unsafely-without-email -d $1 -d www.$1
-fi
-
-systemctl restart nginx
-
-echo -e "VirtualHost for $1 created..."
