@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Default Web Page</title>
@@ -15,11 +15,12 @@
             <div class="content">
                 <h1>Hello there!</h1>
                 <p>
-                    This is the default page used to test the correct operation of the
-                    web server installation and you are using PHP v<?=(float)phpversion()?>.
-                    If you can read this page, it means that the web server installed and
-                    working properly. You should replace this index file before continuing
-                    to operate your website.
+                    This is the default page for <u><?=$_SERVER['HTTP_HOST'];?></u>. This page
+                    used to test the correct operation of the web server installation
+                    and you are using <u>PHP v<?=(float)phpversion();?></u>. If you can read
+                    this page, it means that the web server installed and working
+                    properly. You should replace this index file before continuing to
+                    operate your website.
                 </p>
                 <p>
                     If you are a normal user of this web site and don't know what this page
@@ -27,7 +28,7 @@
                     to maintenance.
                 </p>
                 <p>
-                    Or, you can back to <a href="javascript:window.history.back();">previous page &raquo;</a>
+                    Or, you can back to <a href="javascript:window.history.back();"><u>previous page</u> &raquo;</a>
                 </p>
             </div>
         </div>
