@@ -16,6 +16,9 @@ if [[ ! -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 fi
 
+#hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$1/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
+#sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/vhost.d/$1.conf
+
 # Create Web directory
 mkdir -p /srv/$1/public
 

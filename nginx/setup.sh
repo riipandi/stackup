@@ -29,8 +29,8 @@ chown -R root: /etc/nginx
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 
-sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/nginx.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/server.d/server.conf
 
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
@@ -49,3 +49,9 @@ if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
 fi
 
 systemctl restart nginx
+
+# Generate Public Key Pinning Extension for HTTP (HPKP):
+# cat /etc/ssl/certs/chain.pem | openssl dgst -sha256 -binary | base64
+
+# hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$(hostname -f)/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
+# sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/nginx.conf
