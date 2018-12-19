@@ -160,7 +160,11 @@ SetConfigSetup ftpserver install $powerdns_install
 read -ep "Install Mail Server     (yes/no) : " -i "no" mailserver_install
 SetConfigSetup mailserver install $powerdns_install
 
-read -ep "Do you want to use Swap (yes/no) : " -i "no" swap_enable
+# Determine total memory
+memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
+if (( $memoryTotal >= 2097152 )); then opsi="no"; else opsi="yes";fi
+
+read -ep "Do you want to use Swap (yes/no) : " -i "$opsi" swap_enable
 SetConfigSetup swap enable $swap_enable
 if [[ "${enabled,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Size of Swap (in megabyte)       : "  -i "2048" swap_size
