@@ -1,3 +1,4 @@
+<?php if ($_SERVER['REQUEST_URI'] == '/phpinfo') { phpinfo(); } else { ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,3 +38,4 @@
     </div>
   </body>
 </html>
+<?php } ?>
