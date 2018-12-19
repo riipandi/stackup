@@ -34,6 +34,7 @@ sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/server.d/server.conf
 
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
+cp -r /etc/nginx/_errors/ /var/www/
 chown -R www-data: /var/www
 chmod -R 0775 /var/www
 

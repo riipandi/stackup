@@ -9,7 +9,15 @@ server {
 
     ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
-    #add_header Public-Key-Pins 'pin-sha256="HPKP_VALUE"; max-age=2592000;';
+
+    # enabling Public Key Pinning Extension for HTTP (HPKP)
+    # https://developer.mozilla.org/en-US/docs/Web/Security/Public_Key_Pinning
+    # to generate use on of these:
+    # $ openssl rsa -in my-website.key -outform der -pubout | openssl dgst -sha256 -binary | base64
+    # $ openssl req -in my-website.csr -pubkey -noout | openssl rsa -pubin -outform der | openssl dgst -sha256 -binary | base64
+    # $ openssl x509 -in my-website.crt -pubkey -noout | openssl rsa -pubin -outform der | openssl dgst -sha256 -binary | base64
+    # add_header Public-Key-Pins 'pin-sha256="base64+info1="; max-age=31536000; includeSubDomains';
+    # add_header Public-Key-Pins 'pin-sha256="HPKP_VALUE"; max-age=7890000;';
 
     # redirect to non-www
     if ($host = 'www.HOSTNAME') {
@@ -22,6 +30,7 @@ server {
         if ($invalid_referer) { return 403; }
     }
 
+    include server.d/errors.conf;
     include server.d/server.conf;
     include server.d/static.conf;
 
