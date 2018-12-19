@@ -28,3 +28,13 @@ fi
 
 chown -R www-data: /srv/$1
 chmod -R 00775 /srv/$1
+
+# Ask to generate LetsEncrypt certificate
+read -ep "Do you want to generate LetsEncrypt certificate?  yes/no : " -i "no" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    systemctl stop nginx
+    certbot certonly --standalone --rsa-key-size 3072 --agree-tos \
+    --register-unsafely-without-email -d $1 -d www.$1
+fi
+
+echo -e "VirtualHost for $1 created..."

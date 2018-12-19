@@ -43,7 +43,7 @@ chmod -R 0775 /var/www
 # certbot revoke --cert-path /etc/letsencrypt/live/$(hostname -f)/fullchain.pem
 ##
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 3072 \
+  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
     --register-unsafely-without-email --preferred-challenges http \
     -d "$(hostname -f)"
 fi
