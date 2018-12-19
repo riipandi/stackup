@@ -30,7 +30,7 @@ chown -R www-data: /srv/$1
 chmod -R 00775 /srv/$1
 
 # Ask to generate LetsEncrypt certificate
-read -ep "Do you want to generate SSL certificate?  yes/no : " -i "no" answer
+read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     systemctl stop nginx
