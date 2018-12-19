@@ -216,8 +216,8 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 #-----------------------------------------------------------------------------------------
 # Cleanup
 #-----------------------------------------------------------------------------------------
-cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission
-cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create
+cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission ; chmod +x $_
+cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create ; chmod +x $_
 
 echo "" && apt -y autoremove && apt clean && netstat -pltn
 
