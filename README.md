@@ -25,8 +25,8 @@ bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ### Create MySQL Database
 
 ```bash
-export dbname="xxxxxxxxxxxxx"  # <-- change this variable
-export dbuser="xxxxxxxxxxxxx"  # <-- change this variable
+export dbname="xxxxxxxxxxxxx"  # <-- change this value
+export dbuser="xxxxxxxxxxxxx"  # <-- change this value
 export dbpass="`pwgen -1 12`"  # <-- keep this variable
 
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $dbname"
