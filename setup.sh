@@ -4,6 +4,8 @@ PWD=$(dirname "$(readlink -f "$0")")
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
+echo -e "\nPreparing for installation, installing dependencies..."
+
 apt update -qq
 apt -yqq full-upgrade
 apt -yqq install git curl
