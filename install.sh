@@ -87,7 +87,7 @@ country=`curl -s ipinfo.io | grep country | awk -F":" '{print $2}' | cut -d '"' 
 crudini --set $ROOT/config.ini 'system' 'country' $country
 
 # Print welcome message
-figlet "Hello there!"
+figlet "Are you ready?"
 read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
