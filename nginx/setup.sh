@@ -37,7 +37,10 @@ cp /etc/nginx/manifest/default.tpl /var/www/index.php
 chown -R www-data: /var/www
 chmod -R 0775 /var/www
 
+##
 # Generate SSL certificates for default vhost
+# certbot revoke --cert-path /etc/letsencrypt/live/$(hostname -f)/fullchain.pem
+##
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
   certbot certonly --standalone --agree-tos --rsa-key-size 3072 \
     --register-unsafely-without-email --preferred-challenges http \
