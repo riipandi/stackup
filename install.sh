@@ -178,7 +178,7 @@ fi
 read -ep "Reboot after install    (yes/no) : " -i "no" reboot_after
 SetConfigSetup system reboot $reboot_after
 
-echo -e "" && read -p "Press enter to continue ..."
+echo -e "" && read -p "Press enter to begin installation..."
 
 #-----------------------------------------------------------------------------------------
 # Server configuration and install packages
