@@ -11,7 +11,7 @@ fi
 
 # Virtual Host Configuration
 if [[ ! -f "/etc/nginx/vhost.d/$1.conf" ]]; then
-    cp /etc/nginx/manifest/vhost-php.tpl /etc/nginx/vhost.d/$1.conf
+    cp /etc/nginx/manifest/vhost-php.cnf /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 fi
