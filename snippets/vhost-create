@@ -33,9 +33,15 @@ chmod -R 00775 /srv/$1
 read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+
+    www=""
+    read -ep "Generate certificate for www subdomain?   yes/no : " answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then www="-d www.$1" ; fi
+
     systemctl stop nginx
     certbot certonly --standalone --rsa-key-size 4096 --agree-tos \
-    --register-unsafely-without-email -d $1 -d www.$1
+    --register-unsafely-without-email -d $1 $www
+
 fi
 
 systemctl restart nginx
