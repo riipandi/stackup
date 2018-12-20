@@ -108,7 +108,7 @@ if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Telegram Bot Key                 : " -i "" tgnotif_bot_key
     SetConfigSetup tgnotif bot_key $tgnotif_bot_key
     read -ep "Telegram User Chat ID            : " -i "" tgnotif_chat_id
-    SetConfigSetup tgnotif bot_key $tgnotif_chat_id
+    SetConfigSetup tgnotif chat_id $tgnotif_chat_id
 fi
 
 read -ep "Install Nginx Amplify   (yes/no) : " -i "no" amplify_install
@@ -184,8 +184,6 @@ echo -e "" && read -p "Press enter to begin installation..."
 # Server configuration and install packages
 #-----------------------------------------------------------------------------------------
 InstallPackage swap enable $ROOT/system/swap.sh
-
-InstallPackage tgnotif install $ROOT/system/tgnotif.sh
 source $ROOT/system/netconfig.sh
 
 source $ROOT/php/setup72.sh

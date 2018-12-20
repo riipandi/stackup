@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# Import credentials form config file
-. /etc/sshnotify.conf
+BOT_KEY="VAR_BOTKEY"
+CHAT_ID="VAR_CHATID"
 
-URL="https://api.telegram.org/bot${BOTKEY}/sendMessage"
+URL="https://api.telegram.org/bot${BOT_KEY}/sendMessage"
 DATE="$(date "+%d %b %Y %H:%M")"
 
 if [ -n "$SSH_CLIENT" ]; then
@@ -14,10 +14,11 @@ if [ -n "$SSH_CLIENT" ]; then
 
   IPINFO="https://ipinfo.io/${CLIENT_IP}"
 
-  TEXT="User ${USER} logged in to *${SRV_HOSTNAME}* (*${SRV_IP}*)
-From: *${CLIENT_IP}*
-Date: ${DATE}
+  MESSAGE="User ${USER} logged in to *${SRV_HOSTNAME}*
+Server IP: *${SRV_IP}*
+Client IP: *${CLIENT_IP}*
+Date Time: ${DATE}
 User info: [${IPINFO}](${IPINFO})"
 
-  curl -s -d "chat_id=${USERID}&text=${TEXT}&disable_web_page_preview=true&parse_mode=markdown" $URL > /dev/null
+  curl -s -d "chat_id=${CHAT_ID}&text=${MESSAGE}&disable_web_page_preview=true&parse_mode=markdown" $URL > /dev/null
 fi

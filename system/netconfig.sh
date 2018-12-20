@@ -43,7 +43,19 @@ sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
-
 echo -e "$(figlet server://`hostname -s`)\n" > /etc/motd
-
 systemctl restart ssh
+
+##################
+
+if [ `crudini --get $ROOT/config.ini tgnotif install` == "yes" ]; then
+
+    tg_bot_key=`crudini --get $ROOT/config.ini tgnotif bot_key`
+    tg_chat_id=`crudini --get $ROOT/config.ini tgnotif chat_id`
+
+    cp $PWD/snippets/sshnotify /etc/profile.d/ ; chmod a+x $_
+
+    sed -i "s/VAR_BOTKEY/$tg_bot_key/" /etc/profile.d/sshnotify
+    sed -i "s/VAR_CHATID/$tg_chat_id/" /etc/profile.d/sshnotify
+
+fi
