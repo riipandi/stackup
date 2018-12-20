@@ -1,24 +1,28 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# Copyright (C) 2018, Aris Ripandi.
+# Author: Aris Ripandi <ripandi@pm.me>
+#
+# Purpose: Send realtime notification to Telegram
+#  when user logged in via ssh.
 
 BOT_KEY="VAR_BOTKEY"
 CHAT_ID="VAR_CHATID"
 
-URL="https://api.telegram.org/bot${BOT_KEY}/sendMessage"
-DATE="$(date "+%d %b %Y %H:%M")"
+if [[ ! -z $SSH_CONNECTION ]]; then
 
-if [ -n "$SSH_CLIENT" ]; then
-  CLIENT_IP=$(echo $SSH_CLIENT | awk '{print $1}')
+  CLIENT_IP="${SSH_CONNECTION%% *}"
+  SERVER_IP=$(hostname -I | awk '{print $1}')
+  USER_INFO="https://ipinfo.io/$CLIENT_IP"
 
-  SRV_HOSTNAME=$(hostname -f)
-  SRV_IP=$(hostname -I | awk '{print $1}')
+  MESSAGE="*New remote SSH connection:*
+User ID: $USER@$(hostname -f)
+Access Time: $(date "+%d %b %Y %T")
+Remote host: $SERVER_IP
+Remote user: $CLIENT_IP
+More information: [$USER_INFO]($USER_INFO)"
 
-  IPINFO="https://ipinfo.io/${CLIENT_IP}"
+  API_URL="https://api.telegram.org/bot$BOT_KEY/sendMessage"
 
-  MESSAGE="User ${USER} logged in to *${SRV_HOSTNAME}*
-Server IP: *${SRV_IP}*
-Client IP: *${CLIENT_IP}*
-Date Time: ${DATE}
-User info: [${IPINFO}](${IPINFO})"
+  curl -Lsd "chat_id=$CHAT_ID&text=$MESSAGE&disable_web_page_preview=true&parse_mode=markdown" $API_URL >/dev/null
 
-  curl -s -d "chat_id=${CHAT_ID}&text=${MESSAGE}&disable_web_page_preview=true&parse_mode=markdown" $URL > /dev/null
 fi
