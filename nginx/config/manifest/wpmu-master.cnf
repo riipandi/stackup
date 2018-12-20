@@ -3,21 +3,20 @@ server {
     listen 443 ssl http2;
 
     # Multi-Tenancy Nginx VirtualHost
-    # server_name ~^(?<subdomain>[a-zA-Z0-9-]+)\.WPDOMAIN$;
-    server_name ~^(?<subdomain>.+)\.WPDOMAIN$;
+    server_name ~^(?<user>[a-zA-Z0-9-]+)\.WPDOMAIN$;
 
     root /srv/HOSTNAME/public;
 
-    access_log /var/log/nginx/$subdomain.HOSTNAME-access.log main;
-    error_log  /var/log/nginx/$subdomain.HOSTNAME-error.log warn;
+    access_log /var/log/nginx/HOSTNAME-access.log main;
+    error_log  /var/log/nginx/HOSTNAME-error.log warn;
 
     ssl_dhparam          /etc/ssl/certs/dhparam-4096.pem;
     ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
 
     # redirect to non-www
-    if ($host = 'www.HOSTNAME') {
-        return 301 https://HOSTNAME$request_uri;
+    if ( $host ~ ^www\.(?<domain>.+)$ ) {
+        return 301 $scheme://$domain$request_uri;
     }
 
     # Hotlinking Protection

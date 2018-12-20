@@ -13,8 +13,8 @@ server {
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
 
     # redirect to non-www
-    if ($host = 'www.HOSTNAME') {
-        return 301 https://HOSTNAME$request_uri;
+    if ( $host ~ ^www\.(?<domain>.+)$ ) {
+        return 301 $scheme://$domain$request_uri;
     }
 
     # Hotlinking Protection

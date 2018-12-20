@@ -10,13 +10,11 @@ server {
     ssl_dhparam          /etc/ssl/certs/dhparam-4096.pem;
     ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
-
-    #add_header Public-Key-Pins 'pin-sha256="HPKP_VALUE"; max-age=5184000;';
     #add_header Public-Key-Pins 'pin-sha256="Hash1"; pin-sha256="Hash2"; pin-sha256="Hash3"; max-age=5184000;';
 
     # redirect to non-www
-    if ($host = 'www.HOSTNAME') {
-        return 301 https://HOSTNAME$request_uri;
+    if ( $host ~ ^www\.(?<domain>.+)$ ) {
+        return 301 $scheme://$domain$request_uri;
     }
 
     # Hotlinking Protection
