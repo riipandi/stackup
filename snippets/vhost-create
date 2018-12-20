@@ -34,7 +34,7 @@ chmod -R 00775 /srv/$1
 read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash /usr/local/bin/ssl-create
+    bash /usr/local/bin/ssl-create $1
 fi
 
 echo -e "VirtualHost for $1 created...\n"
