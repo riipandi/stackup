@@ -25,9 +25,9 @@ bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ### Create MySQL Database
 
 ```bash
-# Using single simple command:
+# Using simple command:
 
-mysql-create
+sudo mysql-create
 
 # Or, you can use manual method. Don't
 # forget to adjust the variables value.
@@ -45,16 +45,16 @@ mysql -uroot -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'127.0.0.1'; FLU
 
 ```bash
 # Create virtualhost
-vhost-create domain.tld
+sudo vhost-create domain.tld
 
 # Set Permission File dan Folder
-fix-permission /srv/domain.tld www-data:
+sudo fix-permission /srv/domain.tld www-data:
 
 # Generet SSL Certificate
-ssl-create domain.tld
+sudo ssl-create domain.tld
 
 # Revoke SSL Certificate
-certbot revoke --cert-path /etc/letsencrypt/live/domain.tld/fullchain.pem
+sudo certbot revoke --cert-path /etc/letsencrypt/live/domain.tld/fullchain.pem
 ```
 
 ## License
