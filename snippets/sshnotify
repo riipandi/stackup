@@ -15,14 +15,17 @@ if [[ ! -z $SSH_CONNECTION ]]; then
   USER_INFO="https://ipinfo.io/$CLIENT_IP"
 
   MESSAGE="*New remote SSH connection:*
-User ID: $USER@$(hostname -f)
-Access Time: $(date "+%d %b %Y %T")
-Remote host: $SERVER_IP
-Remote user: $CLIENT_IP
-More information: [$USER_INFO]($USER_INFO)"
+
+User login : *$USER* @ *$(hostname -f)*
+Date Time : *$(date "+%d %b %Y %T")*
+
+Server IP : $SERVER_IP
+Client IP : $CLIENT_IP
+
+More information : [$USER_INFO]($USER_INFO)"
 
   API_URL="https://api.telegram.org/bot$BOT_KEY/sendMessage"
 
-  curl -Lsd "chat_id=$CHAT_ID&text=$MESSAGE&disable_web_page_preview=true&parse_mode=markdown" $API_URL >/dev/null
+  curl -Lsd "chat_id=$CHAT_ID&text=$MESSAGE&disable_web_page_preview=true&parse_mode=markdown" $API_URL >/dev/null 2>&1
 
 fi
