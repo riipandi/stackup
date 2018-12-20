@@ -2,20 +2,19 @@
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
-# Database name and user
-AskDBName() {
-  echo
-  read -e -p "Database Name     : " ask_db_name
-  if [ "$ask_db_name" == "" ] ; then AskDBName ; fi
-  db_name=$ask_db_name
-}
-AskDBName
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the database name."
+    echo -e "\nExample: $(basename "$0") awesomedb\n"
+    exit 1
+fi
 
 # Check if database already exist
-CHECK=`mysql -uroot -e "SHOW DATABASES" | grep $db_name`
-if [ "$CHECK" == "$db_name" ]; then
-  echo -e "\nDatabase $db_name already exists!"
-  AskDBName
+CHECK=`mysql -uroot -e "SHOW DATABASES" | grep $1`
+if [ "$CHECK" == "$1" ]; then
+  echo -e "\nDatabase $1 already exists!\n"
+  exit 1
+else
+  db_name=$1
 fi
 
 # Database password
@@ -34,4 +33,4 @@ mysql -uroot -e "CREATE USER IF NOT EXISTS '$db_name'@'$db_addr' IDENTIFIED BY '
 mysql -uroot -e "GRANT ALL PRIVILEGES ON $db_name.* TO '$db_name'@'$db_addr'"
 mysql -uroot -e "FLUSH PRIVILEGES"
 
-echo -e "\nDatabase created with password: $db_pass\n"
+echo -e "\nDatabase created with user $db_name and password: $db_pass\n"
