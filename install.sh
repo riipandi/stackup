@@ -215,6 +215,7 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 # Cleanup
 #-----------------------------------------------------------------------------------------
 cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission ; chmod +x $_
+cp $ROOT/snippets/mysql-create /usr/local/bin/mysql-create ; chmod +x $_
 cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create ; chmod +x $_
 cp $ROOT/snippets/ssl-create /usr/local/bin/ssl-create ; chmod +x $_
 
