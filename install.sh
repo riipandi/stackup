@@ -140,6 +140,9 @@ if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     fi
 fi
 
+read -ep "Install Redis Server    (yes/no) : " -i "yes" redis_install
+SetConfigSetup redis install $redis_install
+
 read -ep "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
@@ -203,6 +206,7 @@ else
     source $ROOT/mysql/mysql80.sh
 fi
 
+InstallPackage redis install $ROOT/redis/setup.sh
 InstallPackage postgres install $ROOT/postgres/setup.sh
 InstallPackage extras nodejs $ROOT/nodejs/setup.sh
 InstallPackage extras python $ROOT/python/setup.sh
