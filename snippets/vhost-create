@@ -46,4 +46,4 @@ fi
 
 systemctl restart nginx
 
-echo -e "VirtualHost for $1 created..."
+echo -e "VirtualHost for $1 created...\n"
