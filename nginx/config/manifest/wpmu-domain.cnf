@@ -14,7 +14,7 @@ server {
 
     # redirect to non-www
     if ( $host ~ ^www\.(?<domain>.+)$ ) {
-        # return 301 https://$server_name$request_uri;
+        # return 301 $scheme://$server_name$request_uri;
         return 301 $scheme://$domain$request_uri;
     }
 
