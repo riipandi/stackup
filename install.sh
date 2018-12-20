@@ -146,11 +146,17 @@ SetConfigSetup redis install $redis_install
 read -ep "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
-read -ep "Install PHP 7.3         (yes/no) : " -i "yes" php73_install
-SetConfigSetup extras php73 $php73_install
-
 read -ep "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
-SetConfigSetup extras php56 $php56_install
+SetConfigSetup php php56 $php56_install
+
+read -ep "Install PHP 7.2         (yes/no) : " -i "yes" php72_install
+SetConfigSetup php php72 $php72_install
+
+read -ep "Install PHP 7.3         (yes/no) : " -i "no" php73_install
+SetConfigSetup php php73 $php73_install
+
+read -ep "Default PHP version   (56/72/73) : " -i "72" php_default
+SetConfigSetup php default $php_default
 
 read -ep "Install python          (yes/no) : " -i "no" python_install
 SetConfigSetup extras python $python_install
@@ -189,9 +195,9 @@ echo -e "" && read -p "Press enter to begin installation..."
 InstallPackage swap enable $ROOT/system/swap.sh
 source $ROOT/system/netconfig.sh
 
-source $ROOT/php/setup72.sh
-InstallPackage extras php73 $ROOT/php/setup73.sh
-InstallPackage extras php56 $ROOT/php/setup56.sh
+InstallPackage php php56 $ROOT/php/setup56.sh
+InstallPackage php php72 $ROOT/php/setup72.sh
+InstallPackage php php73 $ROOT/php/setup73.sh
 source $ROOT/php/configure.sh
 
 source $ROOT/nginx/setup.sh
@@ -224,6 +230,8 @@ cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create ; chmod +x $_
 cp $ROOT/snippets/ssl-revoke /usr/local/bin/ssl-revoke ; chmod +x $_
 cp $ROOT/snippets/ssl-create /usr/local/bin/ssl-create ; chmod +x $_
 cp $ROOT/snippets/ssl-wildcard /usr/local/bin/ssl-wildcard ; chmod +x $_
+
+cp $ROOT/php/configure.sh /usr/local/bin/set-php ; chmod +x $_
 
 echo "" && apt -y autoremove && apt clean && netstat -pltn
 
