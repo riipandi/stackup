@@ -53,6 +53,9 @@ sudo fix-permission /srv/domain.tld www-data:
 # Generet SSL Certificate
 sudo ssl-create domain.tld
 
+# Generate Wildcard Certificate
+sudo ssl-wildcard domain.tld
+
 # Revoke SSL Certificate
 sudo certbot revoke --cert-path /etc/letsencrypt/live/domain.tld/fullchain.pem
 ```

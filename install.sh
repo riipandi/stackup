@@ -217,7 +217,9 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission ; chmod +x $_
 cp $ROOT/snippets/mysql-create /usr/local/bin/mysql-create ; chmod +x $_
 cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create ; chmod +x $_
+cp $ROOT/snippets/ssl-revoke /usr/local/bin/ssl-revoke ; chmod +x $_
 cp $ROOT/snippets/ssl-create /usr/local/bin/ssl-create ; chmod +x $_
+cp $ROOT/snippets/ssl-wildcard /usr/local/bin/ssl-wildcard ; chmod +x $_
 
 echo "" && apt -y autoremove && apt clean && netstat -pltn
 

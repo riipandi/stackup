@@ -10,8 +10,8 @@ curl -sS https://nginx.org/keys/nginx_signing.key | apt-key add -
 apt update ; apt -yqq install haveged nmap nikto xmlstarlet {libpng,libssl,libffi}-dev \
 libarchive-tools libimage-exiftool-perl speedtest-cli gamin mcrypt imagemagick \
 gettext optipng jpegoptim sqlite3 nginx augeas-lenses libaugeas0 libexpat1-dev \
-libpython-dev libpython2.7 libpython2.7-dev virtualenv python-dev python-pip-whl \
-python-virtualenv python2.7-dev python3-virtualenv openssl
+libpython-dev libpython2.7 libpython2.7-dev virtualenv python-virtualenv python-dev \
+python-pip python-pip-whl python2.7-dev python3-virtualenv openssl
 
 # Latest Certbot
 echo -e "Downloading certbot and trusted certificates..."
@@ -37,6 +37,22 @@ cp /etc/nginx/manifest/default.tpl /var/www/index.php
 cp -r /etc/nginx/_errors/ /var/www/
 chown -R www-data: /var/www
 chmod -R 0775 /var/www
+
+## Setup certbot DNS Plugin
+## https://www.codementor.io/slavko/generating-letsencrypt-wildcard-certificate-with-certbot-hts4aee8u
+# pip install certbot-dns-cloudflare certbot-dns-digitalocean certbot-dns-google certbot-dns-route53
+
+# mkdir -p /etc/letsencrypt
+# cat > /etc/letsencrypt/cli.ini <<EOF
+# dns-cloudflare-credentials = /etc/letsencrypt/dnscredentials.ini
+# server = https://acme-v02.api.letsencrypt.org/directory
+# EOF
+
+# touch /etc/letsencrypt/dnscredentials.ini ; chmod 600 $_
+# cat > /etc/letsencrypt/dnscloudflare.ini <<EOF
+# dns_cloudflare_api_key = yourcloudflarekey
+# dns_cloudflare_email = yourcloudflarelogin
+# EOF
 
 ##
 # Generate SSL certificates for default vhost

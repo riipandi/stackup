@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+CERTBOT=`which certbot`
+
+# Check if running by root
+if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+if [[ ! -d "/etc/letsencrypt/live/$1" ]]; then
+    echo -e "SSL certificate for $1 doesn't exist..."
+    exit 1
+fi
+
+read -p "Press enter to continue ..."
+
+$CERTBOT revoke --cert-path /etc/letsencrypt/live/$1/fullchain.pem
+
+echo -e "SSL certificate for $1 has been revoked..."
