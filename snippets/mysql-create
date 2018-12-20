@@ -11,7 +11,7 @@ fi
 # Check if database already exist
 CHECK=`mysql -uroot -e "SHOW DATABASES" | grep $1`
 if [ "$CHECK" == "$1" ]; then
-  echo -e "\nDatabase $1 already exists!\n"
+  echo -e "\nDatabase already exists!\n"
   exit 1
 else
   db_name=$1
