@@ -26,6 +26,7 @@ if [[ ! -f "/srv/$1/public/index.php" ]]; then
     cp /etc/nginx/manifest/default.tpl /srv/$1/public/index.php
 fi
 
+# Set directory permission
 chown -R www-data: /srv/$1
 chmod -R 00775 /srv/$1
 
@@ -33,17 +34,7 @@ chmod -R 00775 /srv/$1
 read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-
-    www=""
-    read -ep "Generate certificate for www subdomain?   yes/no : " answer
-    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then www="-d www.$1" ; fi
-
-    systemctl stop nginx
-    certbot certonly --standalone --rsa-key-size 4096 --agree-tos \
-    --register-unsafely-without-email -d $1 $www
-
+    bash /usr/local/bin/ssl-create
 fi
-
-systemctl restart nginx
 
 echo -e "VirtualHost for $1 created...\n"
