@@ -35,6 +35,15 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash /usr/local/bin/ssl-create $1
 fi
 
-systemctl restart nginx
+# Test nginx configuration then restart
+`which nginx` -t 2>/dev/null > /dev/null
+if [[ $? == 0 ]]; then
+    echo -e "\nReloading Nginx configuration..."
+    systemctl restart nginx
+else
+    echo -e "\nNginx configuration fail..."
+    `which nginx` -t
+    exit
+fi
 
-echo -e "\nVirtualHost for $1 created...\n"
+echo -e "VirtualHost for $1 created...\n"

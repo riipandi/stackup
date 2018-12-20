@@ -15,8 +15,12 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     exit 1
 fi
 
+# Subtitute domain string
+wpdomain=$(echo $1 | awk '{ gsub("[.]","\\\\.",$1); print $1 }')
+
 # Virtual Host Configuration
 cp /etc/nginx/manifest/wpmu-master.cnf /etc/nginx/vhost.d/$1.conf
+sed -i "s/WPDOMAIN/$wpdomain/g" /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 
@@ -39,6 +43,15 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash /usr/local/bin/ssl-wildcard $1
 fi
 
-systemctl restart nginx
+# Test nginx configuration then restart
+`which nginx` -t 2>/dev/null > /dev/null
+if [[ $? == 0 ]]; then
+    echo -e "\nReloading Nginx configuration..."
+    systemctl restart nginx
+else
+    echo -e "\nNginx configuration fail..."
+    `which nginx` -t
+    exit
+fi
 
-echo -e "\nVirtualHost for $1 created...\n"
+echo -e "VirtualHost for $1 created...\n"
