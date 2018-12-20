@@ -25,9 +25,16 @@ bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ### Create MySQL Database
 
 ```bash
+# Using single simple command:
+
+mysql-create
+
+# Or, you can use manual method. Don't
+# forget to adjust the variables value.
+
 export dbname="xxxxxxxxxxxxx"  # <-- change this value
 export dbuser="xxxxxxxxxxxxx"  # <-- change this value
-export dbpass="`pwgen -1 12`"  # <-- keep this variable
+export dbpass="`pwgen -1 16`"  # <-- keep this variable
 
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $dbname"
 mysql -uroot -e "CREATE USER IF NOT EXISTS '$dbuser'@'127.0.0.1' IDENTIFIED BY '$dbpass'"
@@ -44,10 +51,7 @@ vhost-create domain.tld
 fix-permission /srv/domain.tld www-data:
 
 # Generet SSL Certificate
-systemctl stop nginx
-certbot certonly --standalone --rsa-key-size 4096 \
-  --agree-tos --register-unsafely-without-email \
-  -d domain.tld -d www.domain.tld
+ssl-create domain.tld
 
 # Revoke SSL Certificate
 certbot revoke --cert-path /etc/letsencrypt/live/domain.tld/fullchain.pem

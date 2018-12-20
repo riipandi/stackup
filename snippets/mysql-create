@@ -21,7 +21,7 @@ fi
 # Database password
 read -e -p "Database Password : " -i "auto" ask_db_pass
 if [ "$ask_db_pass" == "auto" ] ;then
-  db_pass=`pwgen -1 -A 12`
+  db_pass=`pwgen -1 -A 16`
 else
   db_pass=$ask_db_pass
 fi
