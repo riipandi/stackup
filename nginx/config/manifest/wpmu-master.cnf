@@ -5,12 +5,13 @@ server {
     server_name ~^(?<user>[a-zA-Z0-9-]+)\.domain\.tld$;
 
     root /srv/HOSTNAME/public;
+
     access_log /var/log/nginx/HOSTNAME-access.log main;
     error_log  /var/log/nginx/HOSTNAME-error.log warn;
 
-    ssl_certificate         /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
-    ssl_certificate_key     /etc/letsencrypt/live/HOSTNAME/privkey.pem;
-    ssl_trusted_certificate /etc/ssl/certs/chain.pem;
+    ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
+    ssl_dhparam          /etc/ssl/certs/dhparam-4096.pem;
 
     include server.d/wpmu.conf;
 }

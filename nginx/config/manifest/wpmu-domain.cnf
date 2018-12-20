@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    listen 443 ssl http2;
+    server_name HOSTNAME www.HOSTNAME;
+
+    root /srv/WPDOMAIN/public;
+
+    access_log /var/log/nginx/HOSTNAME-access.log main;
+    error_log  /var/log/nginx/HOSTNAME-error.log warn;
+
+    ssl_dhparam          /etc/ssl/certs/dhparam-4096.pem;
+    ssl_certificate      /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
+
+    # redirect to non-www
+    if ($host = 'www.HOSTNAME') {
+        return 301 https://HOSTNAME$request_uri;
+    }
+
+    # Hotlinking Protection
+    location ~ .(gif|png|jpe?g)$ {
+        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME;
+        if ($invalid_referer) { return 403; }
+    }
+
+    # wp-mu handler
+    include server.d/wpmu.conf;
+}

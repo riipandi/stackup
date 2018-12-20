@@ -15,28 +15,21 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     exit 1
 fi
 
+AskMasterDomain() {
+    echo
+    read -ep "Master domain for WP-MU?          : " wpDomain
+    if [[ "$wpDomain" == "" ]] ; then AskMasterDomain ; fi
+}
+AskMasterDomain
+
 # Virtual Host Configuration
-cp /etc/nginx/manifest/vhost-php.cnf /etc/nginx/vhost.d/$1.conf
+cp /etc/nginx/manifest/wpmu-domain.cnf /etc/nginx/vhost.d/$1.conf
+sed -i "s/WPDOMAIN/$wpDomain/" /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
-
-#hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$1/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
-#sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/vhost.d/$1.conf
-
-# Create Web directory
-mkdir -p /srv/$1/public
-
-if [[ ! -f "/srv/$1/public/index.php" ]]; then
-    cp /etc/nginx/manifest/default.tpl /srv/$1/public/index.php
-fi
-
-# Set directory permission
-chown -R www-data: /srv/$1
-chmod -R 00775 /srv/$1
 
 # Ask to generate LetsEncrypt certificate
-echo
-read -ep "Do you want to generate SSL certificate?  yes/no : " answer
+read -ep "Generate SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash /usr/local/bin/ssl-create $1

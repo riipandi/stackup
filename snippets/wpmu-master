@@ -16,12 +16,9 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
 fi
 
 # Virtual Host Configuration
-cp /etc/nginx/manifest/vhost-php.cnf /etc/nginx/vhost.d/$1.conf
+cp /etc/nginx/manifest/wpmu-master.cnf /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
-
-#hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$1/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
-#sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/vhost.d/$1.conf
 
 # Create Web directory
 mkdir -p /srv/$1/public
@@ -36,10 +33,10 @@ chmod -R 00775 /srv/$1
 
 # Ask to generate LetsEncrypt certificate
 echo
-read -ep "Do you want to generate SSL certificate?  yes/no : " answer
+read -ep "Generate wildcard SSL certificate?  yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash /usr/local/bin/ssl-create $1
+    bash /usr/local/bin/ssl-wildcard $1
 fi
 
 systemctl restart nginx
