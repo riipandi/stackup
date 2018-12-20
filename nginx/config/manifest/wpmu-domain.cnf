@@ -20,7 +20,7 @@ server {
 
     # Hotlinking Protection
     location ~ .(gif|png|jpe?g)$ {
-        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME;
+        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME ~.HOSTNAME;
         if ($invalid_referer) { return 403; }
     }
 
