@@ -233,6 +233,9 @@ cp $ROOT/snippets/ssl-wildcard /usr/local/bin/ssl-wildcard ; chmod +x $_
 
 cp $ROOT/php/configure.sh /usr/local/bin/set-php ; chmod +x $_
 
+# Fix permission for snippets
+chmod a+x /usr/local/bin/* ; chown -R root: /usr/local/bin/*
+
 echo "" && apt -y autoremove && apt clean && netstat -pltn
 
 echo -e "\nCongratulation, server stack has been installed.\n"
