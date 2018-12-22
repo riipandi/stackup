@@ -14,32 +14,25 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     echo -e "\nVirtualHost already exist...\n"
     exit 1
 else
-    cp /etc/nginx/manifest/vhost-php.cnf /etc/nginx/vhost.d/$1.conf
+    cp /etc/nginx/manifest/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
+    mkdir -p /srv/$1/public
+    chown -R www-data: /srv/$1
+    chmod -R 00775 /srv/$1
+    echo
 fi
 
-echo
+# Configure reverse proxy host
+read -ep "Enter application host and port                  : " -i "127.0.0.1:2368" answer
+sed -i "s/RVS_HOST/$answer/" /etc/nginx/vhost.d/$1.conf
+
 read -ep "Do you want to use www subdomain?         yes/no : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/# server_name www/server_name www/" /etc/nginx/vhost.d/$1.conf
 fi
 
-#hpkp_value=`openssl x509 -pubkey < /etc/letsencrypt/archive/$1/cert1.pem | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | base64`
-#sed -i "s/HPKP_VALUE/$hpkp_value/" /etc/nginx/vhost.d/$1.conf
-
-# Create Web directory
-mkdir -p /srv/$1/public
-
-if [[ ! -f "/srv/$1/public/index.php" ]]; then
-    cp /etc/nginx/manifest/default.tpl /srv/$1/public/index.php
-fi
-
-# Set directory permission
-chown -R www-data: /srv/$1
-chmod -R 00775 /srv/$1
-
 # Ask to generate LetsEncrypt certificate
-read -ep "Do you want to generate SSL certificate?  yes/no : " answer
+read -ep "Generate LetsEncrypt certificate?         yes/no : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash /usr/local/bin/ssl-create $1
