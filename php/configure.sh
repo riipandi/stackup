@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-default="72"
+default="7.2"
+
+arr_ver=['5.6','7.2','7.3']
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
-
-echo -e "\nConfiguring PHP-FPM..."
 
 # Check default PHP version in installation config
 if [[ ! -z $ROOT ]]; then
@@ -13,12 +13,12 @@ elif [[ ! -z $1 ]]; then
     default=$1
 fi
 
-case $default in
-    56) version="5.6" ;;
-    72) version="7.2" ;;
-    73) version="7.3" ;;
-     *) echo -e "\nThat PHP version doesnt' exist...\n" ; exit ;;
-esac
+if [[ "${arr_ver[*]}" != *"$default"* ]]; then
+    echo -e "\nThat PHP version doesnt' exist...\n"
+    exit 1
+fi
+
+echo -e "\nConfiguring PHP-FPM. Default PHP is set to v$default"
 
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize" "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"  "300"' {} \;
@@ -39,15 +39,14 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.pro
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.status_path" "/status"' {} \;
 
 # Set default PHP version
-
-echo -e "\nChanging default PHP to $version..."
-update-alternatives --set php /usr/bin/php$version
-update-alternatives --set phar /usr/bin/phar$version
-update-alternatives --set phar.phar /usr/bin/phar.phar$version
+echo
+update-alternatives --set php /usr/bin/php$default
+update-alternatives --set phar /usr/bin/phar$default
+update-alternatives --set phar.phar /usr/bin/phar.phar$default
 
 phpenmod curl opcache imagick fileinfo
 
 # Default PHP-FPM on Nginx configuration
-find /etc/nginx/ -type f -exec sed -i "s/php.*.-fpm/php${version}-fpm/g" {} +
+find /etc/nginx/ -type f -exec sed -i "s/php*.-fpm/php${default}-fpm/g" {} +
 
 echo -e "\nPHP-FPM has been configured...\n"
