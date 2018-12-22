@@ -19,7 +19,7 @@ server {
 
     # Hotlinking Protection
     location ~ .(gif|png|jpe?g)$ {
-        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME *.HOSTNAME ~.HOSTNAME;
+        valid_referers none blocked ~.google. ~.bing. ~.yahoo HOSTNAME ~.HOSTNAME;
         if ($invalid_referer) { return 403; }
     }
 
@@ -32,7 +32,7 @@ server {
     location @php { rewrite ^/(.*)$ /index.php?q=$1; }
 
     location ~ \.php(/|$) {
-        fastcgi_pass unix:/var/run/php/php72-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
         include server.d/phpfpm.conf;
     }
 }

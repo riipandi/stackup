@@ -33,6 +33,7 @@ sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/server.d/server.conf
 
+# Default web page
 cp /etc/nginx/manifest/default.tpl /var/www/index.php
 cp -r /etc/nginx/_errors/ /var/www/
 chown -R www-data: /var/www
