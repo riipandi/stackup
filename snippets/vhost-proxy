@@ -16,20 +16,25 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
 else
     cp /etc/nginx/manifest/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
     sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
-    mkdir -p /srv/$1/public
-    chown -R www-data: /srv/$1
-    chmod -R 00775 /srv/$1
     echo
 fi
 
 # Configure reverse proxy host
+read -ep "Enter app identifier        (ex: my_application) : " answer
+sed -i "s/APP_NAME/$answer/" /etc/nginx/vhost.d/$1.conf
+
 read -ep "Enter application host and port                  : " -i "127.0.0.1:2368" answer
-sed -i "s/RVS_HOST/$answer/" /etc/nginx/vhost.d/$1.conf
+sed -i "s/APP_HOST/$answer/" /etc/nginx/vhost.d/$1.conf
 
 read -ep "Do you want to use www subdomain?         yes/no : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/# server_name www/server_name www/" /etc/nginx/vhost.d/$1.conf
 fi
+
+# Creating web directory
+mkdir -p /srv/$1/public
+chown -R www-data: /srv/$1
+chmod -R 00775 /srv/$1
 
 # Ask to generate LetsEncrypt certificate
 read -ep "Generate LetsEncrypt certificate?         yes/no : " answer
