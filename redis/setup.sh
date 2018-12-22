@@ -27,4 +27,8 @@ sed -i "s/# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/" /etc/redi
 sed -i "s/# maxmemory <bytes>/maxmemory 256mb/" /etc/redis/redis.conf
 sed -i "s|\("^bind" * *\).*|\1$bindaddress|" /etc/redis/redis.conf
 
+
+# Securing redis-server with password
+# sed -i "s/# requirepass foobared/requirepass $(echo "redisspass" | openssl base64 -A)/" /etc/redis/redis.conf
+
 systemctl restart redis-server
