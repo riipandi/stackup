@@ -18,7 +18,8 @@ if [[ "${arr_ver[*]}" != *"$default"* ]]; then
     exit 1
 fi
 
-echo -e "\nConfiguring PHP-FPM. Default PHP is set to v$default"
+echo -e "\nConfiguring PHP-FPM..."
+echo -e "Set default PHP to v$default"
 
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize" "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"  "300"' {} \;
@@ -49,4 +50,4 @@ phpenmod curl opcache imagick fileinfo
 # Default PHP-FPM on Nginx configuration
 find /etc/nginx/ -type f -exec sed -i "s/php*.-fpm/php${default}-fpm/g" {} +
 
-echo -e "\nPHP-FPM has been configured...\n"
+echo -e "PHP-FPM has been configured...\n"
