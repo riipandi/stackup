@@ -20,15 +20,17 @@ echo 512 > /proc/sys/net/core/somaxconn
 
 mkdir -p /var/run/redis
 
-bindaddress=`crudini --get $ROOT/config.ini redis bind_address`
+bindaddr=`crudini --get $ROOT/config.ini redis bind_address`
+password=`crudini --get $ROOT/config.ini redis bind_address`
 
 sed -i "s/supervised no/supervised systemd/" /etc/redis/redis.conf
 sed -i "s/# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/" /etc/redis/redis.conf
 sed -i "s/# maxmemory <bytes>/maxmemory 256mb/" /etc/redis/redis.conf
-sed -i "s|\("^bind" * *\).*|\1$bindaddress|" /etc/redis/redis.conf
-
+sed -i "s|\("^bind" * *\).*|\1$bindaddr|" /etc/redis/redis.conf
 
 # Securing redis-server with password
-# sed -i "s/# requirepass foobared/requirepass $(echo "redisspass" | openssl base64 -A)/" /etc/redis/redis.conf
+if [[ $password != ""]] ; then
+    sed -i "s/# requirepass foobared/requirepass ${password}/" /etc/redis/redis.conf
+fi
 
 systemctl restart redis-server

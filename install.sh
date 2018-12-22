@@ -99,10 +99,10 @@ SetConfigSetup system ssh_port $ssh_port
 read -ep "Please specify time zone         : " -i "Asia/Jakarta" timezone
 SetConfigSetup system timezone $timezone
 
-read -ep "Disable IPv6            (yes/no) : " -i "no" disable_ipv6
+read -ep "Disable IPv6              yes/no : " -i "no" disable_ipv6
 SetConfigSetup system disable_ipv6 $disable_ipv6
 
-read -ep "Use Telegram Notif      (yes/no) : " -i "no" tgnotif_install
+read -ep "Use Telegram Notif        yes/no : " -i "no" tgnotif_install
 SetConfigSetup tgnotif install $tgnotif_install
 if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Telegram Bot Key                 : " -i "" tgnotif_bot_key
@@ -111,7 +111,7 @@ if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     SetConfigSetup tgnotif chat_id $tgnotif_chat_id
 fi
 
-read -ep "Install Nginx Amplify   (yes/no) : " -i "no" amplify_install
+read -ep "Install Nginx Amplify     yes/no : " -i "no" amplify_install
 SetConfigSetup nginx amplify $amplify_install
 if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Nginx Amplify API Key            : " -i "" amplify_api
@@ -129,7 +129,7 @@ else
     SetConfigSetup mysql root_pass $root_pass
 fi
 
-read -ep "Install PostgreSQL      (yes/no) : " -i "no" pgsql_install
+read -ep "Install PostgreSQL        yes/no : " -i "no" pgsql_install
 SetConfigSetup postgres install $pgsql_install
 if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "PostgreSQL Root Password         : "  -i "auto" root_pass
@@ -140,51 +140,58 @@ if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     fi
 fi
 
-read -ep "Install Redis Server    (yes/no) : " -i "yes" redis_install
+read -ep "Install Redis Server      yes/no : " -i "yes" redis_install
 SetConfigSetup redis install $redis_install
 
-read -ep "Install NodeJS and Yarn (yes/no) : " -i "yes" nodejs_install
+if [[ "${redis_install,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Redis Server Password            : "  -i "" redispass
+    if [[ "$redispass" != "" ]] ; then
+        SetConfigSetup redis password $redispass
+    fi
+fi
+
+read -ep "Install NodeJS and Yarn   yes/no : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
-read -ep "Install PHP 5.6         (yes/no) : " -i "yes" php56_install
+read -ep "Install PHP 5.6           yes/no : " -i "yes" php56_install
 SetConfigSetup php php56 $php56_install
 
-read -ep "Install PHP 7.2         (yes/no) : " -i "yes" php72_install
+read -ep "Install PHP 7.2           yes/no : " -i "yes" php72_install
 SetConfigSetup php php72 $php72_install
 
-read -ep "Install PHP 7.3         (yes/no) : " -i "no" php73_install
+read -ep "Install PHP 7.3           yes/no : " -i "no" php73_install
 SetConfigSetup php php73 $php73_install
 
 read -ep "Default PHP version   (56/72/73) : " -i "72" php_default
 SetConfigSetup php default $php_default
 
-read -ep "Install python          (yes/no) : " -i "no" python_install
+read -ep "Install python            yes/no : " -i "no" python_install
 SetConfigSetup extras python $python_install
 
-read -ep "Install IMAPSync        (yes/no) : " -i "yes" imapsync_install
+read -ep "Install IMAPSync          yes/no : " -i "yes" imapsync_install
 SetConfigSetup extras imapsync $imapsync_install
 
-read -ep "Install PowerDNS        (yes/no) : " -i "no" powerdns_install
+read -ep "Install PowerDNS          yes/no : " -i "no" powerdns_install
 SetConfigSetup powerdns install $powerdns_install
 
-read -ep "Install FTP Server      (yes/no) : " -i "no" ftpserver_install
+read -ep "Install FTP Server        yes/no : " -i "no" ftpserver_install
 SetConfigSetup ftpserver install $powerdns_install
 
-read -ep "Install Mail Server     (yes/no) : " -i "no" mailserver_install
+read -ep "Install Mail Server       yes/no : " -i "no" mailserver_install
 SetConfigSetup mailserver install $powerdns_install
 
 # Determine total memory
 memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
 if (( $memoryTotal >= 2097152 )); then opsi="no"; else opsi="yes";fi
 
-read -ep "Do you want to use Swap (yes/no) : " -i "$opsi" swap_enable
+read -ep "Do you want to use Swap   yes/no : " -i "$opsi" swap_enable
 SetConfigSetup swap enable $swap_enable
 if [[ "${enabled,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Size of Swap (in megabyte)       : "  -i "2048" swap_size
     SetConfigSetup swap size $swap_size
 fi
 
-read -ep "Reboot after install    (yes/no) : " -i "no" reboot_after
+read -ep "Reboot after install      yes/no : " -i "no" reboot_after
 SetConfigSetup system reboot $reboot_after
 
 echo -e "" && read -p "Press enter to begin installation..."
