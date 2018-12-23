@@ -56,6 +56,7 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
 fi
 
 # Reload supervisor
+echo
 read -ep "Do you want to reload supervisor daemon?  yes/no : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     supervisorctl reread
