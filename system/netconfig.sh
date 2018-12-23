@@ -30,7 +30,7 @@ fi
 crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1'
 crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
 crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
-sysctl -p -q
+sysctl -p -q >/dev/null 2>&1
 
 ## SSH Server + welcome message
 ssh_port=`crudini --get $ROOT/config.ini system ssh_port`
