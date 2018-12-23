@@ -9,11 +9,11 @@ echo -e "\nUpgrading packages..."
 apt full-upgrade -yqq
 
 echo -e "\nInstalling basic packages..."
-apt install -yqq sudo nano figlet elinks pwgen curl crudini lsof ntp \
-ntpdate whois perl dirmngr software-properties-common debconf-utils \
-apt-transport-https gcc make cmake build-essential binutils dnsutils \
-nscd dh-autoreconf ftp zip unzip bsdtar pv rsync screen screenfetch \
-ca-certificates resolvconf
+apt install -yqq sudo nano figlet elinks pwgen curl crudini lsof whois \
+dirmngr software-properties-common debconf-utils apt-transport-https \
+gcc make cmake build-essential perl binutils dnsutils nscd pv ftp zip \
+unzip bsdtar dh-autoreconf rsync screen screenfetch ca-certificates \
+resolvconf
 
 echo -e "\nRemoving unnecessary packages..."
 apt autoremove -y

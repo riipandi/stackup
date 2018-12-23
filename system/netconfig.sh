@@ -3,15 +3,17 @@
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
 # NTP Client
-country=`crudini --get $ROOT/config.ini system country`
-if [ $country != "ID" ] || [ $country != "SG" ] ; then
-    ntpdate -u pool.ntp.org
-else
-    ntpdate -u 0.asia.pool.ntp.org
-fi
+# country=`crudini --get $ROOT/config.ini system country`
+# if [ $country != "ID" ] || [ $country != "SG" ] ; then
+#     ntpdate -u pool.ntp.org
+# else
+#     ntpdate -u 0.asia.pool.ntp.org
+# fi
 
-# Timezone
+# Timezone Synchronization
+apt purge -yqq ntp ntpdate ; timedatectl set-ntp true
 timedatectl set-timezone `crudini --get $ROOT/config.ini system timezone`
+systemctl enable systemd-timesyncd && systemctl restart systemd-timesyncd
 
 if [[ `crudini --get $ROOT/config.ini system disable_ipv6` == "yes" ]] ; then
     echo -e "Disabling IPv6..."
