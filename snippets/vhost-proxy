@@ -12,18 +12,27 @@ fi
 # Validate existing vhost
 if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     echo -e "\nVirtualHost already exist...\n"
-    exit 1
-else
-    cp /etc/nginx/manifest/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
-    sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
-    echo
+    read -ep "Do you want to reset it (be careful)?     yes/no : " -i "no" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        rm -f /etc/nginx/vhost.d/$1.conf
+        rm -f /etc/supervisor/conf.d/$1.conf
+        rm -fr /srv/$1
+    else
+        exit 1
+    fi
 fi
+
+echo
+# Creating web directory and configuration file
+cp /etc/nginx/manifest/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
+sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
+mkdir -p /srv/$1/public
 
 # Configure reverse proxy host
 read -ep "Enter app identifier        (ex: my_application) : " app_id
 sed -i "s/APP_NAME/$app_id/" /etc/nginx/vhost.d/$1.conf
 
-read -ep "Enter application host and port                  : " -i "127.0.0.1:2368" app_host
+read -ep "Enter application host and port                  : " -i "127.0.0.1:5801" app_host
 sed -i "s/APP_HOST/$app_host/" /etc/nginx/vhost.d/$1.conf
 
 read -ep "Do you want to use www subdomain?         yes/no : " answer
@@ -31,49 +40,54 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/# server_name www/server_name www/" /etc/nginx/vhost.d/$1.conf
 fi
 
-# Supervisor configuration (gunicorn is a sample)
-cat > /etc/supervisor/conf.d/${app_id}.conf-disable <<EOF
-[program:${app_id}]
-directory=/srv/$1
-# environment=APP_ENV=live
-# command=/srv/$1/.venv/bin/gunicorn -b ${app_host} app:app
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/supervisor/$1-err.log
-stdout_logfile=/var/log/supervisor/$1-out.log
-EOF
-
-# Creating web directory
-mkdir -p /srv/$1/public
-chown -R www-data: /srv/$1
-chmod -R 00775 /srv/$1
-
 # Ask to generate LetsEncrypt certificate
 read -ep "Generate LetsEncrypt certificate?         yes/no : " answer
-
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash /usr/local/bin/ssl-create $1
 fi
 
-# Reload supervisor
-echo
-read -ep "Do you want to reload supervisor daemon?  yes/no : " answer
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    supervisorctl reread
-    systemctl restart supervisor
-    systemctl status supervisor | grep Active
-    supervisorctl status
+read -p "Press enter to continue ..."
+
+echo -e "\nCrafting server configuration...\n"
+
+# Setup virtual env
+cd /srv/$1 ; rm -rf .venv
+/usr/bin/virtualenv -qp python3 .venv --download
+/srv/$1/.venv/bin/pip install -q gunicorn falcon
+
+# Put an example Python application
+if [[ ! -f "/srv/$1/app.py" ]]; then
+    cp /etc/nginx/manifest/example.py /srv/$1/app.py
 fi
+
+# Fix directory permission
+chown -R www-data: /srv/$1
+chmod -R 00775 /srv/$1
+
+# Supervisor configuration (gunicorn is a sample)
+cat > /etc/supervisor/conf.d/$1.conf <<EOF
+[program:${app_id}]
+directory=/srv/$1
+environment=APP_ENV=live
+command=/srv/$1/.venv/bin/gunicorn -b ${app_host} app:api
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/$1-err.log
+stdout_logfile=/var/log/supervisor/$1-out.log
+user=www-data
+EOF
 
 # Test nginx configuration then restart
 `which nginx` -t 2>/dev/null > /dev/null
 if [[ $? == 0 ]]; then
-    echo -e "\nReloading Nginx configuration..."
+    echo -e "\nReloading server configuration...\n"
     systemctl restart nginx
+    supervisorctl reread
+    systemctl restart supervisor
 else
-    echo -e "\nNginx configuration fail..."
+    echo -e "\nSomething wrong with configuration file..."
     `which nginx` -t
     exit
 fi
 
-echo -e "VirtualHost for $1 created...\n"
+echo -e "\nVirtualHost for $1 created...\n"
