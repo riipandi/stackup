@@ -153,6 +153,10 @@ fi
 read -ep "Install NodeJS and Yarn   yes/no : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
+## Setup PHP repo
+echo "deb https://packages.sury.org/php/ `lsb_release -cs` main" > /etc/apt/sources.list.d/sury-php.list
+curl -sS https://packages.sury.org/php/apt.gpg | apt-key add -
+
 read -ep "Install PHP 5.6           yes/no : " -i "yes" php56_install
 SetConfigSetup php php56 $php56_install
 

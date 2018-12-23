@@ -2,7 +2,7 @@
 
 default="7.2"
 
-arr_ver=['5.6','7.2','7.3']
+arr_ver=( '5.6' '7.2' '7.3' )
 
 if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
 
@@ -18,8 +18,7 @@ if [[ "${arr_ver[*]}" != *"$default"* ]]; then
     exit 1
 fi
 
-echo -e "\nConfiguring PHP-FPM..."
-echo -e "Set default PHP to v$default"
+echo -e "\nConfiguring php-fpm, set default to v$default..."
 
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize" "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"  "300"' {} \;
@@ -41,9 +40,9 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.sta
 
 # Set default PHP version
 echo
-update-alternatives --set php /usr/bin/php$default
-update-alternatives --set phar /usr/bin/phar$default
-update-alternatives --set phar.phar /usr/bin/phar.phar$default
+update-alternatives --set php /usr/bin/php$default >/dev/null 2>&1
+update-alternatives --set phar /usr/bin/phar$default >/dev/null 2>&1
+update-alternatives --set phar.phar /usr/bin/phar.phar$default >/dev/null 2>&1
 
 phpenmod curl opcache imagick fileinfo
 
