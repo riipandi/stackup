@@ -29,8 +29,11 @@ chown -R root: /etc/nginx
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 
+sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/nginx.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/server.d/server.conf
 
 # Default web page
