@@ -36,7 +36,7 @@ cat > /etc/supervisor/conf.d/${app_id}.conf-disable <<EOF
 [program:${app_id}]
 directory=/srv/$1
 # environment=APP_ENV=live
-# command=/srv/$1/.venv/bin/gunicorn -b 127.0.0.1:6465 app:app
+# command=/srv/$1/.venv/bin/gunicorn -b ${app_host} app:app
 autostart=true
 autorestart=true
 stderr_logfile=/var/log/supervisor/$1-err.log
