@@ -40,6 +40,11 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/# server_name www/server_name www/" /etc/nginx/vhost.d/$1.conf
 fi
 
+read -ep "Enable indexing by search engine?         yes/no : " answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    sed -i "s/# add_header X-Robots-Tag/add_header X-Robots-Tag/" /etc/nginx/vhost.d/$1.conf
+fi
+
 # Ask to generate LetsEncrypt certificate
 read -ep "Generate LetsEncrypt certificate?         yes/no : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
