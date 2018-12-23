@@ -48,6 +48,6 @@ update-alternatives --set phar.phar /usr/bin/phar.phar$default
 phpenmod curl opcache imagick fileinfo
 
 # Default PHP-FPM on Nginx configuration
-find /etc/nginx/ -type f -exec sed -i "s/php*.-fpm/php${default}-fpm/g" {} +
+find /etc/nginx/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
 
 echo -e "PHP-FPM has been configured...\n"
