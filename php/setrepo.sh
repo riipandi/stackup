@@ -8,4 +8,4 @@ file="/etc/apt/sources.list.d/sury-php.list"
 
 echo "deb https://packages.sury.org/php/ `lsb_release -cs` main" > $file
 curl -sS https://packages.sury.org/php/apt.gpg | apt-key add -
-apt update
+apt update -qq
