@@ -5,4 +5,6 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 apt -y install {python,python3}-{dev,virtualenv,pip,setuptools,gunicorn,mysqldb} \
 supervisor python-{m2crypto,configparser} gunicorn gunicorn3
 
+wget https://raw.githubusercontent.com/chenull/py3crudini/master/crudini -qO /usr/bin/crudini
+
 source $ROOT/python/configure.sh 3.5
