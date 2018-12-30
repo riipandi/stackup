@@ -29,8 +29,8 @@ sed -i "s/# maxmemory <bytes>/maxmemory 256mb/" /etc/redis/redis.conf
 sed -i "s|\("^bind" * *\).*|\1$bindaddr|" /etc/redis/redis.conf
 
 # Securing redis-server with password
-if [[ $password != ""]] ; then
-    sed -i "s/# requirepass foobared/requirepass ${password}/" /etc/redis/redis.conf
-fi
+# if [[ $password != ""]] ; then
+#     sed -i "s/# requirepass foobared/requirepass ${password}/" /etc/redis/redis.conf
+# fi
 
 systemctl restart redis-server
