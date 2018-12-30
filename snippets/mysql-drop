@@ -4,7 +4,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 
 MYSQL=`which mysql`
 
-$MYSQL -uroot -e "show databases; select host, user from mysql.user"
+$MYSQL -uroot mysql -e "select Db, User, Host from db"
 
 # The wizard
 read -e -p "Database Name     : " db_name
