@@ -68,7 +68,6 @@ CreateNewUser() {
         read -sp "Enter new user password (again)   : " userpass2
         [ "$userpass1" = "$userpass2" ] && break
     done
-    useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass1"`
     echo
 }
 
@@ -77,6 +76,7 @@ if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter new user fullname           : " -i "Admin Sistem" fullname
     read -ep "Enter new user username           : " -i "admin" username
     CreateNewUser
+    useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass1"`
 fi
 
 # Upgrade basic system packages
