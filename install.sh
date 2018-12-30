@@ -55,6 +55,7 @@ source $ROOT/system/netconfig.sh
 InstallPackage php php56 $ROOT/php/setup56.sh
 InstallPackage php php72 $ROOT/php/setup72.sh
 InstallPackage php php73 $ROOT/php/setup73.sh
+cp $ROOT/php/configure.sh /usr/local/bin/set-php
 source $ROOT/php/configure.sh
 
 source $ROOT/nginx/setup.sh
@@ -72,7 +73,9 @@ fi
 InstallPackage redis install $ROOT/redis/setup.sh
 InstallPackage postgres install $ROOT/postgres/setup.sh
 InstallPackage extras nodejs $ROOT/nodejs/setup.sh
+
 InstallPackage python install $ROOT/python/setup.sh
+cp $ROOT/python/configure.sh /usr/local/bin/set-python
 
 # InstallPackage powerdns install $ROOT/powerdns/setup.sh
 InstallPackage mailserver install $ROOT/mailsuite/mailserver.sh
@@ -81,11 +84,8 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 #-----------------------------------------------------------------------------------------
 # Cleanup
 #-----------------------------------------------------------------------------------------
-cp $ROOT/python/configure.sh /usr/local/bin/
-cp $ROOT/php/configure.sh /usr/local/bin/
-cp $ROOT/snippets/* /usr/local/bin/
-
 # Fix permission for snippets
+cp $ROOT/snippets/* /usr/local/bin/
 chown -R root: /usr/local/bin/*
 chmod a+x /usr/local/bin/*
 
