@@ -153,10 +153,6 @@ fi
 read -ep "Install NodeJS and Yarn   yes/no : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
 
-## Setup PHP repo
-echo "deb https://packages.sury.org/php/ `lsb_release -cs` main" > /etc/apt/sources.list.d/sury-php.list
-curl -sS https://packages.sury.org/php/apt.gpg | apt-key add -
-
 read -ep "Install PHP 5.6           yes/no : " -i "yes" php56_install
 SetConfigSetup php php56 $php56_install
 
@@ -235,17 +231,13 @@ InstallPackage extras imapsync $ROOT/mailsuite/imapsync.sh
 #-----------------------------------------------------------------------------------------
 # Cleanup
 #-----------------------------------------------------------------------------------------
-cp $ROOT/snippets/fix-permission /usr/local/bin/fix-permission ; chmod +x $_
-cp $ROOT/snippets/mysql-create /usr/local/bin/mysql-create ; chmod +x $_
-cp $ROOT/snippets/vhost-create /usr/local/bin/vhost-create ; chmod +x $_
-cp $ROOT/snippets/ssl-revoke /usr/local/bin/ssl-revoke ; chmod +x $_
-cp $ROOT/snippets/ssl-create /usr/local/bin/ssl-create ; chmod +x $_
-cp $ROOT/snippets/ssl-wildcard /usr/local/bin/ssl-wildcard ; chmod +x $_
-
-cp $ROOT/php/configure.sh /usr/local/bin/set-php ; chmod +x $_
+cp $ROOT/python/configure.sh /usr/local/bin/
+cp $ROOT/php/configure.sh /usr/local/bin/
+cp $ROOT/snippets/* /usr/local/bin/
 
 # Fix permission for snippets
-chmod a+x /usr/local/bin/* ; chown -R root: /usr/local/bin/*
+chown -R root: /usr/local/bin/*
+chmod a+x /usr/local/bin/*
 
 echo "" && apt -y autoremove && apt clean && netstat -pltn
 

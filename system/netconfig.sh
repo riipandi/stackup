@@ -55,7 +55,7 @@ if [ `crudini --get $ROOT/config.ini tgnotif install` == "yes" ]; then
     tg_bot_key=`crudini --get $ROOT/config.ini tgnotif bot_key`
     tg_chat_id=`crudini --get $ROOT/config.ini tgnotif chat_id`
 
-    cp $PWD/snippets/sshnotify /etc/profile.d/sshnotify.sh
+    cp $PWD/snippets/sshnotify.sh /etc/profile.d/
     chmod a+x /etc/profile.d/sshnotify.sh
 
     sed -i "s/VAR_BOTKEY/$tg_bot_key/" /etc/profile.d/sshnotify.sh
