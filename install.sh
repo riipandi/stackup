@@ -72,7 +72,7 @@ fi
 InstallPackage redis install $ROOT/redis/setup.sh
 InstallPackage postgres install $ROOT/postgres/setup.sh
 InstallPackage extras nodejs $ROOT/nodejs/setup.sh
-InstallPackage extras python $ROOT/python/setup.sh
+InstallPackage python install $ROOT/python/setup.sh
 
 # InstallPackage powerdns install $ROOT/powerdns/setup.sh
 InstallPackage mailserver install $ROOT/mailsuite/mailserver.sh

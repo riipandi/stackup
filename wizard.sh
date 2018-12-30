@@ -133,23 +133,23 @@ SetConfigSetup php php72 $php72_install
 read -ep "Install PHP 7.3                      yes/no : " -i "no" php73_install
 SetConfigSetup php php73 $php73_install
 
-read -ep "Default PHP ver?              (5.6/7.2/7.3) : " -i "7.2" php_default
+read -ep "Default PHP version?          (5.6/7.2/7.3) : " -i "7.2" php_default
 SetConfigSetup php default $php_default
 
 read -ep "Install python                       yes/no : " -i "yes" python_install
-SetConfigSetup extras python $python_install
+SetConfigSetup python install $python_install
 
 read -ep "Install IMAPSync                     yes/no : " -i "yes" imapsync_install
 SetConfigSetup extras imapsync $imapsync_install
 
-read -ep "Install PowerDNS                     yes/no : " -i "no" powerdns_install
-SetConfigSetup powerdns install $powerdns_install
+# read -ep "Install PowerDNS                     yes/no : " -i "no" powerdns_install
+# SetConfigSetup powerdns install $powerdns_install
 
-read -ep "Install FTP Server                   yes/no : " -i "no" ftpserver_install
-SetConfigSetup ftpserver install $powerdns_install
+# read -ep "Install FTP Server                   yes/no : " -i "no" ftpserver_install
+# SetConfigSetup ftpserver install $powerdns_install
 
-read -ep "Install Mail Server                  yes/no : " -i "no" mailserver_install
-SetConfigSetup mailserver install $powerdns_install
+# read -ep "Install Mail Server                  yes/no : " -i "no" mailserver_install
+# SetConfigSetup mailserver install $powerdns_install
 
 # Determine total memory
 memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
