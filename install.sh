@@ -56,10 +56,10 @@ InstallPackage php php56 $ROOT/php/setup56.sh
 InstallPackage php php72 $ROOT/php/setup72.sh
 InstallPackage php php73 $ROOT/php/setup73.sh
 cp $ROOT/php/configure.sh /usr/local/bin/set-php
-source $ROOT/php/configure.sh
 
 source $ROOT/nginx/setup.sh
 source $ROOT/nginx/phpmy.sh
+source $ROOT/php/configure.sh
 InstallPackage nginx amplify $ROOT/nginx/amplify.sh
 
 # Setup MySQL / MariaDB Database

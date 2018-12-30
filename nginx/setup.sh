@@ -15,7 +15,7 @@ python-pip python-pip-whl python2.7-dev python3-virtualenv openssl
 
 # Latest Certbot
 echo -e "Downloading certbot and trusted certificates..."
-wget https://dl.eff.org/certbot-auto -O /usr/bin/certbot ; chmod a+x /usr/bin/certbot
+wget https://dl.eff.org/certbot-auto -qO /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 
 systemctl enable --now haveged
