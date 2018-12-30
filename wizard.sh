@@ -163,3 +163,6 @@ fi
 
 read -ep "Reboot after install                 yes/no : " -i "no" reboot_after
 SetConfigSetup system reboot $reboot_after
+
+# Mark wizard as finish
+SetConfigSetup installer ready yes
