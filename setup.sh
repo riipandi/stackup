@@ -6,8 +6,7 @@ if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; 
 
 echo -e "\nPreparing for installation, installing dependencies..."
 
-apt update -qq
-apt -yqq full-upgrade
+apt update -qq ; apt -yqq full-upgrade
 apt -yqq install sudo git curl crudini openssl
 
 workdir="/usr/src/lempstack"
