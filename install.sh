@@ -143,12 +143,12 @@ fi
 read -ep "Install Redis Server      yes/no : " -i "yes" redis_install
 SetConfigSetup redis install $redis_install
 
-if [[ "${redis_install,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Redis Server Password            : "  -i "" redispass
-    if [[ "$redispass" != "" ]] ; then
-        SetConfigSetup redis password $redispass
-    fi
-fi
+# if [[ "${redis_install,,}" =~ ^(yes|y)$ ]] ; then
+#     read -ep "Redis Server Password            : "  -i "" redispass
+#     if [[ "$redispass" != "" ]] ; then
+#         SetConfigSetup redis password $redispass
+#     fi
+# fi
 
 read -ep "Install NodeJS and Yarn   yes/no : " -i "yes" nodejs_install
 SetConfigSetup extras nodejs $nodejs_install
