@@ -9,10 +9,10 @@ echo -e "\nUpgrading packages..."
 apt full-upgrade -yqq
 
 echo -e "\nInstalling basic packages..."
-apt install -yqq nano figlet elinks pwgen curl lsof whois dirmngr \
+apt install -yqq nano figlet elinks pwgen curl lsof whois dirmngr pv \
 software-properties-common debconf-utils apt-transport-https gcc make \
 cmake build-essential perl binutils dnsutils nscd ftp zip unzip bsdtar \
-pv dh-autoreconf rsync screen screenfetch ca-certificates resolvconf
+dh-autoreconf rsync screen screenfetch ca-certificates resolvconf
 
 echo -e "\nRemoving unnecessary packages..."
 apt autoremove -y
