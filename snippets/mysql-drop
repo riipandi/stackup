@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [[ $EUID -ne 0 ]]; then echo -e 'This script must be run as root' ; exit 1 ; fi
+
+MYSQL=`which mysql`
+
+$MYSQL -uroot -e "show databases; select host, user from mysql.user"
+
+# The wizard
+read -e -p "Database Name     : " db_name
+read -e -p "Database User     : " db_user
+read -e -p "Database Host     : " -i "127.0.0.1" db_host
+
+# Create database and user
+mysql -uroot -e "DROP DATABASE IF EXISTS $db_name"
+mysql -uroot -e "DROP USER IF EXISTS '$db_name'@'$db_host'"
+mysql -uroot -e "FLUSH PRIVILEGES"
+
+echo -e "\nDatabase $db_name @ $db_pass has been dropped.\n"
