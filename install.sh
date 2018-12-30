@@ -40,7 +40,7 @@ rm -f /etc/resolv.conf
 echo 'nameserver 209.244.0.3' >  /etc/resolv.conf
 echo 'nameserver 209.244.0.4' >> /etc/resolv.conf
 
-if [[ `crudini --get $ROOT/config.ini installer ready` != "yes" ]] ; then
+if [[ `crudini --get $ROOT/config.ini setup ready` != "yes" ]] ; then
     source $ROOT/wizard.sh
 fi
 
