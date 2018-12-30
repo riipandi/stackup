@@ -18,36 +18,36 @@ SetConfigSetup() {
 #-----------------------------------------------------------------------------------------
 
 # Change default repository mirror
-read -ep "Change repository mirror?  yes/no : " -i "yes" changrepo
+read -ep "Change repository mirror?     yes/no : " -i "yes" changrepo
 if [[ "${changrepo,,}" =~ ^(yes|y)$ ]] ; then source $ROOT/system/repository.sh ; fi
 
 ChangeRootPass() {
-    read -sp "Enter new root password           : " rootpass
+    read -sp "Enter new root password              : " rootpass
     if [[ "$rootpass" == "" ]] ; then
         echo -e "" && ChangeRootPass
     else
         usermod root --password `openssl passwd -1 "$rootpass"`
     fi
 }
-read -ep "Change root password?      yes/no : " -i "no" changerootpass
+read -ep "Change root password?         yes/no : " -i "no" changerootpass
 if [[ "${changerootpass,,}" =~ ^(yes|y)$ ]] ; then ChangeRootPass ; fi
 
 CreateNewUser() {
     while true; do
         echo
-        read -sp "Enter new user password           : " userpass1
+        read -sp "Enter new user password              : " userpass1
         [ "$userpass1" == "" ] && CreateNewUser
         echo
-        read -sp "Enter new user password (again)   : " userpass2
+        read -sp "Enter new user password (again)      : " userpass2
         [ "$userpass1" = "$userpass2" ] && break
     done
     echo
 }
 
-read -ep "Create a new user?         yes/no : " -i "yes" createuser
+read -ep "Create a new user?            yes/no : " -i "yes" createuser
 if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Enter new user fullname           : " -i "Admin Sistem" fullname
-    read -ep "Enter new user username           : " -i "admin" username
+    read -ep "Enter new user fullname              : " -i "Admin Sistem" fullname
+    read -ep "Enter new user username              : " -i "admin" username
     CreateNewUser
     useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass1"`
     SetConfigSetup setup create_user no
