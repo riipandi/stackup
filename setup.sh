@@ -8,7 +8,7 @@ echo -e "\nPreparing for installation, installing dependencies..."
 
 apt update -qq
 apt -yqq full-upgrade
-apt -yqq install git curl crudini
+apt -yqq install sudo git curl crudini openssl
 
 workdir="/usr/src/lempstack"
 
