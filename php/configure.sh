@@ -18,7 +18,7 @@ if [[ "${arr_ver[*]}" != *"$default"* ]]; then
     exit 1
 fi
 
-echo -e "\nConfiguring php-fpm, set default to v$default..."
+echo -e "\nConfiguring php-fpm, set default to v$default"
 
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize" "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"  "300"' {} \;
