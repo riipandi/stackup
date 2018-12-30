@@ -50,6 +50,7 @@ if [[ "${createuser,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter new user username           : " -i "admin" username
     CreateNewUser
     useradd -mg sudo -s `which bash` $username -c "$fullname" -p `openssl passwd -1 "$userpass1"`
+    SetConfigSetup setup create_user no
 fi
 
 # Upgrade basic system packages
