@@ -88,7 +88,7 @@ crudini --set $ROOT/config.ini 'system' 'country' $country
 
 # Print welcome message
 figlet "Are you ready?"
-read -p "Press enter to continue ..."
+echo && read -p "Press enter to continue ..."
 
 #-----------------------------------------------------------------------------------------
 # System and packages setup
