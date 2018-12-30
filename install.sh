@@ -165,7 +165,7 @@ SetConfigSetup php php73 $php73_install
 read -ep "Default PHP ver?   (5.6/7.2/7.3) : " -i "7.2" php_default
 SetConfigSetup php default $php_default
 
-read -ep "Install python            yes/no : " -i "no" python_install
+read -ep "Install python            yes/no : " -i "yes" python_install
 SetConfigSetup extras python $python_install
 
 read -ep "Install IMAPSync          yes/no : " -i "yes" imapsync_install
