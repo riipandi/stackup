@@ -18,7 +18,6 @@ echo -e "\nRemoving unnecessary packages..."
 apt autoremove -y
 
 echo -e "\nDownloading extra utilities..."
-
 curl -L# "https://dl.eff.org/certbot-auto" -o /usr/local/bin/certbot
 curl -L# "https://git.io/vN3Ff" -o /usr/local/bin/wp
 curl -L# "https://git.io/fAFyN" -o /usr/local/bin/phpcs
