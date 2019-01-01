@@ -2,11 +2,12 @@ proxy_cache_path /tmp/HOSTNAME/ levels=1:2 keys_zone=HOSTNAME:16m max_size=10g i
 
 server {
     listen 80;
-    listen [::]:80;
-    listen [::]:443 ssl http2;
     listen 443 ssl http2;
+    # listen [::]:80;
+    # listen [::]:443 ssl http2;
     server_name HOSTNAME;
 
+    add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive";
     access_log /var/log/nginx/HOSTNAME-access.log main;
     error_log  /var/log/nginx/HOSTNAME-error.log warn;
 
@@ -15,8 +16,13 @@ server {
     ssl_certificate_key  /etc/letsencrypt/live/HOSTNAME/privkey.pem;
 
     location / {
-        proxy_pass https://BUCKETNAME.sgp1.cdn.digitaloceanspaces.com/;
+        proxy_pass             https://BUCKETNAME.sgp1.cdn.digitaloceanspaces.com/;
         proxy_hide_header      Strict-Transport-Security;
+        proxy_hide_header      x-amz-meta-s3cmd-attrs;
+        proxy_hide_header      x-amz-request-id;
+        proxy_hide_header      x-hw;
+        proxy_hide_header      Set-Cookie;
+        proxy_ignore_headers   Set-Cookie;
         proxy_cache            HOSTNAME;
         proxy_cache_valid      200 60m;
         proxy_cache_use_stale  error timeout updating http_500 http_502 http_503 http_504;
