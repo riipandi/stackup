@@ -50,8 +50,9 @@ apt install -y sudo nano figlet elinks pwgen curl lsof whois dirmngr \
 gcc make cmake build-essential software-properties-common debconf-utils \
 apt-transport-https perl binutils dnsutils nscd ftp zip unzip bsdtar pv \
 dh-autoreconf rsync screen screenfetch ca-certificates resolvconf nmap \
-nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd \
-python-virtualenv python3-virtualenv virtualenv
+nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd virtualenv \
+libpython2.7 {libpython,libpython2.7,python2.7}-dev python-virtualenv \
+python3-virtualenv
 
 # Copy snippet to local bin
 cp $ROOT/snippets/* /usr/local/bin/
