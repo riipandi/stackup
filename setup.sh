@@ -27,12 +27,14 @@ if [ -d $WORKDIR ]; then rm -fr $WORKDIR ; fi
 
 git clone https://github.com/riipandi/lempstack $WORKDIR ; cd $_
 
-crudini --set $PWD/config.ini 'system' 'country' $COUNTRY
-find $PWD/snippets/ -type f -exec chmod +x {} \;
+crudini --set $WORKDIR/config.ini 'system' 'country' $COUNTRY
+find $WORKDIR/snippets/ -type f -exec chmod +x {} \;
 find . -type f -name '*.sh' -exec chmod +x {} \;
 find . -type f -name '.git*' -exec rm -fr {} \;
 rm -fr /etc/apt/sources.list.d/*
 
 echo -e "\nStarting the installer..."
 
-bash $PWD/install.sh
+crudini --set $WORKDIR/config.ini 'setup' 'ready' 'no'
+
+bash $WORKDIR/install.sh
