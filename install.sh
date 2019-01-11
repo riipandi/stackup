@@ -51,10 +51,10 @@ chmod a+x /usr/local/bin/*
 
 # Ask for creating new user
 #-----------------------------------------------------------------------------------------
-read -ep "Do you want to create a new user?        [Y/n] : " CreateUserSudo
+read -ep "Create a new sudo user?      [Y/n] : " CreateUserSudo
 [[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
 
-read -ep "Do you want to create deployer user?     [Y/n] : " CreateUserDeployer
+read -ep "Create user for deployer?    [Y/n] : " CreateUserDeployer
 [[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
 
 # Install and configure packages

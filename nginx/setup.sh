@@ -7,8 +7,8 @@ PARENT=$(dirname "$PWD")
 
 # Set Nginx repository
 #-----------------------------------------------------------------------------------------
-echo "deb https://nginx.org/packages/ubuntu/ `lsb_release -cs` nginx" > /etc/apt/sources.list.d/nginx.list
-curl -sS https://nginx.org/packages/keys/nginx_signing.key | apt-key add - && apt-update
+echo "deb http://ppa.launchpad.net/ondrej/nginx/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/nginx.list
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 
 # Install packages
 #-----------------------------------------------------------------------------------------
