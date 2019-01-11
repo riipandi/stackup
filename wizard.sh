@@ -38,19 +38,6 @@ CFVAL=`crudini --get $PWD/config.ini system disable_ipv6`
 read -ep "Do you want to disable IPv6?            yes/no : " -i "$CFVAL" disable_ipv6
 SetConfig system disable_ipv6 $disable_ipv6
 
-CFVAL=`crudini --get $PWD/config.ini telegram enable`
-read -ep "Use Telegram Notif                      yes/no : " -i "$CFVAL" sshnotify
-SetConfig telegram enable $sshnotify
-
-if [[ "${sshnotify,,}" =~ ^(yes|y)$ ]] ; then
-    BOTKEY=`crudini --get $PWD/config.ini telegram bot_key`
-    CHATID=`crudini --get $PWD/config.ini telegram chat_id`
-    read -ep "Telegram Bot Key                               : " -i "$BOTKEY" tg_bot_key
-    read -ep "Telegram User Chat ID                          : " -i "$CHATID" tg_chat_id
-    SetConfig telegram bot_key $tg_bot_key
-    SetConfig telegram chat_id $tg_chat_id
-fi
-
 # Determine total memory for swap usage
 #-----------------------------------------------------------------------------------------
 memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
@@ -64,6 +51,21 @@ if [[ "${swap_enable,,}" =~ ^(yes|y)$ ]] ; then
     CFVAL=`crudini --get $PWD/config.ini system swap_size`
     read -ep "Enter size of Swap (in megabyte)               : "  -i "$CFVAL" swap_size
     SetConfig system swap_size $swap_size
+fi
+
+# Telegram notification
+#-----------------------------------------------------------------------------------------
+CFVAL=`crudini --get $PWD/config.ini telegram enable`
+read -ep "Use Telegram Notif                      yes/no : " -i "$CFVAL" sshnotify
+SetConfig telegram enable $sshnotify
+
+if [[ "${sshnotify,,}" =~ ^(yes|y)$ ]] ; then
+    BOTKEY=`crudini --get $PWD/config.ini telegram bot_key`
+    CHATID=`crudini --get $PWD/config.ini telegram chat_id`
+    read -ep "Telegram Bot Key                               : " -i "$BOTKEY" tg_bot_key
+    read -ep "Telegram User Chat ID                          : " -i "$CHATID" tg_chat_id
+    SetConfig telegram bot_key $tg_bot_key
+    SetConfig telegram chat_id $tg_chat_id
 fi
 
 # Nginx + Amplify
