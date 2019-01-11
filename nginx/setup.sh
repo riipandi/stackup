@@ -91,7 +91,10 @@ if [ $AMPLIFY_INSTALL == "yes" ] ; then
     crudini --set /etc/amplify-agent/agent.conf 'credentials' 'hostname' `hostname -f`
     crudini --set /etc/amplify-agent/agent.conf 'extensions'  'phpfpm' 'True'
 
+    # TODO Change php-fpm alias or identifier
     # if [ $INSTALL_V56 == "yes" ] ; then fi
+    # if [ $INSTALL_V72 == "yes" ] ; then fi
+    # if [ $INSTALL_V73 == "yes" ] ; then fi
 
     mv /etc/nginx/conf.d/stub_status.{conf-disable,conf}
 
