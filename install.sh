@@ -19,6 +19,16 @@ if [ $(crudini --get $ROOT/config.ini setup ready) != "yes" ]; then
     source "$ROOT/wizard.sh"
 fi
 
+# Ask for creating new user
+#-----------------------------------------------------------------------------------------
+read -ep "Create a new sudo user?      [Y/n] : " CreateUserSudo
+[[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
+
+read -ep "Create user for deployer?    [Y/n] : " CreateUserDeployer
+[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
+
+echo ; read -p "Press enter to begin installation..."
+
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
 COUNTRY=`crudini --get $ROOT/config.ini system country`
@@ -34,8 +44,6 @@ apt update ; apt full-upgrade -y ; apt autoremove -y
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
-echo ; read -p "Press enter to begin installation..."
-
 echo -e "\nInstalling basic packages..."
 apt install -y sudo nano figlet elinks pwgen curl lsof whois dirmngr \
 gcc make cmake build-essential software-properties-common debconf-utils \
@@ -48,14 +56,6 @@ python-virtualenv python3-virtualenv virtualenv
 cp $ROOT/snippets/* /usr/local/bin/
 chown -R root: /usr/local/bin/*
 chmod a+x /usr/local/bin/*
-
-# Ask for creating new user
-#-----------------------------------------------------------------------------------------
-read -ep "Create a new sudo user?      [Y/n] : " CreateUserSudo
-[[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
-
-read -ep "Create user for deployer?    [Y/n] : " CreateUserDeployer
-[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
 
 # Install and configure packages
 #-----------------------------------------------------------------------------------------
