@@ -124,6 +124,10 @@ if [[ "${mysql_install,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Database Bind Address                          : " -i "$CFVAL" bind_address
     SetConfig mysql bind_address $bind_address
 
+    CFVAL=`crudini --get $PWD/config.ini mysql root_user`
+    read -ep "Default MySQL database root user               : " -i "$CFVAL" mysql_user
+    SetConfig mysql root_user $mysql_user
+
     CFVAL=`crudini --get $PWD/config.ini mysql root_pass`
     read -ep "Set database root password                     : "  -i "$CFVAL" root_pass
     if [[ "$root_pass" == "auto" ]] ; then
@@ -155,6 +159,10 @@ if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     CFVAL=`crudini --get $PWD/config.ini postgres bind_address`
     read -ep "Database Bind Address                          : " -i "$CFVAL" bind_address
     SetConfig postgres bind_address $bind_address
+
+    # CFVAL=`crudini --get $PWD/config.ini postgres root_user`
+    # read -ep "Default PostgreSQL root user                   : " -i "$CFVAL" pgsql_user
+    # SetConfig postgres root_user $pgsql_user
 
     CFVAL=`crudini --get $PWD/config.ini postgres root_pass`
     read -ep "Set database root password                     : "  -i "$CFVAL" root_pass
