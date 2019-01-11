@@ -21,6 +21,7 @@ fi
 
 # Ask for creating new user
 #-----------------------------------------------------------------------------------------
+echo
 read -ep "Create a new sudo user?      [Y/n] : " CreateUserSudo
 [[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
 
