@@ -12,7 +12,8 @@ SetConfig() {
 
 # Print welcome message
 #-----------------------------------------------------------------------------------------
-figlet "Are you ready?" ; echo
+figlet "Are you ready?"
+echo
 while true; do
     read -ep "Type your answer ....... yes/no : " answer
     if [[ "${answer,,}" =~ ^(yes|y)$ ]]; then
