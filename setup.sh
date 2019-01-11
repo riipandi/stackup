@@ -19,9 +19,7 @@ touch /etc/resolv.conf
 COUNTRY=`wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/'`
 
 echo -e "\nPreparing for installation, installing dependencies..."
-
-apt update -qq ; apt -yqq full-upgrade
-apt -yqq install git curl crudini openssl
+apt update -qq ; apt -yqq full-upgrade ; apt -yqq install git curl crudini openssl figlet
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
