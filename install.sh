@@ -50,7 +50,7 @@ apt install -y sudo nano figlet elinks pwgen curl lsof whois dirmngr \
 gcc make cmake build-essential software-properties-common debconf-utils \
 apt-transport-https perl binutils dnsutils nscd ftp zip unzip bsdtar pv \
 dh-autoreconf rsync screen screenfetch ca-certificates resolvconf nmap \
-nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd
+nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd \
 python-virtualenv python3-virtualenv virtualenv
 
 # Copy snippet to local bin
