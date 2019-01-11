@@ -12,7 +12,7 @@ PHP and or Python.
 - Fresh installation of Ubuntu 16.04 or 18.04 LTS.
 - Domain with already pointed IP address to that server.
 
-If you prefer to use Debian, you can check [`debian`](./tree/debian) branch.
+If you prefer to use Debian, you can check [`debian`](//github.com/riipandi/lempstack/tree/debian) branch.
 
 ## Quick Start
 
