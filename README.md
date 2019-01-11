@@ -22,6 +22,20 @@ Run this command as root and follow the wizard:
 bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ```
 
+## Manual Installation
+
+If you prefer to run installation manually, you can follow this step:
+
+1. Clone this repo or download latest release from [release page](//github.com/riipandi/lempstack/releases/latest).
+2. Extract downloaded file and make all `*.sh` and `snippets` files executable.
+3. Install basic dependencies: `apt -y install sudo git curl crudini openssl figlet perl`
+4. Start installation process by executing `install.sh` file.
+5. Follow the installation wizard as usual.
+
+You can also configure the `config.ini` file manually if you don't want to use the installation wizard.
+
+Change `ready=no` to `ready=yes` in `config.ini` file, then execute `install.sh` file.
+
 ## Some Useful Snippets
 
 Command            | Description                                       | Example Usage

@@ -66,7 +66,11 @@ systemctl restart nginx
 AMPLIFY_INSTALL=`crudini --get $PARENT/config.ini nginx amplify`
 AMPLIFY_API_KEY=`crudini --get $PARENT/config.ini nginx api_key`
 
-DB_ROOT_USER="root"
+INSTALL_V56=`crudini --get $PARENT/config.ini php php56`
+INSTALL_V72=`crudini --get $PARENT/config.ini php php72`
+INSTALL_V73=`crudini --get $PARENT/config.ini php php73`
+
+DB_ROOT_USER=`crudini --get $PARENT/config.ini mysql root_user`
 DB_ROOT_PASS=`crudini --get $PARENT/config.ini mysql root_pass`
 DB_BIND_ADDR=`crudini --get $PARENT/config.ini mysql bind_address`
 DB_SOCKET_PATH="/var/run/mysqld/mysqld.sock"
@@ -86,6 +90,8 @@ if [ $AMPLIFY_INSTALL == "yes" ] ; then
 
     crudini --set /etc/amplify-agent/agent.conf 'credentials' 'hostname' `hostname -f`
     crudini --set /etc/amplify-agent/agent.conf 'extensions'  'phpfpm' 'True'
+
+    # if [ $INSTALL_V56 == "yes" ] ; then fi
 
     mv /etc/nginx/conf.d/stub_status.{conf-disable,conf}
 
