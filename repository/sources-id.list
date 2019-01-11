@@ -1,0 +1,4 @@
+deb http://kartolo.sby.datautama.net.id/ubuntu CODENAME main restricted universe multiverse
+deb http://kartolo.sby.datautama.net.id/ubuntu CODENAME-updates main restricted universe multiverse
+deb http://kartolo.sby.datautama.net.id/ubuntu CODENAME-security main restricted universe multiverse
+deb http://kartolo.sby.datautama.net.id/ubuntu CODENAME-proposed main restricted universe multiverse
