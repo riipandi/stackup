@@ -5,7 +5,7 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
 # Get parameter
 #-----------------------------------------------------------------------------------------
-TIMEZONE=`crudini --get $PARENT/config.ini system country`
+TIMEZONE=`crudini --get $PARENT/config.ini system timezone`
 DISABLE_IPV6=`crudini --get $PARENT/config.ini system disable_ipv6`
 
 # Configure the system
