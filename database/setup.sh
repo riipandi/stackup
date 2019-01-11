@@ -4,7 +4,6 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 PWD=$(dirname "$(readlink -f "$0")")
 PARENT=$(dirname "$PWD")
 
-
 GET_ENGINE=`crudini --get $ROOT/config.ini mysql engine`
 GET_VERSION=`crudini --get $ROOT/config.ini mysql version`
 

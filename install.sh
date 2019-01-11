@@ -19,6 +19,19 @@ InstallPackage() {
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
+COUNTRY=`crudini --get $ROOT/config.ini system country`
+if [ $COUNTRY == "ID" ] ; then
+    cat $ROOT/repository/sources-id.list > /etc/apt/sources.list
+else if [ $COUNTRY == "SG" ] ; then
+    cat $ROOT/repository/sources-sg.list > /etc/apt/sources.list
+else
+    cat $ROOT/repository/sources.list > /etc/apt/sources.list
+fi
+sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
+apt update ; apt full-upgrade -y ; apt autoremove -y
+
+# Preparing for installation
+#-----------------------------------------------------------------------------------------
 echo ; read -p "Press enter to begin installation..."
 
 echo -e "\nInstalling basic packages..."
