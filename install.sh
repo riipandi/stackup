@@ -17,12 +17,6 @@ InstallPackage() {
 #-----------------------------------------------------------------------------------------
 [[ $(crudini --get $ROOT/config.ini setup ready) == "yes" ]] || bash $ROOT/wizard.sh
 
-read -ep "Do you want to create a new user?        [Y/n] : " CreateUserSudo
-[[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'system/create-sudoer.sh'
-
-read -ep "Do you want to create deployer user?     [Y/n] : " CreateUserDeployer
-[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'system/create-buddy.sh'
-
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
 echo ; read -p "Press enter to begin installation..."
@@ -38,6 +32,14 @@ nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd
 cp $ROOT/snippets/* /usr/local/bin/
 chown -R root: /usr/local/bin/*
 chmod a+x /usr/local/bin/*
+
+# Ask for creating new user
+#-----------------------------------------------------------------------------------------
+read -ep "Do you want to create a new user?        [Y/n] : " CreateUserSudo
+[[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
+
+read -ep "Do you want to create deployer user?     [Y/n] : " CreateUserDeployer
+[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
 
 # Install and configure packages
 #-----------------------------------------------------------------------------------------
