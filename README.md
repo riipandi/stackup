@@ -19,11 +19,7 @@ If you prefer to use Debian, you can check [`debian`](//github.com/riipandi/lemp
 Run this command as root and follow the wizard:
 
 ```sh
-# Using wget
 bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
-
-# Using curl
-curl -fsSL https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh | bash
 ```
 
 ## Some Useful Snippets

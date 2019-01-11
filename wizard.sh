@@ -125,7 +125,7 @@ if [[ "${mysql_install,,}" =~ ^(yes|y)$ ]] ; then
     CFVAL=`crudini --get $PWD/config.ini mysql root_pass`
     read -ep "Set database root password                     : "  -i "$CFVAL" root_pass
     if [[ "$root_pass" == "auto" ]] ; then
-        SetConfig mysql root_pass `pwgen -1 12`
+        SetConfig mysql root_pass $(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
     else
         SetConfig mysql root_pass $root_pass
     fi
@@ -157,7 +157,7 @@ if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     CFVAL=`crudini --get $PWD/config.ini postgres root_pass`
     read -ep "Set database root password                     : "  -i "$CFVAL" root_pass
     if [[ "$root_pass" == "auto" ]] ; then
-        SetConfig postgres root_pass `pwgen -1 12`
+        SetConfig postgres root_pass $(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
     else
         SetConfig postgres root_pass $root_pass
     fi
