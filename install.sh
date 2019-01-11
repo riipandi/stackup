@@ -15,14 +15,16 @@ InstallPackage() {
 
 # Initial setup
 #-----------------------------------------------------------------------------------------
-[[ $(crudini --get $ROOT/config.ini setup ready) == "yes" ]] || source $ROOT/wizard.sh
+if [ $(crudini --get $ROOT/config.ini setup ready) != "yes" ]; then
+    source "$ROOT/wizard.sh"
+fi
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
 COUNTRY=`crudini --get $ROOT/config.ini system country`
 if [ $COUNTRY == "ID" ] ; then
     cat $ROOT/repository/sources-id.list > /etc/apt/sources.list
-else if [ $COUNTRY == "SG" ] ; then
+elif [ $COUNTRY == "SG" ] ; then
     cat $ROOT/repository/sources-sg.list > /etc/apt/sources.list
 else
     cat $ROOT/repository/sources.list > /etc/apt/sources.list
