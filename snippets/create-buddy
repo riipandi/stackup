@@ -6,7 +6,7 @@ OK='\033[0;32m'
 NC='\033[0m'
 
 while true; do
-    read -ep "Enter username for deployer       : " -i "buddy" username
+    read -ep "Enter username for deployer        : " -i "buddy" username
     if [[ $(cat /etc/passwd | grep -c "$username") -eq 1 ]]; then
         echo -e "${NO}User $username already exists!${NC}"
     else
@@ -14,7 +14,7 @@ while true; do
         pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
         useradd -mg sudo -s `which bash` $username -c "Deployer Bot" -p $pass
         if [ $? -eq 0 ] ; then
-            read -ep "Enter ssh key for this user       : " sshkey
+            read -ep "Enter ssh key for this user        : " sshkey
             HOMEDIR=$(eval echo "~$username")
             KEYFILE="$HOMEDIR/.ssh/${username}_keys"
             mkdir -p $HOMEDIR/.ssh ; chmod 0700 $_
