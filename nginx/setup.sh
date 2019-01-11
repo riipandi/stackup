@@ -11,7 +11,7 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 # Install packages
 #-----------------------------------------------------------------------------------------
 apt full-upgrade -y ; apt install -y {libpng,libssl,libffi,libexpat1}-dev libarchive-tools \
-libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses
+libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses python-dev
 
 # Extra packages
 #-----------------------------------------------------------------------------------------
