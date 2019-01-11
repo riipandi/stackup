@@ -9,58 +9,34 @@ PHP and or Python.
 
 ## Prerequisites
 
-- Fresh installed Debian 9 server with a root user.
+- Fresh installation of Ubuntu 16.04 or 18.04 LTS.
 - Domain with already pointed IP address to that server.
 
-## Usage
+If you prefer to use Debian, you can check [`debian`](./tree/debian) branch.
 
-Just run this command and follow the wizard:
+## Quick Start
 
-```bash
+Run this command and follow the wizard:
+
+```sh
 bash <(wget -qO- raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
 ```
 
-## Commands
+## Some Useful Snippets
 
-### Create MySQL Database
-
-```bash
-# Using simple command:
-
-sudo mysql-create
-
-# Or, you can use manual method. Don't
-# forget to adjust the variables value.
-
-export dbname="xxxxxxxxxxxxx"  # <-- change this value
-export dbuser="xxxxxxxxxxxxx"  # <-- change this value
-export dbpass="`pwgen -1 16`"  # <-- keep this variable
-
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $dbname"
-mysql -uroot -e "CREATE USER IF NOT EXISTS '$dbuser'@'127.0.0.1' IDENTIFIED BY '$dbpass'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'127.0.0.1'; FLUSH PRIVILEGES"
-```
-
-### Create Nginx vHost
-
-```bash
-# Create virtualhost
-sudo vhost-create domain.tld
-
-# Set Permission File dan Folder
-sudo fix-permission /srv/domain.tld www-data:
-
-# Generet SSL Certificate
-sudo ssl-create domain.tld
-
-# Generate Wildcard Certificate
-sudo ssl-wildcard domain.tld
-
-# Revoke Certificate
-sudo ssl-revoke domain.tld
-```
+Command            | Description                                       | Example Usage
+:------------------|:--------------------------------------------------|:-------------
+mysql-create       | Create new MySQL database                         | `sudo mysql-create mydatabase`
+mysql-drop         | Drop MySQL database and user                      | Run with sudo and follow the wizard
+vhost-create       | Create Nginx VirtualHost for PHP-FPM backend      | `sudo vhost-create domain.tld`
+vhost-proxy        | Create Nginx VirtualHost for reverse proxy        | `sudo vhost-proxy domain.tld`
+fix-permission     | Fix directory and file permission                 | `sudo fix-permission /my/path user:group`
+ssl-create         | Generate Let's Encrypt SSL certificate            | `sudo ssl-create domain.tld`
+ssl-wildcard       | Generate wildcard Let's Encrypt SSL certificate   | `sudo ssl-wildcard domain.tld`
+ssl-revoke         | Revoke Let's Encrypt SSL certificate              | `sudo ssl-revoke domain.tld`
+set-php            | Set default PHP version                           | `sudo set-php 7.2`
+set-python         | Set default Python version                        | `sudo set-python 3.5`
 
 ## License
 
-This project is open-sourced software licensed under the
-[MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](./LICENSE).
