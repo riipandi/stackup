@@ -46,13 +46,10 @@ sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.con
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/vhost.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/vhost.d/default.conf
 
-# Default web page
+# Default web page and custom error page
+cp -r $PARENT/nginx/errpage/* /usr/share/nginx/html/.
 cp /etc/nginx/manifest/default.php /var/www/index.php
 chown -R www-data: /var/www ; chmod -R 0775 /var/www
-
-# Custom error page for nginx
-echo "Error 404" > /usr/share/nginx/html/404.html
-echo "Error 50x" > /usr/share/nginx/html/50x.html
 
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
