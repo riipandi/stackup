@@ -12,8 +12,9 @@ SetConfig() {
 
 # Print welcome message
 #-----------------------------------------------------------------------------------------
-figlet "Are you ready?" ; echo -e "\n"
-read -p "Press enter to continue ..."
+figlet "Are you ready?" ; echo
+read -ep "Type your answer ....... yes/no : " answer
+if [[ ! "${answer,,}" =~ ^(yes|y)$ ]] ; then exit 1 ; fi
 echo
 
 # Basic questions
