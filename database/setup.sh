@@ -17,7 +17,7 @@ if [ $(crudini --get $PARENT/config.ini mysql install) == "yes" ] ; then
             source $PARENT/database/mysql80.sh
         fi
     fi
-    source $PARENT/database/phppgadmin.sh
+    source $PARENT/database/phpmyadmin.sh
 fi
 
 # Install POstgreSQL and phpPgAdmin

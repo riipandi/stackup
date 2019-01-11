@@ -5,9 +5,10 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
 # Get parameter
 #-----------------------------------------------------------------------------------------
-ROOT_USER="root"
+ROOT_USER=`crudini --get $PARENT/config.ini mysql root_user`
 ROOT_PASS=`crudini --get $PARENT/config.ini mysql root_pass`
 BIND_ADDR=`crudini --get $PARENT/config.ini mysql bind_address`
+BIND_PORT=`crudini --get $PARENT/config.ini mysql bind_port`
 
 # Install packages
 #-----------------------------------------------------------------------------------------
@@ -31,11 +32,20 @@ rm -f /etc/mysql/mysql.conf.d/default-auth-override.cnf
 
 crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'default-authentication-plugin' 'mysql_native_password'
 crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'bind-address' $BIND_ADDR
-crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'port' '3306'
+crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'port' $BIND_PORT
 
-crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'  $BIND_ADDR
-crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'port'  '3306'
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'      $BIND_ADDR
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'port'      $BIND_PORT
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'user'      $ROOT_USER
+crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'password'  $ROOT_PASS
+
+crudini --set /etc/mysql/conf.d/mysqldump.cnf 'mysqldump' 'host'      $BIND_ADDR
+crudini --set /etc/mysql/conf.d/mysqldump.cnf 'mysqldump' 'port'      $BIND_PORT
+crudini --set /etc/mysql/conf.d/mysqldump.cnf 'mysqldump' 'user'      $ROOT_USER
+crudini --set /etc/mysql/conf.d/mysqldump.cnf 'mysqldump' 'password'  $ROOT_PASS
 
 systemctl restart mysql
 
-mysql -uroot -psecret -e "drop database if exists test;"
+# Change default mysql root user
+mysql -uroot -p$ROOT_PASS -e "drop database if exists test;"
+mysql -uroot -p$ROOT_PASS mysql -e "update user set User='$ROOT_USER' where User='root'; flush privileges;"

@@ -33,3 +33,7 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql'     'user'         $ROOT_USER
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'user'         $ROOT_USER
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password'     $ROOT_PASS
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'host'         $BIND_ADDR
+
+systemctl restart mysql
+
+mysql -uroot -p$ROOT_PASS -e "drop database if exists test;"
