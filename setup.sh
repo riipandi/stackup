@@ -1,6 +1,8 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
+PWD=$(dirname "$(readlink -f "$0")")
+
 WORKDIR="/usr/src/lempstack"
 
 # Set default resolver
@@ -38,4 +40,4 @@ echo -e "\nStarting the installer..."
 
 crudini --set $WORKDIR/config.ini 'setup' 'ready' 'no'
 
-bash $WORKDIR/install.sh
+bash $PWD/install.sh
