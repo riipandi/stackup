@@ -6,7 +6,7 @@ ROOT=$(dirname "$(readlink -f "$0")")
 # Some functions
 #-----------------------------------------------------------------------------------------
 CallScript() {
-    bash $ROOT/$1
+    source $ROOT/$1
 }
 
 InstallPackage() {
