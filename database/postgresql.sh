@@ -1,15 +1,14 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname "$PWD")
+[ -z $ROOT ] && PARENT=$(dirname "$(readlink -f "$0")") || PARENT=$ROOT
 
 # Get parameter
 #-----------------------------------------------------------------------------------------
 ROOT_USER="postgres"
-ROOT_PASS=`crudini --get $ROOT/config.ini postgres root_pass`
-BIND_ADDR=`crudini --get $ROOT/config.ini postgres bind_address`
-PGVERSION=`crudini --get $ROOT/config.ini postgres version`
+ROOT_PASS=`crudini --get $PARENT/config.ini postgres root_pass`
+BIND_ADDR=`crudini --get $PARENT/config.ini postgres bind_address`
+PGVERSION=`crudini --get $PARENT/config.ini postgres version`
 
 # Install and configure packages
 #-----------------------------------------------------------------------------------------

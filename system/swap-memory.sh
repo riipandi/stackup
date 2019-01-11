@@ -1,8 +1,7 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname "$PWD")
+[ -z $ROOT ] && PARENT=$(dirname "$(readlink -f "$0")") || PARENT=$ROOT
 
 if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
     echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab

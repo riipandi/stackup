@@ -1,9 +1,7 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname "$PWD")
-
+[ -z $ROOT ] && PARENT=$(dirname "$(readlink -f "$0")") || PARENT=$ROOT
 
 # Get parameter
 #-----------------------------------------------------------------------------------------
@@ -36,7 +34,7 @@ echo -e "$(figlet node://`hostname -s`)\n" > /etc/motd
 
 # Telegram notification
 if [ $TELEGRAM_NOTIFY == "yes" ]; then
-    sed -i "s/VAR_BOTKEY/$TELEGRAM_BOTKEY/" $PWD/telegram.sh
-    sed -i "s/VAR_CHATID/$TELEGRAM_CHATID/" $PWD/telegram.sh
-    cp $PWD/telegram.sh /etc/profile.d/ ; chmod +x $_
+    sed -i "s/VAR_BOTKEY/$TELEGRAM_BOTKEY/" $PARENT/system/telegram.sh
+    sed -i "s/VAR_CHATID/$TELEGRAM_CHATID/" $PARENT/system/telegram.sh
+    cp $PARENT/system/telegram.sh /etc/profile.d/ ; chmod +x $_
 fi

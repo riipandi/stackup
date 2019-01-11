@@ -1,9 +1,7 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname "$PWD")
-
+[ -z $ROOT ] && PARENT=$(dirname "$(readlink -f "$0")") || PARENT=$ROOT
 
 # Set Nginx repository
 #-----------------------------------------------------------------------------------------
@@ -38,7 +36,7 @@ curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /
 #-----------------------------------------------------------------------------------------
 systemctl enable --now haveged ; systemctl stop nginx
 mkdir -p /var/www ; rm -fr /etc/nginx/*
-cp -r $PWD/config/* /etc/nginx/.
+cp -r $PARENT/nginx/config/* /etc/nginx/.
 chown -R root: /etc/nginx
 
 # Adjusting nginx configuration
@@ -59,7 +57,7 @@ echo "Error 50x" > /usr/share/nginx/html/50x.html
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
 if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-  certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
+    certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
     --register-unsafely-without-email --preferred-challenges http \
     -d "$(hostname -f)"
 fi
@@ -72,8 +70,8 @@ AMPLIFY_INSTALL=`crudini --get $PARENT/config.ini nginx amplify`
 AMPLIFY_API_KEY=`crudini --get $PARENT/config.ini nginx api_key`
 
 DB_ROOT_USER="root"
-DB_ROOT_PASS=`crudini --get $ROOT/config.ini mysql root_pass`
-DB_BIND_ADDR=`crudini --get $ROOT/config.ini mysql bind_address`
+DB_ROOT_PASS=`crudini --get $PARENT/config.ini mysql root_pass`
+DB_BIND_ADDR=`crudini --get $PARENT/config.ini mysql bind_address`
 DB_SOCKET_PATH="/var/run/mysqld/mysqld.sock"
 
 if [ $AMPLIFY_INSTALL == "yes" ] ; then

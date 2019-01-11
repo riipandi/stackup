@@ -1,15 +1,13 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-PWD=$(dirname "$(readlink -f "$0")")
-PARENT=$(dirname "$PWD")
-
+[ -z $ROOT ] && PARENT=$(dirname "$(readlink -f "$0")") || PARENT=$ROOT
 
 # Get parameter
 #-----------------------------------------------------------------------------------------
 ROOT_USER="root"
-ROOT_PASS=`crudini --get $ROOT/config.ini mysql root_pass`
-BIND_ADDR=`crudini --get $ROOT/config.ini mysql bind_address`
+ROOT_PASS=`crudini --get $PARENT/config.ini mysql root_pass`
+BIND_ADDR=`crudini --get $PARENT/config.ini mysql bind_address`
 
 # Install packages
 #-----------------------------------------------------------------------------------------
