@@ -18,7 +18,7 @@ while true; do
             HOMEDIR=$(eval echo "~$username")
             mkdir -p $HOMEDIR/.ssh ; chmod 0700 $_
             touch $HOMEDIR/.ssh/${username}_keys ; chmod 0600 $_
-            echo $sshkey > $HOMEDIR/.ssh/${username}_keys
+            echo -e "$sshkey" > $HOMEDIR/.ssh/${username}_keys
             chown -R $username: $HOMEDIR/.ssh
             echo -e "${OK}User ${NO}$username${NC}${OK} with password ${NO}$password${NC} ${OK}has been added to system!${NC}"
         else
