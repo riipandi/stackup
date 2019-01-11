@@ -15,7 +15,7 @@ InstallPackage() {
 
 # Initial setup
 #-----------------------------------------------------------------------------------------
-[[ $(crudini --get $ROOT/config.ini setup ready) == "yes" ]] || bash $ROOT/wizard.sh
+[[ $(crudini --get $ROOT/config.ini setup ready) == "yes" ]] || source $ROOT/wizard.sh
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
