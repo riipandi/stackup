@@ -29,7 +29,7 @@ Command            | Description                                       | Example
 set-php            | Set default PHP version                           | `sudo set-php 7.2`
 set-python         | Set default Python version                        | `sudo set-python 3.5`
 vhost-create       | Create Nginx VirtualHost for PHP-FPM backend      | `sudo vhost-create domain.tld`
-vhost-proxy        | Create Nginx VirtualHost for reverse proxy        | `sudo vhost-proxy domain.tld`
+vhost-python       | Create Nginx VirtualHost for Python backend       | `sudo vhost-python domain.tld`
 fix-permission     | Fix directory and file permission                 | `sudo fix-permission /my/path user:group`
 ssl-create         | Generate Let's Encrypt SSL certificate            | `sudo ssl-create domain.tld`
 ssl-wildcard       | Generate wildcard Let's Encrypt SSL certificate   | `sudo ssl-wildcard domain.tld`
