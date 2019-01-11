@@ -12,7 +12,7 @@ SetConfig() {
 
 # Print welcome message
 #-----------------------------------------------------------------------------------------
-figlet "Are you ready?" ; echo
+figlet "Are you ready?" ; echo -e "\n"
 read -p "Press enter to continue ..."
 echo
 
