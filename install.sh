@@ -3,6 +3,10 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
 ROOT=$(dirname "$(readlink -f "$0")")
 
+NO='\033[0;33m'
+OK='\033[0;32m'
+NC='\033[0m'
+
 # Some functions
 #-----------------------------------------------------------------------------------------
 CallScript() {
@@ -46,7 +50,7 @@ apt update ; apt full-upgrade -y ; apt autoremove -y
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
 echo -e "\nInstalling basic packages..."
-apt install -y sudo nano figlet elinks pwgen curl lsof whois dirmngr \
+apt install -y sudo nano figlet elinks pwgen curl lsof whois dirmngr gnupg \
 gcc make cmake build-essential software-properties-common debconf-utils \
 apt-transport-https perl binutils dnsutils nscd ftp zip unzip bsdtar pv \
 dh-autoreconf rsync screen screenfetch ca-certificates resolvconf nmap \
@@ -77,12 +81,48 @@ InstallPackage 'redis' 'install' 'database/redis-server.sh'
 
 CallScript 'database/setup.sh'
 
-# Cleanup
+# Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
 echo -e "\nCleaning up installation...\n"
 apt -y autoremove && apt clean && netstat -pltn
 
-echo -e "\nCongratulation, server stack has been installed.\n"
+# Change root password and ave encrypted server information
+while true; do
+    read -sp "Enter new password for root        : " NewRootPass
+    if [[ $NewRootPass == "" ]]; then
+        echo -e "${NO}Please enter new root password!${NC}"
+    else
+        usermod root --password $(perl -e 'print crypt($ARGV[0], "password")' $NewRootPass)
+        if [ $? -eq 0 ] ; then
+            echo -e "\n${OK}Password for root has beeen changed!${NC}"
+        else
+            echo -e "\n${NO}Failed to add a user!${NC}"
+        fi
+        break
+    fi
+done
+
+# Save encrypted server information
+INFO_FILE="/usr/local/etc/server-info.txt"
+touch $INFO_FILE
+{
+    echo -e "MySQL root user : $(crudini --get $ROOT/config.ini mysql root_user)"
+    echo -e "MySQL root pass : $(crudini --get $ROOT/config.ini mysql root_pass)\n"
+    echo -e "PgSQL root user : $(crudini --get $ROOT/config.ini postgres root_user)"
+    echo -e "PgSQL root pass : $(crudini --get $ROOT/config.ini postgres root_pass)"
+} > $INFO_FILE
+
+gpg --yes --batch --passphrase="$NewRootPass" -c $INFO_FILE
+rm $INFO_FILE
+
+echo -e "\nCongratulation, server stack has been installed."
+echo -e "Server information located at: ${NO}${INFO_FILE}.gpg${NC}"
+echo -e "\nThat file ${OK}encrypted${NC} with root user password."
+echo -e "To see the decrypted file use this command:"
+echo -e "\n${NO}gpg -d ${INFO_FILE}.gpg${NC}"
+echo -e "\nAnd then enter your root password!\n"
+
+# Reboot server if defined
 if [[ `crudini --get $ROOT/config.ini system reboot` == "yes" ]] ; then
     echo "System will reboot in 5 seconds..."
     sleep 5s; shutdown -r now
