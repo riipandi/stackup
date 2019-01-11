@@ -88,6 +88,7 @@ apt -y autoremove && apt clean && netstat -pltn
 
 # Change root password and ave encrypted server information
 while true; do
+    echo
     read -sp "Enter new password for root        : " NewRootPass
     if [[ $NewRootPass == "" ]]; then
         echo -e "${NO}Please enter new root password!${NC}"
