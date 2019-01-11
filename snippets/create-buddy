@@ -19,7 +19,7 @@ while true; do
             KEYFILE="$HOMEDIR/.ssh/${username}_keys"
             mkdir -p $HOMEDIR/.ssh ; chmod 0700 $_
             touch $KEYFILE ; chmod 0600 $_
-            [[ $(cat "$KEYFILE") == "" ]]; then
+            if [[ $(cat "$KEYFILE") == "" ]]; then
                 echo -e "$sshkey\n" > $KEYFILE
             else
                 echo -e "$sshkey\n" >> $KEYFILE
