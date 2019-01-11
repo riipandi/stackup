@@ -18,9 +18,9 @@ COUNTRY=`wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\
 
 echo -e "\nPreparing for installation, installing dependencies..."
 
-apt update -qq ; apt -yqq full-upgrade
-apt -yqq install sudo git curl crudini openssl figlet perl
-apt autoremove -y
+apt update -qq
+DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
+apt -yqq install sudo git curl crudini openssl figlet perl ; apt autoremove -y
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
