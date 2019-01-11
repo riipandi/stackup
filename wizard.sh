@@ -13,9 +13,14 @@ SetConfig() {
 # Print welcome message
 #-----------------------------------------------------------------------------------------
 figlet "Are you ready?" ; echo
-read -ep "Type your answer ....... yes/no : " answer
-if [[ ! "${answer,,}" =~ ^(yes|y)$ ]] ; then exit 1 ; fi
-echo
+while true; do
+    read -ep "Type your answer ....... yes/no : " answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]]; then
+        break
+    elif [[ "${answer,,}" =~ ^(no|n)$ ]]; then
+        exit 1
+    fi
+done
 
 # Basic questions
 #-----------------------------------------------------------------------------------------
