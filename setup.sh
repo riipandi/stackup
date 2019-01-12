@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
 if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
@@ -9,8 +9,7 @@ WORKDIR="/usr/src/lempstack"
 
 # Set default resolver
 #-----------------------------------------------------------------------------------------
-rm -f /etc/resolv.conf
-touch /etc/resolv.conf
+rm -f /etc/resolv.conf ; touch /etc/resolv.conf
 {
     echo 'nameserver 1.1.1.1'
     echo 'nameserver 209.244.0.3'
