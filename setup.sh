@@ -10,10 +10,8 @@ WORKDIR="/usr/src/lempstack"
 # Set default resolver
 #-----------------------------------------------------------------------------------------
 rm -f /etc/resolv.conf ; touch /etc/resolv.conf
-{
-    echo 'nameserver 1.1.1.1'
-    echo 'nameserver 209.244.0.3'
-} > /etc/resolv.conf
+echo 'nameserver 1.1.1.1' > /etc/resolv.conf
+echo 'nameserver 209.244.0.3' >> /etc/resolv.conf
 
 # Change mirror repository
 #-----------------------------------------------------------------------------------------
