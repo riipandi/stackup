@@ -38,16 +38,3 @@ if [ $TELEGRAM_NOTIFY == "yes" ]; then
     sed -i "s/VAR_CHATID/$TELEGRAM_CHATID/" $PARENT/system/telegram.sh
     cp $PARENT/system/telegram.sh /etc/profile.d/ ; chmod +x $_
 fi
-
-# Set user environment for user with uid 1101.
-ADMIN=`id -nu 1101`
-runuser -l $ADMIN -c 'composer global require hirak/prestissimo laravel/installer wp-cli/wp-cli riipandi/wink-installer'
-runuser -l $ADMIN -c 'yarn global add ghost-cli@latest'
-if ! grep -q 'composer' /home/$ADMIN/.bashrc ; then
-    echo 'export PATH=$PATH:$HOME/.config/composer/vendor/bin:$HOME/.yarn/bin' >> "/home/$ADMIN/.bashrc"
-fi
-mkdir -p /home/$ADMIN/.ssh ; chmod 0700 $_
-touch /home/$ADMIN/.ssh/id_rsa ; chmod 0600 $_
-touch /home/$ADMIN/.ssh/id_rsa.pub ; chmod 0600 $_
-touch /home/$ADMIN/.ssh/authorized_keys ; chmod 0600 $_
-chown -R $ADMIN: /home/$ADMIN/.ssh

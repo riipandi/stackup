@@ -53,7 +53,7 @@ nikto speedtest-cli xmlstarlet optipng jpegoptim sqlite3 s3cmd virtualenv \
 libpython2.7 {libpython,libpython2.7,python2.7}-dev python-virtualenv \
 python3-virtualenv
 
-# Copy snippet to local bin
+# Copy snippets to local bin
 cp $ROOT/snippets/* /usr/local/bin/
 chown -R root: /usr/local/bin/*
 chmod a+x /usr/local/bin/*
@@ -75,6 +75,20 @@ InstallPackage 'nodejs' 'install' 'interpreter/setup-nodejs.sh'
 InstallPackage 'redis' 'install' 'database/redis-server.sh'
 
 CallScript 'database/setup.sh'
+
+# Set user environment for user with uid 1101.
+#-----------------------------------------------------------------------------------------
+ADMIN=`id -nu 1101`
+runuser -l $ADMIN -c 'composer global require hirak/prestissimo laravel/installer wp-cli/wp-cli'
+runuser -l $ADMIN -c 'yarn global add ghost-cli@latest'
+if ! grep -q 'composer' /home/$ADMIN/.bashrc ; then
+    echo 'export PATH=$PATH:$HOME/.config/composer/vendor/bin:$HOME/.yarn/bin' >> "/home/$ADMIN/.bashrc"
+fi
+mkdir -p /home/$ADMIN/.ssh ; chmod 0700 $_
+touch /home/$ADMIN/.ssh/id_rsa ; chmod 0600 $_
+touch /home/$ADMIN/.ssh/id_rsa.pub ; chmod 0600 $_
+touch /home/$ADMIN/.ssh/authorized_keys ; chmod 0600 $_
+chown -R $ADMIN: /home/$ADMIN/.ssh
 
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
