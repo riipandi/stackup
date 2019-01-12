@@ -130,7 +130,7 @@ fi
 # Execute Ghost installation
 #-----------------------------------------------------------------------------------------
 echo -e "\nCrafting ghost application...\n"
-sudo mkdir -p "/srv/$1" ; sudo chown $CURRENT_USER: $_
+sudo mkdir -p "/srv/$1" ; sudo chown $CURRENT_USER:www-data $_
 sudo mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME"
 sudo mysql -e "CREATE USER IF NOT EXISTS '$DB_NAME'@'127.0.0.1' IDENTIFIED BY '$DB_PASS'"
 sudo mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_NAME'@'127.0.0.1'"
