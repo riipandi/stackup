@@ -19,7 +19,11 @@ If you prefer to use Debian, you can check [`debian`](//github.com/riipandi/lemp
 Run this command as root and follow the wizard:
 
 ```sh
+# Stable channel
 bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
+
+# Master branch
+bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh) --dev
 ```
 
 ## Manual Installation

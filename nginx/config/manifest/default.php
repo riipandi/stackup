@@ -43,11 +43,11 @@
                 </div>
                 <h2>Welcome to our new website.</h2>
                 <p>
-                    This is the default page for sgp-a.aris.web.id. This page used to
-                    test the correct operation of the web server installation and we
-                    are using PHP v<?=(float)phpversion();?> as default interpreter.
-                    If you can read this page, it means that the web server installed
-                    and working properly.
+                    This is the default page for sgp-a.aris<?=$_SERVER['HTTP_HOST'];?>.
+                    This page used to test the correct operation of the web server
+                    installation and we are using PHP v<?=(float)phpversion();?> as
+                    default interpreter. If you can read this page, it means that the
+                    web server installed and working properly.
                 </p>
                 <div class="notfound-social">
                     <a href="//github.com/riipandi"><i class="fa fa-github"></i></a>
