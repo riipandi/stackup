@@ -20,6 +20,9 @@ COUNTRY=`wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\
 
 echo -e "\nPreparing for installation, installing dependencies..."
 
+wget https://raw.githubusercontent.com/riipandi/lempstack/master/repository/sources.list -qO /etc/apt/sources.list
+sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
+
 apt update -qq
 DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 apt -yqq install sudo git curl crudini openssl figlet perl ; apt autoremove -y
