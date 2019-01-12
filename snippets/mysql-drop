@@ -17,7 +17,7 @@ read -e -p "Database Name     : " db_name
 read -e -p "Database User     : " -i "$db_name" db_user
 read -e -p "Database Host     : " -i "127.0.0.1" db_host
 
-# Create database and user
+# Drop database and user
 $MYSQL -e "DROP DATABASE IF EXISTS $db_name"
 $MYSQL -e "DROP USER IF EXISTS '$db_name'@'$db_host'"
 $MYSQL -e "FLUSH PRIVILEGES"

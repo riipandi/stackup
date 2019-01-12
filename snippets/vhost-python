@@ -78,7 +78,7 @@ read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 
 read -p "Press enter to continue ..."
 
-echo -e "\nCrafting server configuration...\n"
+echo -e "\nCrafting sample application...\n"
 
 # Create Web directory and setup an example python application
 [[ -d "/srv/$1/public" ]] || mkdir -p /srv/$1/public ; cd /srv/$1 ; rm -rf .venv

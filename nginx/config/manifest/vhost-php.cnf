@@ -7,6 +7,7 @@ server {
     index index.php index.html;
     root /srv/HOSTNAME/public;
 
+    # add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive";
     access_log /var/log/nginx/HOSTNAME-access.log main;
     error_log  /var/log/nginx/HOSTNAME-error.log warn;
 
