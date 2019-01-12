@@ -49,4 +49,4 @@ echo -e "\nStarting the installer..."
 
 crudini --set $WORKDIR/config.ini 'setup' 'ready' 'no'
 
-(exec "$WORKDIR/install.sh")
+bash "$WORKDIR/install.sh"
