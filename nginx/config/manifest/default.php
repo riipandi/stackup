@@ -43,7 +43,7 @@
                 </div>
                 <h2>Welcome to our new website.</h2>
                 <p>
-                    This is the default page for sgp-a.aris<?=$_SERVER['HTTP_HOST'];?>.
+                    This is the default page for <?=$_SERVER['HTTP_HOST'];?>.
                     This page used to test the correct operation of the web server
                     installation and we are using PHP v<?=(float)phpversion();?> as
                     default interpreter. If you can read this page, it means that the

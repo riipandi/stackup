@@ -22,7 +22,6 @@ server {
     include server.d/header-control.conf;
     include server.d/static-control.conf;
     include server.d/restrictions.conf;
-    include server.d/custom-error.conf;
 
     location / {
         try_files $uri $uri/ /index.php$args;
