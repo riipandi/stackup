@@ -17,9 +17,9 @@ echo "nameserver 209.244.0.3" >> /etc/resolv.conf
 #-----------------------------------------------------------------------------------------
 COUNTRY=`wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/'`
 
-[[ $CHANNEL = "dev" ]] && MSG=" (master branch) "
+[[ $CHANNEL = "dev" ]] && MSG=" (master branch)"
 
-echo -e "\nPreparing for installation, installing dependencies$MSG..."
+echo -e "\nPreparing for installation$MSG, installing dependencies$MSG..."
 
 wget https://raw.githubusercontent.com/riipandi/lempstack/master/repository/sources.list -qO /etc/apt/sources.list
 sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
