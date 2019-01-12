@@ -25,7 +25,7 @@ fi
 
 # Request for create new user if not any sudoer
 #-----------------------------------------------------------------------------------------
-[[ $(cat /etc/passwd | grep -c "1101") -eq 1 ]] || bash $ROOT/create-sudoer 1101
+[[ $(cat /etc/passwd | grep -c "1101") -eq 1 ]] || bash $ROOT/snippets/create-sudoer 1101
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
