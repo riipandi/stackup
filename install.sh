@@ -23,19 +23,14 @@ if [ $(crudini --get $ROOT/config.ini setup ready) != "yes" ]; then
     source "$ROOT/wizard.sh"
 fi
 
-# Ask for creating new user
+# Request for create new user if not any sudoer
 #-----------------------------------------------------------------------------------------
-echo
-read -ep "Create a new sudo user?      [Y/n] : " CreateUserSudo
-[[ ! "${CreateUserSudo,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-sudoer'
-
-read -ep "Create user for deployer?    [Y/n] : " CreateUserDeployer
-[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
-
-echo ; read -p "Press enter to begin installation..."
+[[ $(cat /etc/passwd | grep -c "1101") -eq 1 ]] || bash $ROOT/create-sudoer 1101
 
 # Preparing for installation
 #-----------------------------------------------------------------------------------------
+echo ; read -p "Press enter to begin installation..."
+
 COUNTRY=`crudini --get $ROOT/config.ini system country`
 if [ $COUNTRY == "ID" ] ; then
     cat $ROOT/repository/sources-id.list > /etc/apt/sources.list
@@ -86,7 +81,11 @@ CallScript 'database/setup.sh'
 echo -e "\nCleaning up installation...\n"
 apt -y autoremove && apt clean && netstat -pltn
 
-# Change root password and ave encrypted server information
+# Change root password and ask for creating deployer bot user
+#-----------------------------------------------------------------------------------------
+read -ep "Create user for deployer?    [Y/n] : " CreateUserDeployer
+[[ ! "${CreateUserDeployer,,}" =~ ^(yes|y)$ ]] || CallScript 'snippets/create-buddy'
+
 while true; do
     echo
     read -sp "Enter new password for root        : " NewRootPass

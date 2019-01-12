@@ -2,7 +2,7 @@
 if [[ ! $EUID -ne 0 ]]; then echo -e 'This script must be run as non-root user' ; exit 1 ; fi
 
 
-# Switch to another user: sudo -u goku bash
+# This is a script for setup personal environment
 #-----------------------------------------------------------------------------------------
 
 echo "Instaling Composer packages..."

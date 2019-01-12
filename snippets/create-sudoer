@@ -23,6 +23,7 @@ while true; do
         # Create new user
         pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
         useradd -mg sudo -s `which bash` $username -c "$fullname" -p $pass
+        if [[ -z "${1//[0-9]}" ]] ; then usermod -u $1 $username ; fi
         if [ $? -eq 0 ] ; then
             HOMEDIR=$(eval echo "~$username")
             mkdir -p $HOMEDIR/.ssh ; chmod 0700 $_
