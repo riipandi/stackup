@@ -152,6 +152,7 @@ $GHOST_CLI install --no-prompt \
     --enable
 
 # Install without running setup
+# Read more at: https://docs.ghost.org/api/ghost-cli/
 # --no-setup-migrate
 # --no-setup
 
