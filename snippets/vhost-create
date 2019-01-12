@@ -35,7 +35,7 @@ read -ep "Do you want to generate SSL certificate?  yes/no : " answer
 `which nginx` -t 2>/dev/null > /dev/null
 if [[ $? == 0 ]]; then
     echo -e "\nReloading Nginx configuration..."
-    systemctl restart nginx
+    systemctl reload nginx
 else
     echo -e "\nNginx configuration fail..."
     `which nginx` -t
