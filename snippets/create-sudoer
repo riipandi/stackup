@@ -5,6 +5,7 @@ NO='\033[0;33m'
 OK='\033[0;32m'
 NC='\033[0m'
 
+echo
 while true; do
     read -ep "Enter username for this user       : " -i "admin" username
     read -ep "Enter new user real name           : " -i "Admin Sistem" fullname
