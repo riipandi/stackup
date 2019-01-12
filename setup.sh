@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 
-# if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
+if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
 
 PWD=$(dirname "$(readlink -f "$0")")
 
@@ -9,9 +9,12 @@ WORKDIR="/usr/src/lempstack"
 
 # Set default resolver
 #-----------------------------------------------------------------------------------------
-rm -f /etc/resolv.conf ; touch /etc/resolv.conf
-echo 'nameserver 1.1.1.1' > /etc/resolv.conf
-echo 'nameserver 209.244.0.3' >> /etc/resolv.conf
+rm -f /etc/resolv.conf
+touch /etc/resolv.conf
+{
+    echo 'nameserver 1.1.1.1'
+    echo 'nameserver 209.244.0.3'
+} > /etc/resolv.conf
 
 # Change mirror repository
 #-----------------------------------------------------------------------------------------
@@ -30,7 +33,7 @@ apt -yqq install sudo git curl crudini openssl figlet perl ; apt autoremove -y
 #-----------------------------------------------------------------------------------------
 [[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/lempstack-*
 
-if [ $CHANNEL == "dev" ]
+if [ $CHANNEL == "dev" ]; then
     git clone https://github.com/riipandi/lempstack $WORKDIR
 else
     project="https://api.github.com/repos/riipandi/lempstack/releases/latest"
