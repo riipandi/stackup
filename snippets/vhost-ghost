@@ -95,14 +95,12 @@ fi
 
 # Create Nginx virtualhost
 #-----------------------------------------------------------------------------------------
-echo -e "\nInstalling Ghost for ${NO}${1}${NC}"
-echo ; read -p "Press enter to continue or Ctrl + C to cancel ..."
-
-# Check for existing installation
 if [ -d "/srv/$1" ] || [ -f "/etc/nginx/vhost.d/$1.conf" ] ; then
-    echo -e "Site $1 already exists!\n" ; exit
+    echo -e "\nSite $1 already exists!\n" ; exit
 fi
 
+echo -e "\nInstalling Ghost for ${NO}${1}${NC}"
+echo ; read -p "Press enter to continue or Ctrl + C to cancel ..."
 sudo cp /etc/nginx/manifest/vhost-ghost.cnf /etc/nginx/vhost.d/$1.conf
 sudo sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 sudo sed -i "s/GH_PORT/$GH_PORT/" /etc/nginx/vhost.d/$1.conf
