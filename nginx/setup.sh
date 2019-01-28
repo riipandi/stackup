@@ -35,7 +35,7 @@ curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /
 # Configure Nginx
 #-----------------------------------------------------------------------------------------
 systemctl enable --now haveged ; systemctl stop nginx
-mkdir -p /var/www ; rm -fr /etc/nginx/*
+mkdir -p /var/www/html ; rm -fr /etc/nginx/*
 cp -r $PARENT/nginx/config/* /etc/nginx/.
 chown -R root: /etc/nginx
 
@@ -48,7 +48,7 @@ sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/vhost.d/default.conf
 
 # Default web page and custom error page
 cp -r $PARENT/nginx/errpage/* /usr/share/nginx/html/.
-cp /etc/nginx/manifest/default.php /var/www/index.php
+cp /etc/nginx/manifest/default.php /var/www/html/index.php
 chown -R www-data: /var/www ; chmod -R 0775 /var/www
 
 # SSL certifiacte for default vhost
