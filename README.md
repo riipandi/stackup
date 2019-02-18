@@ -1,10 +1,10 @@
-# Another LEMP Stack Installer.
+# Linux Stack Made Easy.
 
-The LEMP software stack is a group of software that can be used to
-serve dynamic web pages and web applications. This is an acronym
-that describes a Linux operating system, with an Nginx web server.
-The backend data is stored in the MySQL/MariaDB database and or
-PostgreSQL as optional, and the dynamic processing is handled by
+The LEMP / LAMP software stack is a group of software that can be used 
+to serve dynamic web pages and web applications. This is an acronym
+that describes a Linux operating system, with an Nginx or Apache web 
+server. The backend data is stored in the MySQL/MariaDB database and 
+or PostgreSQL as optional, and the dynamic processing is handled by
 PHP and or Python.
 
 ## Prerequisites
