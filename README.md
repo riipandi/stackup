@@ -5,7 +5,7 @@ to serve dynamic web pages and web applications. This is an acronym
 that describes a Linux operating system, with an Nginx or Apache web 
 server. The backend data is stored in the MySQL/MariaDB database and 
 or PostgreSQL as optional, and the dynamic processing is handled by
-PHP and or Python.
+PHP, Python, Nodejs, etc.
 
 ## Prerequisites
 
