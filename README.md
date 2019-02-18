@@ -20,10 +20,10 @@ Run this command as root and follow the wizard:
 
 ```sh
 # Stable channel
-bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh)
+bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7)
 
 # Master branch
-bash <(wget -qO- https://raw.githubusercontent.com/riipandi/lempstack/master/setup.sh) --dev
+bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7) --dev
 ```
 
 ## Manual Installation
