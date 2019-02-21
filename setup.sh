@@ -1,6 +1,26 @@
 #!/bin/bash
-if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+# StackUp Installation Script.
 
+# Check OS support
+distr=`echo $(lsb_release -i | cut -d':' -f 2)`
+osver=`echo $(lsb_release -c | cut -d':' -f 2)`
+if ! [[ $distr == "Ubuntu" && $osver =~ ^(xenial|bionic)$ ]]; then
+    echo "$(tput setaf 1)"
+    echo "***************************************************************************"
+    echo "****  This OS is not supported by StackUp and could not work properly  ****"
+    echo "***************************************************************************"
+    echo "$(tput sgr0)"
+    read -p "Press [Enter] key to Continue or [Ctrl+C] to Cancel..."
+fi
+# Check for sudo/root privileges
+if ! $(groups $USERNAME | grep &>/dev/null '\bsudo\b' || groups $USERNAME | grep &>/dev/null '\broot\b'); then
+    echo "$(tput setaf 1)"
+    echo "****  [ERROR] sudo/root privileges are required to install StackUp ****"
+    echo "$(tput sgr0)"
+    read -p "Press [Enter] key to Continue or [Ctrl+C] to Cancel..."
+fi
+
+# Check installation source
 if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
 
 PWD=$(dirname "$(readlink -f "$0")")
