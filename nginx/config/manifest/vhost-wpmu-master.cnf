@@ -5,7 +5,7 @@ server {
     server_name www.HOSTNAME;
     server_name ~^(?<user>[a-zA-Z0-9-]+)\.HOSTNAME$;
     if ( $host ~ ^www\.(?<domain>.+)$ ) { return 301 $scheme://$domain$request_uri; }
-    if ($scheme = http) { return 301 https://$server_name$request_uri; }
+    #if ($scheme = http) { return 301 https://$server_name$request_uri; }
     ssl_certificate         /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key     /etc/letsencrypt/live/HOSTNAME/privkey.pem;
     ssl_trusted_certificate /etc/ssl/certs/chain.pem;
