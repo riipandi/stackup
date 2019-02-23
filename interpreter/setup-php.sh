@@ -19,22 +19,24 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 #-----------------------------------------------------------------------------------------
 [[ -d /run/php ]] || mkdir -p /run/php ; [[ -d /var/run/php ]] || mkdir -p /var/run/php
 
+MAIN_PHP_EXT="bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip"
+
 if [ $INSTALL_V56 == "yes" ] ; then
-    apt install -y php5.6 php5.6-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,sqlite3,xml,xmlrpc,zip,zip} php-apcu
+    apt install -y php5.6 php5.6-{$MAIN_PHP_EXT} php-apcu
     crudini --set /etc/php/5.6/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php5.6-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php5.6-fpm
 fi
 
 if [ $INSTALL_V72 == "yes" ] ; then
-    apt install -y php7.2 php7.2-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,sqlite3,xml,xmlrpc,zip,zip}
+    apt install -y php7.2 php7.2-{$MAIN_PHP_EXT}
     crudini --set /etc/php/7.2/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.2-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.2-fpm
 fi
 
 if [ $INSTALL_V73 == "yes" ] ; then
-    apt install -y php7.3 php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,sqlite3,xml,xmlrpc,zip,zip} php7.3-imagick php-pear
+    apt install -y php7.3 php7.3-{$MAIN_PHP_EXT} php7.3-imagick php-pear
     crudini --set /etc/php/7.3/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.3-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.3-fpm
