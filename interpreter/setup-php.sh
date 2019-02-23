@@ -43,7 +43,7 @@ if [ $INSTALL_V73 == "yes" ] ; then
 fi
 
 # Required package for all php version
-apt install -y composer gettext gamin mcrypt imagemagick
+apt install -y composer gettext gamin mcrypt imagemagick aspell graphviz
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
