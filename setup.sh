@@ -25,7 +25,7 @@ if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stab
 
 PWD=$(dirname "$(readlink -f "$0")")
 
-WORKDIR="/usr/src/lempstack"
+WORKDIR="/usr/src/stackup"
 
 # Set default resolver
 #-----------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ COUNTRY=`wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\
 
 echo -e "\nPreparing for installation$MSG, installing dependencies$MSG..."
 
-wget https://raw.githubusercontent.com/riipandi/lempstack/master/repository/sources.list -qO /etc/apt/sources.list
+wget https://raw.githubusercontent.com/riipandi/stackup/master/repository/sources.list -qO /etc/apt/sources.list
 sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
 
 apt update -qq
@@ -50,15 +50,15 @@ apt -yqq install sudo git curl crudini openssl figlet perl ; apt autoremove -y
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
-[[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/lempstack-*
+[[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/stackup-*
 
 if [ $CHANNEL == "dev" ]; then
-    git clone https://github.com/riipandi/lempstack $WORKDIR
+    git clone https://github.com/riipandi/stackup $WORKDIR
 else
-    project="https://api.github.com/repos/riipandi/lempstack/releases/latest"
+    project="https://api.github.com/repos/riipandi/stackup/releases/latest"
     release=`curl -s $project | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'`
-    curl -fsSL https://github.com/riipandi/lempstack/archive/$release.zip | bsdtar -xvf- -C /tmp
-    version=`echo "${release/v/}"` ; mv /tmp/lempstack-$version $WORKDIR
+    curl -fsSL https://github.com/riipandi/stackup/archive/$release.zip | bsdtar -xvf- -C /tmp
+    version=`echo "${release/v/}"` ; mv /tmp/stackup-$version $WORKDIR
 fi
 
 crudini --set $WORKDIR/config.ini 'system' 'country' $COUNTRY
