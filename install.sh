@@ -7,6 +7,13 @@ NO='\033[0;33m'
 OK='\033[0;32m'
 NC='\033[0m'
 
+# Disable some motd banner
+#-----------------------------------------------------------------------------------------
+sudo chmod -x /etc/update-motd.d/10-help-text
+sudo chmod -x /etc/update-motd.d/50-motd-news
+sudo chmod -x /etc/update-motd.d/80-livepatch
+sudo chmod -x /etc/update-motd.d/90-updates-available
+
 # Some functions
 #-----------------------------------------------------------------------------------------
 CallScript() {
