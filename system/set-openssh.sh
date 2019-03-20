@@ -26,7 +26,7 @@ sed -i "s|\("^ListenAddress" * *\).*|\10.0.0.0|" /etc/ssh/sshd_config
 sed -i "s|\("^PermitRootLogin" * *\).*|\1no|" /etc/ssh/sshd_config
 sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
-sed -i "s/[#]*Port [0-9]*/Port $SSH_PORT/" /etc/ssh/sshd_config
+sed -i "s/[#]*Port [0-9]*/Port 22/" /etc/ssh/sshd_config
 systemctl restart ssh
 
 # Set custom motd message
