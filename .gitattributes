@@ -1,4 +1,6 @@
 * text eol=lf
 *.css linguist-vendored
 *.js linguist-vendored
-README.md export-ignore
+readme.md export-ignore
+changelog.md export-ignore
+license.txt export-ignore
