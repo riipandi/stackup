@@ -7,7 +7,7 @@ ROOT=$(dirname "$(readlink -f "$0")")
 #------------------------------------------------------------------------------
 
 # Set working directory
-WORKDIR=$ROOT
+WORKDIR=/usr/src/stackup
 
 # Check OS support
 distr=`echo $(lsb_release -i | cut -d':' -f 2)`
