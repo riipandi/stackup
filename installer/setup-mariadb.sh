@@ -12,6 +12,7 @@ read -ep "Database root password                          : " -i "auto" mariadb_
 
 if [[ "$mariadb_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
+    echo "MSQL_ROOT_PASS:$DB_ROOT_PASS" >> /usr/local/share/stackup.info
 else
     DB_ROOT_PASS=$mariadb_root_pass
 fi

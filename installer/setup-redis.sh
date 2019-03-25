@@ -20,6 +20,7 @@ sed -i "s|\("^bind" * *\).*|\1$bind_address|" /etc/redis/redis.conf
 # Securing redis-server with password
 if ! [[ "${redis_password,,}" =~ ^(no|n)$ ]] ; then
     sed -i "s/# requirepass foobared/requirepass $redis_password/" /etc/redis/redis.conf
+    echo "REDIS_PASSWORD:$redis_password" >> /usr/local/share/stackup.info
 fi
 
 systemctl restart redis-server

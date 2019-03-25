@@ -12,6 +12,7 @@ read -ep "Database root password                          : " -i "auto" mysql_ro
 
 if [[ "$mysql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
+    echo "MSQL_ROOT_PASS:$DB_ROOT_PASS" >> /usr/local/share/stackup.info
 else
     DB_ROOT_PASS=$mysql_root_pass
 fi

@@ -6,7 +6,11 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
-read -ep "Do you want to use Swap ?                   y/n : " -i "n" answer
+memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
+
+if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y";fi
+
+read -ep "Do you want to use Swap ?                   y/n : " -i "$opsi" answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
