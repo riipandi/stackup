@@ -9,6 +9,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 echo -e "\n${OK}Disabling Ubuntu motd message...${NC}"
 chmod -x /etc/update-motd.d/10-help-text
 chmod -x /etc/update-motd.d/50-motd-news
+chmod -x /etc/update-motd.d/51-cloudguest
 chmod -x /etc/update-motd.d/80-livepatch
 chmod -x /etc/update-motd.d/90-updates-available
 
