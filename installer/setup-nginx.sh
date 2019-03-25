@@ -36,6 +36,7 @@ sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/vhost.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/vhost.d/default.conf
 cat /etc/nginx/manifest/default.php > /var/www/html/index.php
 chown -R www-data: /var/www ; chmod -R 0775 /var/www
+rm -f /var/www/html/index.nginx-debian.html
 
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
@@ -50,6 +51,7 @@ systemctl restart nginx
 #-----------------------------------------------------------------------------------------
 find /etc/nginx/manifest/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
 sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/vhost.d/default.conf
+systemctl restart nginx
 
 # Nginx Amplify
 #-----------------------------------------------------------------------------------------
