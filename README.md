@@ -28,6 +28,26 @@ bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7) --dev
 
 If you prefer to run installation manually, you just clone this repo then run setup script in `installer` directory.
 
+Installation information stored at: `/usr/local/share/stackup.info`.
+
+### Installation notes in AWS
+
+AWS Lightsail doesn't use password by default for ssh authentication.
+Download SSH key from Lightsail management console, then:
+
+```
+cat LightsailDefaultKey-zone.pem > ~/.ssh/id_rsa_aws_oregon
+
+ssh given_username@ip_address -i ~/.ssh/id_rsa_aws_oregon
+```
+
+Also, AWS Lightsail use generated hostname for you instance. So, you will 
+need change your instance hostname:
+
+```
+hostnamectl set-hostname myhostname.mydomain.tld
+```
+
 ## Some Useful Snippets
 
 | Command             | Description                                         | Example Usage

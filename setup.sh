@@ -66,7 +66,7 @@ bash "$WORKDIR/installer/config-telegram.sh"
 #-----------------------------------------------------------------------------------------
 read -ep "Install MySQL / MariaDB ?                   y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Select database Engine          (mariadb/mysql) : " mysql_engine
+    read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
     if [[ "$mysql_engine" == "mysql" ]] ; then
         bash "$WORKDIR/installer/setup-mysql.sh"
     else
