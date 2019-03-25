@@ -7,7 +7,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name='elsa',
-    version='0.2',
+    version='2.5',
     author="Aris Ripandi",
     author_email="aris@ripandi.id",
     description="StackUp commandline utility",

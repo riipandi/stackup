@@ -5,21 +5,31 @@
 
 import os
 import click
+import pkg_resources
+from utils import logger as logger
+
+VERSION = pkg_resources.require('stk')[0].version
 
 # Privilages check
 if os.getuid() is not 0:
-    print("You aren't root!")
+    print("You are not root!")
     exit(1)
 
-# Update and upgrade the system
-# os.system('apt update ; apt full-upgrade -y')
-# os.system('apt autoremove -y ; apt clean')
+@click.group()
+@click.version_option(version=VERSION, prog_name='elsa')
+def cli():
+    pass
 
-@click.command()
+@cli.command()
+def sysupdate():
+    os.system('apt update ; apt full-upgrade -y')
+    os.system('apt autoremove -y ; apt clean')
+
+@cli.command()
+@click.option('--type', default='html', help='Type of site [html|php|ghost|python|proxy]')
 @click.argument('name')
-@click.option('--greeting', '-g')
-def main(name, greeting):
-    click.echo("{}, {}".format(greeting, name))
+def site(type, name):
+    click.echo('Creating virtualhost {} for {}'.format(type,name))
 
 if __name__ == "__main__":
-    main()
+    cli()
