@@ -45,6 +45,15 @@ fi
 # Required package for all php version
 apt -y install composer gettext gamin mcrypt imagemagick aspell graphviz
 
+# PHP development packages
+#-----------------------------------------------------------------------------------------
+echo -e "\n${OK}Downloading PHP development packages...${NC}"
+curl -L# "https://git.io/vN3Ff" -o /usr/local/bin/wp
+curl -L# "https://git.io/fAFyN" -o /usr/local/bin/phpcs
+curl -L# "https://git.io/fAFyb" -o /usr/local/bin/phpcbf
+curl -L# "https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar" -o /usr/local/bin/php-cs-fixer
+chmod +x /usr/local/bin/* ; chown root: /usr/local/bin/*
+
 # Configure packages
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Configuring PHP-FPM...${NC}"

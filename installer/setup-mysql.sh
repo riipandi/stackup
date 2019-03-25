@@ -37,9 +37,9 @@ apt -y full-upgrade; apt -y install mysql-server mysql-client
 #-----------------------------------------------------------------------------------------
 rm -f /etc/mysql/mysql.conf.d/default-auth-override.cnf
 
-crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'default-authentication-plugin' 'mysql_native_password'
-crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'bind-address' $mysql_bind_address
-crudini --set /etc/mysql/mysql.conf.d/mysqld.cnf 'mysqld' 'port' $mysql_listen_port
+crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'default-authentication-plugin' 'mysql_native_password'
+crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'bind-address' $mysql_bind_address
+crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'port' $mysql_listen_port
 
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'host'      $mysql_bind_address
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql' 'port'      $mysql_listen_port

@@ -34,12 +34,12 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
                 chown -R $username: $HOMEDIR/.ssh
 
                 echo
-                read -ep "Configure development environment?          y/n : " answer
+                read -ep "Configure development environment?          y/n : " -i "y" answer
                 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
                     # Composer environment
                     if [ -x "$(command -v composer)" ]; then
                         echo -e "${OK}\nConfiguring Composer environment..${NC}"
-                        runuser -l $username -c 'composer global require hirak/prestissimo laravel/installer wp-cli/wp-cli'
+                        runuser -l $username -c 'composer global require hirak/prestissimo laravel/installer'
                         if ! grep -q 'composer' /home/$username/.bashrc ; then
                             echo 'export PATH=$PATH:$HOME/.config/composer/vendor/bin' >> "/home/$username/.bashrc"
                         fi

@@ -4,7 +4,7 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Default PHP version ?                           : " -i "7.3" default_php
+read -ep "Default PHP version for virtualhost?            : " -i "7.3" default_php
 
 # Installing packages
 #-----------------------------------------------------------------------------------------
@@ -13,15 +13,6 @@ echo "deb http://ppa.launchpad.net/ondrej/nginx/ubuntu `lsb_release -cs` main" >
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 apt -y full-upgrade ; apt -y install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools \
 libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses python-dev
-
-# Extra packages
-#-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Downloading extra utilities...${NC}"
-curl -L# "https://git.io/vN3Ff" -o /usr/local/bin/wp
-curl -L# "https://git.io/fAFyN" -o /usr/local/bin/phpcs
-curl -L# "https://git.io/fAFyb" -o /usr/local/bin/phpcbf
-curl -L# "https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar" -o /usr/local/bin/php-cs-fixer
-chmod +x /usr/local/bin/* ; chown root: /usr/local/bin/*
 
 # Download latest certbot
 echo -e "\n${OK}Downloading certbot and trusted certificates...${NC}"

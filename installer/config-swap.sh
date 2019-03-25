@@ -9,7 +9,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 read -ep "Do you want to use Swap ?                   y/n : " -i "n" answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Enter size of Swap (in megabyte)               : " -i "2048" swap_size
+    read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
     if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
         echo -e "\n${OK}Configuring Linux SWAP...${NC}"
         echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab

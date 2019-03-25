@@ -66,7 +66,7 @@ bash "$WORKDIR/installer/config-telegram.sh"
 #-----------------------------------------------------------------------------------------
 read -ep "Install MySQL / MariaDB ?                   y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
+    read -ep "Select database Engine          (mariadb/mysql) : " mysql_engine
     if [[ "$mysql_engine" == "mysql" ]] ; then
         bash "$WORKDIR/installer/setup-mysql.sh"
     else
@@ -116,5 +116,5 @@ chmod +x /usr/local/bin/create-user
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Cleaning up installation...${NC}\n"
-apt -y autoremove && apt clean && netstat -pltn
+apt -y autoremove && apt clean && echo && netstat -pltn
 echo -e "\n${OK}Installation has been finish...${NC}\n"

@@ -26,25 +26,14 @@ bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7)
 bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7) --dev
 ```
 
-## Manual Installation
-
-If you prefer to run installation manually, you can follow this step:
-
-1. Clone this repo or download latest release from [release page](//github.com/riipandi/stackup/releases/latest).
-2. Extract downloaded file and make all `*.sh` and `snippets` files executable.
-3. Install basic dependencies: `apt -y install sudo git curl crudini openssl figlet perl`
-4. Start installation process by executing `install.sh` file.
-5. Follow the installation wizard as usual.
-
-You can also configure the `config.ini` file manually if you don't want to use the installation wizard.
-
-Change `ready=no` to `ready=yes` in `config.ini` file, then execute `install.sh` file.
+If you prefer to run installation manually, you just clone this repo then run setup script in `installer` directory.
 
 ## Some Useful Snippets
 
 | Command             | Description                                         | Example Usage
 | :------------------ | :-------------------------------------------------- | :------------
-| create-sudoer       | Create new user with sudo privileges                | _Run with sudo privileges_
+| create-buddy        | Create new user for application deployment          | `sudo create-buddy`
+| create-user         | Create new user with sudo privileges                | `sudo create-user`
 | set-default-php     | Set default PHP version                             | `sudo set-php 7.2`
 | set-default-python  | Set default Python version                          | `sudo set-python 3.5`
 | site-ghost          | Create or uninstall Ghost blogging platform         | `site-ghost example.com`
@@ -64,7 +53,8 @@ Change `ready=no` to `ready=yes` in `config.ini` file, then execute `install.sh`
 
 - [x] Change license from MIT to Apache 2.0
 - [x] Write the change logs
-- [ ] Make each setup script as independent installer
+- [x] Make each setup script as independent installer
+- [ ] Add automatic installation wizard
 - [ ] Add more snippets
 
 ## License
