@@ -73,6 +73,8 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     else
         bash "$WORKDIR/installer/setup-mariadb.sh"
     fi
+    bash "$WORKDIR/installer/tools-adminer.sh"
+    bash "$WORKDIR/installer/tools-pma.sh"
 fi
 
 # Install PostgreSQL
@@ -80,6 +82,7 @@ fi
 read -ep "Install PostgreSQL ?                        y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
+    bash "$WORKDIR/installer/tools-pgadmin.sh"
 fi
 
 # Install PHP-FPM
@@ -96,7 +99,10 @@ bash "$WORKDIR/installer/setup-nginx.sh"
 
 # Install Redis Server
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/installer/setup-redis.sh"
+read -ep "Install Redis Server ?                      y/n : " -i "yes" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    bash "$WORKDIR/installer/setup-redis.sh"
+fi
 
 # Install StackUp cli utility
 #-----------------------------------------------------------------------------------------
