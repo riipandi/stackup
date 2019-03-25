@@ -5,4 +5,4 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
 
-read -ep "Install Redis Server ?                  y/n : " -i "yes" answer
+read -ep "Install Redis Server ?                      y/n : " -i "yes" answer

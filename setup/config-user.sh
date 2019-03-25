@@ -4,19 +4,19 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Create new sudo user?                   y/n : " answer
+read -ep "Create new sudo user?                       y/n : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     echo
     while true; do
-        read -ep "Enter username for this user       : " -i "admin" username
-        read -ep "Enter new user real name           : " -i "Admin Sistem" fullname
+        read -ep "Enter username for this user                    : " -i "admin" username
+        read -ep "Enter new user real name                        : " -i "Admin Sistem" fullname
         egrep "^$username" /etc/passwd >/dev/null
         if [ $? -eq 0 ]; then
             echo -e "${NO}User $username already exists!${NC}"
         else
             while true; do
-                read -sp "Enter password for new user        : " password
+                read -sp "Enter password for new user                     : " password
                 if [ "$password" == "" ]; then
                     echo -e "${NO}\nPlease enter user password!${NC}"
                 else

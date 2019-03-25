@@ -29,7 +29,7 @@ else
     cat $PARENT/config/repo/sources.list > /etc/apt/sources.list
 fi
 sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
-apt update ; apt -y full-upgrade ; apt -y autoremove
+apt update -qq ; apt -y full-upgrade ; apt -y autoremove
 
 # Install basic packages
 #-----------------------------------------------------------------------------------------
