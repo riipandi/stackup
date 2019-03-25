@@ -19,7 +19,18 @@ fi
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-echo "deb http://sgp1.mirrors.digitalocean.com/mariadb/repo/$mariadb_version/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/mariadb.list
+echo -e "\n${OK}Installing MariaDB ${mariadb_version}...${NC}"
+COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
+
+if [ $COUNTRY == "ID" ] ; then
+    REPO="deb http://mariadb.biz.net.id/repo/$mariadb_version/ubuntu `lsb_release -cs` main"
+elif [ $COUNTRY == "SG" ] ; then
+    REPO="deb http://download.nus.edu.sg/mirror/mariadb/repo/$mariadb_version/ubuntu `lsb_release -cs` main"
+else
+    REPO="deb http://mirror.rackspace.com/mariadb/repo/$mariadb_version/ubuntu `lsb_release -cs` main"
+fi
+
+echo $REPO > /etc/apt/sources.list.d/mariadb.list
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 ; apt update -qq
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
@@ -29,8 +40,8 @@ apt full-upgrade -y ; apt -y install mariadb-server mariadb-client
 #-----------------------------------------------------------------------------------------
 sed -i "s/skip-external-locking//" /etc/mysql/my.cnf
 
-crudini --set /etc/mysql/conf.d/mariadb.cnf 'mysqld' 'bind-address'  $mariadb_bind_address
-crudini --set /etc/mysql/conf.d/mariadb.cnf 'mysqld' 'pot'           $mariadb_listen_port
+crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'bind-address'  $mariadb_bind_address
+crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'port'          $mariadb_listen_port
 
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql'     'host'         $mariadb_bind_address
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql'     'port'         $mariadb_listen_port
