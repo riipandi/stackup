@@ -72,7 +72,7 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     else
         bash "$WORKDIR/installer/setup-mariadb.sh"
     fi
-    bash "$WORKDIR/installer/tools-adminer.sh"
+    # bash "$WORKDIR/installer/tools-adminer.sh"
     bash "$WORKDIR/installer/tools-pma.sh"
 fi
 
@@ -82,6 +82,7 @@ read -ep "Install PostgreSQL ?                        y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
     bash "$WORKDIR/installer/tools-pgadmin.sh"
+    # bash "$WORKDIR/installer/tools-pgadmin4.sh"
 fi
 
 # Install PHP-FPM

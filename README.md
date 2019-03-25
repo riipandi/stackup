@@ -54,6 +54,7 @@ If you prefer to run installation manually, you just clone this repo then run se
 - [x] Change license from MIT to Apache 2.0
 - [x] Write the change logs
 - [x] Make each setup script as independent installer
+- [ ] Fix pgAdmin4 installation
 - [ ] Add automatic installation wizard
 - [ ] Add more snippets
 

@@ -9,6 +9,7 @@ server {
     ssl_certificate         /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key     /etc/letsencrypt/live/HOSTNAME/privkey.pem;
     ssl_trusted_certificate /etc/ssl/certs/chain.pem;
+    location = /wp-config.php  { deny all; }
     root /srv/MASTER_SITE/public;
     include wpms.d/wp-ms-fpm.conf;
 }
