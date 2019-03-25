@@ -6,8 +6,6 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Configure the system
 #-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Configuring network configuration...${NC}"
-
 read -ep "Please specify time zone                       : " -i "Asia/Jakarta" timezone
 
 # Timezone Synchronization
@@ -19,7 +17,6 @@ systemctl enable systemd-timesyncd
 systemctl restart systemd-timesyncd
 
 # Sysctl tweak
-echo -e "\n${OK}Configuring sysctl...${NC}"
 crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1'
 crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
 crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'

@@ -8,7 +8,6 @@ read -ep "Please specify SSH port                        : " -i "22" ssh_port
 
 # SSH Server + welcome message
 #-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Configuring SSH server...${NC}"
 sed -i "s/[#]*PubkeyAuthentication/PubkeyAuthentication/" /etc/ssh/sshd_config
 sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
