@@ -35,7 +35,7 @@ Installation information stored at: `/usr/local/share/stackup.info`.
 AWS Lightsail doesn't use password by default for ssh authentication.
 Download SSH key from Lightsail management console, then:
 
-```
+```bash
 cat LightsailDefaultKey-zone.pem > ~/.ssh/id_rsa_aws_oregon
 
 ssh given_username@ip_address -i ~/.ssh/id_rsa_aws_oregon
@@ -44,8 +44,16 @@ ssh given_username@ip_address -i ~/.ssh/id_rsa_aws_oregon
 Also, AWS Lightsail use generated hostname for you instance. So, you will 
 need change your instance hostname:
 
-```
+```bash
 hostnamectl set-hostname myhostname.mydomain.tld
+```
+
+If you create new sudo user, you will need execute this command:
+
+```bash
+sudo cp /home/ubuntu/.ssh/authorized_keys /home/new_username/.ssh/authorized_keys
+sudo chmod 0600 /home/new_username/.ssh/authorized_keys
+sudo chown new_username /home/new_username/.ssh/authorized_keys
 ```
 
 ## Some Useful Snippets
