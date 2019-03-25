@@ -52,7 +52,8 @@ echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
 
-# bash "$WORKDIR/install.sh"
+bash "$WORKDIR/setup/common.sh"
+bash "$WORKDIR/setup/config-ssh.sh"
 
 # Install pip global
 # sudo -H pip install .
