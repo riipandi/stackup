@@ -26,9 +26,9 @@ bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7)
 bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7) --dev
 ```
 
-If you prefer to run installation manually, you just clone this repo then run setup script in `installer` directory.
+If you prefer to run installation manually, you just clone this repo then run provided scripts in `installer` directory.
 
-Installation information stored at: `/usr/local/share/stackup.info`.
+Installation information stored at: `/usr/local/share/stackup.info`
 
 ### Installation notes in AWS
 
@@ -55,6 +55,8 @@ sudo cp /home/ubuntu/.ssh/authorized_keys /home/new_username/.ssh/authorized_key
 sudo chmod 0600 /home/new_username/.ssh/authorized_keys
 sudo chown new_username /home/new_username/.ssh/authorized_keys
 ```
+
+Or, you can use your own SSH key.
 
 ## Some Useful Snippets
 
