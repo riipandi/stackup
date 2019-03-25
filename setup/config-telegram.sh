@@ -6,11 +6,14 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Telegram SSH Notification
 #-----------------------------------------------------------------------------------------
-SSH_PORT=`crudini --get $PARENT/config.ini system ssh_port`
-TELEGRAM_NOTIFY=`crudini --get $PARENT/config.ini telegram enable`
-TELEGRAM_BOTKEY=`crudini --get $PARENT/config.ini telegram bot_key`
-TELEGRAM_CHATID=`crudini --get $PARENT/config.ini telegram chat_id`
+read -ep "Use Telegram ssh notification ?         yes/no : " -i "no" answer
 
-sed -i "s/VAR_BOTKEY/$TELEGRAM_BOTKEY/" $PARENT/system/telegram.sh
-sed -i "s/VAR_CHATID/$TELEGRAM_CHATID/" $PARENT/system/telegram.sh
-cp $PARENT/system/telegram.sh /etc/profile.d/ ; chmod +x $_
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+
+    read -ep "Telegram Bot Key                               : " tg_bot_key
+    read -ep "Telegram User Chat ID                          : " tg_chat_id
+
+    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $PARENT/config/tg-notif.sh
+    sed -i "s/VAR_CHATID/$tg_chat_id/" $PARENT/config/tg-notif.sh
+    cp $PARENT/config/tg-notif.sh /etc/profile.d/ ; chmod +x $_
+fi

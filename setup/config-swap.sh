@@ -6,16 +6,19 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Configuring Linux SWAP...${NC}"
-swap_size=`crudini --get $PARENT/config/stackup.ini system swap_size`
+read -ep "Do you want to use Swap ?               yes/no : " -i "no" answer
 
-if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
-    echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab
-    dd if=/dev/zero of=/swapfile count=$swap_size bs=1M
-    chmod 600 /swapfile
-    mkswap /swapfile
-    swapon /swapfile
-    swapon --show
-else
-    echo -e "\nSwapfile already configured!\n"
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Enter size of Swap (in megabyte)               : " -i "2048" swap_size
+    if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
+        echo -e "\n${OK}Configuring Linux SWAP...${NC}"
+        echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab
+        dd if=/dev/zero of=/swapfile count=$swap_size bs=1M
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        swapon --show
+    else
+        echo -e "\n${OK}Swapfile already configured...${NC}"
+    fi
 fi

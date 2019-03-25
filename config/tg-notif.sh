@@ -5,8 +5,8 @@
 # Purpose: Send realtime notification to Telegram
 #  when user logged in via ssh.
 
-BOT_KEY="VAR_BOTKEY"
-CHAT_ID="VAR_CHATID"
+BOT_KEY="xx"
+CHAT_ID="xxxxxx"
 
 if [[ ! -z $SSH_CONNECTION ]]; then
 
