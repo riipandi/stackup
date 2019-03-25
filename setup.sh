@@ -111,8 +111,10 @@ cat $WORKDIR/installer/config-user.sh > /usr/local/bin/create-user
 chmod +x /usr/local/bin/create-user
 
 # Install StackUp cli utility
-#-----------------------------------------------------------------------------------------
 # sudo -H pip install .
+#-----------------------------------------------------------------------------------------
+echo -e "\n${OK}Installing StackUp utility...${NC}\n"
+chmod +x $WORKDIR/snippet/* ; cp $WORKDIR/snippet/* /usr/local/bin/.
 
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------

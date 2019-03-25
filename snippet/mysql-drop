@@ -2,3 +2,23 @@
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
+if [[ $($MYSQL mysql -e "select Db, User, Host from db") ]]; then
+    echo
+    $MYSQL mysql -e "select Db, User, Host from db;"
+else
+    echo -e "\nNo databased needs to be deleted.\n"
+    exit 1
+fi
+
+# The wizard
+echo
+read -e -p "Database Name     : " db_name
+read -e -p "Database User     : " -i "$db_name" db_user
+read -e -p "Database Host     : " -i "127.0.0.1" db_host
+
+# Drop database and user
+mysql -e "DROP DATABASE IF EXISTS $db_name"
+mysql -e "DROP USER IF EXISTS '$db_name'@'$db_host'"
+mysql -e "FLUSH PRIVILEGES"
+
+echo -e "\nDatabase $db_name @ $db_host has been dropped.\n"

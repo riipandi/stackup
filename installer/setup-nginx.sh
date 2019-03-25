@@ -79,3 +79,9 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     mv /etc/nginx/conf.d/stub_status.{conf-disable,conf}
     systemctl restart amplify-agent
 fi
+
+# Crontab for renewing LetsEncrypt certificates
+#-----------------------------------------------------------------------------------------
+echo -e "\n${OK}Configuring cron for renewing certificates...${NC}"
+echo "01 01 01 */3 * /usr/local/bin/ssl-renew >/var/log/ssl-renew.log" > /tmp/ssl_renew
+crontab /tmp/ssl_renew ; rm /tmp/ssl_renew

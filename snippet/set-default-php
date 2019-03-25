@@ -2,3 +2,24 @@
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
+default="7.2"
+
+arr_ver=( '5.6' '7.2' '7.3' )
+
+# Check default PHP version in installation config
+if [[ ! -z $1 ]]; then default=$1 ; fi
+
+if [[ "${arr_ver[*]}" != *"$default"* ]]; then
+    echo -e "\nThat PHP version doesnt' exist...\n" ; exit 1
+fi
+
+echo -e "\nConfiguring php-fpm, set default to v$default" ; echo
+update-alternatives --set php /usr/bin/php$default >/dev/null 2>&1
+update-alternatives --set phar /usr/bin/phar$default >/dev/null 2>&1
+update-alternatives --set phar.phar /usr/bin/phar.phar$default >/dev/null 2>&1
+
+# Default PHP-FPM on Nginx configuration
+find /etc/nginx/server.d/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
+find /etc/nginx/manifest/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
+
+echo -e "Default PHP version has been set to v$default\n"
