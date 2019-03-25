@@ -65,7 +65,7 @@ bash "$WORKDIR/setup/config-telegram.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
-read -ep "Install MySQL / MariaDB ?               yes/no : " answer
+read -ep "Install MySQL / MariaDB ?               y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Select database Engine         (mariadb/mysql) : " -i "mariadb" mysql_engine
     if [[ "$mysql_engine" == "mysql" ]] ; then
@@ -77,7 +77,7 @@ fi
 
 # Install PostgreSQL
 #-----------------------------------------------------------------------------------------
-read -ep "Install PostgreSQL ?                    yes/no : " answer
+read -ep "Install PostgreSQL ?                    y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/setup/setup-pgsql.sh"
 fi

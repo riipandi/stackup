@@ -6,7 +6,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Telegram SSH Notification
 #-----------------------------------------------------------------------------------------
-read -ep "Use Telegram ssh notification ?         yes/no : " -i "no" answer
+read -ep "Use Telegram ssh notification ?         y/n : " -i "no" answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
 

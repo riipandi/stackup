@@ -4,7 +4,7 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Create new sudo user?                   yes/no : " answer
+read -ep "Create new sudo user?                   y/n : " answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     echo
