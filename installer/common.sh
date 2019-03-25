@@ -34,10 +34,13 @@ apt update -qq ; apt -y full-upgrade ; apt -y autoremove
 # Install basic packages
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Installing basic packages...${NC}"
-apt -y install sudo nano figlet elinks pwgen curl lsof whois dirmngr gnupg \
-gcc make cmake build-essential software-properties-common debconf-utils \
-apt-transport-https perl binutils dnsutils nscd ftp zip unzip bsdtar pv \
-dh-autoreconf rsync screen screenfetch ca-certificates nmap nikto xmlstarlet \
-speedtest-cli optipng jpegoptim sqlite3 s3cmd virtualenv libpython2.7 \
-{libpython,libpython2.7,python2.7}-dev python-virtualenv python3-virtualenv \
-python3-venv python-click
+apt -y install sudo nano figlet elinks pwgen curl lsof whois dirmngr gnupg gcc make \
+cmake build-essential software-properties-common debconf-utils apt-transport-https \
+perl binutils dnsutils nscd ftp zip unzip bsdtar pv dh-autoreconf rsync screenfetch \
+screen ca-certificates nmap nikto xmlstarlet speedtest-cli optipng jpegoptim sqlite3 \
+s3cmd virtualenv libpython2.7 {libpython,libpython2.7,python2.7}-dev gunicorn gunicorn3 \
+python3-venv {python,python3}-{click,dev,pip,setuptools,gunicorn,virtualenv} \
+python-{m2crypto,configparser,pip-whl} supervisor
+
+# crudini for Python3
+wget https://raw.githubusercontent.com/chenull/py3crudini/master/crudini -qO /usr/bin/crudini3

@@ -31,17 +31,17 @@ apt update -qq ; apt -yqq install git curl crudini openssl figlet perl python-cl
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
-# if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
-# [[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/stackup-*
+if [ ! -z "$1" ] && [ "$1" == "--dev" ]; then CHANNEL="dev" ; else CHANNEL="stable" ; fi
+[[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/stackup-*
 
-# if [ $CHANNEL == "dev" ]; then
-#     git clone https://github.com/riipandi/stackup $WORKDIR
-# else
-#     project="https://api.github.com/repos/riipandi/stackup/releases/latest"
-#     release=`curl -s $project | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'`
-#     curl -fsSL https://github.com/riipandi/stackup/archive/$release.zip | bsdtar -xvf- -C /tmp
-#     version=`echo "${release/v/}"` ; mv /tmp/stackup-$version $WORKDIR
-# fi
+if [ $CHANNEL == "dev" ]; then
+    git clone https://github.com/riipandi/stackup $WORKDIR
+else
+    project="https://api.github.com/repos/riipandi/stackup/releases/latest"
+    release=`curl -s $project | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'`
+    curl -fsSL https://github.com/riipandi/stackup/archive/$release.zip | bsdtar -xvf- -C /tmp
+    version=`echo "${release/v/}"` ; mv /tmp/stackup-$version $WORKDIR
+fi
 
 find $WORKDIR/ -type f -name '*.py' -exec chmod +x {} \;
 find $WORKDIR/ -type f -name '*.sh' -exec chmod +x {} \;
@@ -57,7 +57,6 @@ crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
 # System configuration
 #-----------------------------------------------------------------------------------------
 bash "$WORKDIR/installer/common.sh"
-bash "$WORKDIR/installer/config-user.sh"
 bash "$WORKDIR/installer/config-ssh.sh"
 bash "$WORKDIR/installer/config-network.sh"
 bash "$WORKDIR/installer/config-swap.sh"
@@ -104,8 +103,18 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-redis.sh"
 fi
 
+# Crate sudo user
+#-----------------------------------------------------------------------------------------
+bash "$WORKDIR/installer/config-user.sh"
+cat $WORKDIR/installer/config-user.sh > /usr/local/bin/create-user
+chmod +x /usr/local/bin/create-user
+
 # Install StackUp cli utility
 #-----------------------------------------------------------------------------------------
 # sudo -H pip install .
 
+# Cleanup and save some important information
+#-----------------------------------------------------------------------------------------
+echo -e "\n${OK}Cleaning up installation...${NC}\n"
+apt -y autoremove && apt clean && netstat -pltn
 echo -e "\n${OK}Installation has been finish...${NC}\n"
