@@ -5,6 +5,10 @@ format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
 
+### [3.0] - 2019/03/29
+- Each setup script as independent installer
+- Some improvements and fixes
+
 ### [2.4] - 2019/03/29
 - Changed license from MIT to Apache 2.0
 - Fix some configuration
