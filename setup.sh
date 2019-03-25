@@ -56,12 +56,12 @@ crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
 
 # System configuration
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/setup/common.sh"
-bash "$WORKDIR/setup/config-user.sh"
-bash "$WORKDIR/setup/config-ssh.sh"
-bash "$WORKDIR/setup/config-network.sh"
-bash "$WORKDIR/setup/config-swap.sh"
-bash "$WORKDIR/setup/config-telegram.sh"
+bash "$WORKDIR/installer/common.sh"
+bash "$WORKDIR/installer/config-user.sh"
+bash "$WORKDIR/installer/config-ssh.sh"
+bash "$WORKDIR/installer/config-network.sh"
+bash "$WORKDIR/installer/config-swap.sh"
+bash "$WORKDIR/installer/config-telegram.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
@@ -69,9 +69,9 @@ read -ep "Install MySQL / MariaDB ?                   y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
     if [[ "$mysql_engine" == "mysql" ]] ; then
-        bash "$WORKDIR/setup/setup-mysql.sh"
+        bash "$WORKDIR/installer/setup-mysql.sh"
     else
-        bash "$WORKDIR/setup/setup-mariadb.sh"
+        bash "$WORKDIR/installer/setup-mariadb.sh"
     fi
 fi
 
@@ -79,24 +79,24 @@ fi
 #-----------------------------------------------------------------------------------------
 read -ep "Install PostgreSQL ?                        y/n : " answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash "$WORKDIR/setup/setup-pgsql.sh"
+    bash "$WORKDIR/installer/setup-pgsql.sh"
 fi
 
 # Install PHP-FPM
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/setup/setup-php.sh"
+bash "$WORKDIR/installer/setup-php.sh"
 
 # Install NodeJS and Yarn
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/setup/setup-nodejs.sh"
+bash "$WORKDIR/installer/setup-nodejs.sh"
 
 # Install Nginx
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/setup/setup-nginx.sh"
+bash "$WORKDIR/installer/setup-nginx.sh"
 
 # Install Redis Server
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/setup/setup-redis.sh"
+bash "$WORKDIR/installer/setup-redis.sh"
 
 # Install StackUp cli utility
 #-----------------------------------------------------------------------------------------

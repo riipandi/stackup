@@ -6,7 +6,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
-read -ep "Do you want to use Swap ?                   y/n : " -i "no" answer
+read -ep "Do you want to use Swap ?                   y/n : " -i "n" answer
 
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter size of Swap (in megabyte)               : " -i "2048" swap_size
