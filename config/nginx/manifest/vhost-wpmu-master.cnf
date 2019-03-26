@@ -7,9 +7,6 @@ server {
 server {
     listen 443 ssl http2;
     server_name ~^(?<user>[a-zA-Z0-9-].+)\.domain\.tld$;
-    if ( $host ~ ^www\.(?<domain>.+)$ ) {
-        return 301 $scheme://$domain$request_uri;
-    }
     ssl_dhparam /etc/ssl/certs/dhparam-4096.pem;
     ssl_certificate /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/HOSTNAME/privkey.pem;
