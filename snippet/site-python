@@ -1,0 +1,119 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
+
+# Validate input
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+# Check for existing vhost
+#-----------------------------------------------------------------------------------------
+if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
+    echo -e "\nVirtualHost already exist...\n"
+    read -ep "Do you want to reset and remove it?       yes/no : " -i "no" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        rm -f /etc/nginx/vhost.d/$1.conf
+        rm -f /etc/supervisor/conf.d/$1.conf
+        rm -fr /srv/$1
+    else
+        exit 1
+    fi
+fi
+
+# Get random unused port
+#-----------------------------------------------------------------------------------------
+function getFreeTcpPort {
+    local ports="${1:-1}" interim="${5:-5099}" spacing=32
+    local free_ports=( )
+    local taken_ports=( $( netstat -aln | egrep ^tcp | fgrep LISTEN |
+                        awk '{print $4}' | egrep -o '[0-9]+$' |
+                        sort -n | uniq ) )
+    interim=$(( interim + (RANDOM % spacing) ))
+
+    for taken in "${taken_ports[@]}" 65535
+    do
+        while [[ $interim -lt $taken && ${#free_ports[@]} -lt $ports ]]
+        do
+        free_ports+=( $interim )
+        interim=$(( interim + spacing + (RANDOM % spacing) ))
+        done
+        interim=$(( interim > taken + spacing
+                    ? interim
+                    : taken + spacing + (RANDOM % spacing) ))
+    done
+
+    [[ ${#free_ports[@]} -ge $ports ]] || return 2
+
+    printf '%d\n' "${free_ports[@]}"
+}
+
+APP_PORT=`getFreeTcpPort`
+APP_NAME=$(echo $1 | awk '{ gsub("[.]","-",$1); print $1 }')
+
+# Creating web directory and configuration file
+#-----------------------------------------------------------------------------------------
+echo ; cp /etc/nginx/manifest/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
+sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
+
+# Configure reverse proxy host
+read -ep "Enter your application name         (ex: myblog) : " -i "$APP_NAME" ApplicationName
+sed -i "s/APP_NAME/$ApplicationName/" /etc/nginx/vhost.d/$1.conf
+
+read -ep "Enter application port number                    : " -i "$APP_PORT" ApplicationPort
+sed -i "s/APP_PORT/$ApplicationPort/" /etc/nginx/vhost.d/$1.conf
+
+read -ep "Do you want to use www subdomain?         yes/no : " answer
+[[ ! "${answer,,}" =~ ^(yes|y)$ ]] || sed -i "s/# server_name www/server_name www/" /etc/nginx/vhost.d/$1.conf
+
+read -ep "Disable search engine indexing?           yes/no : " answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    sed -i "s/# add_header X-Robots-Tag/add_header X-Robots-Tag/" /etc/nginx/vhost.d/$1.conf
+fi
+
+# Ask to generate LetsEncrypt certificate
+read -ep "Do you want to generate SSL certificate?  yes/no : " answer
+[[ ! "${answer,,}" =~ ^(yes|y)$ ]] || bash /usr/local/bin/ssl-create $1
+
+read -p "Press enter to continue ..."
+
+echo -e "\nCrafting sample application...\n"
+
+# Create Web directory and setup an example python application
+[[ -d "/srv/$1/public" ]] || mkdir -p /srv/$1/public ; cd /srv/$1 ; rm -rf .venv
+[[ -f "/srv/$1/example.py" ]] || cp /etc/nginx/manifest/example.py /srv/$1/example.py
+
+# Setup python virtual env
+/usr/bin/virtualenv -qp python3 .venv --download
+/srv/$1/.venv/bin/pip install -q gunicorn falcon
+chown -R www-data: /srv/$1 ; chmod -R 0775 /srv/$1
+
+# Supervisor configuration (gunicorn is a sample)
+APP_ID=$(echo $ApplicationName | awk '{ gsub("[-]","_",$1); print $1 }')
+cat > /etc/supervisor/conf.d/$APP_PORT-$APP_NAME.conf <<EOF
+[program:${APP_ID}]
+directory=/srv/$1
+environment=APP_ENV=production
+command=/srv/$1/.venv/bin/gunicorn -b 127.0.0.1:${ApplicationPort} example:api
+stderr_logfile=/var/log/supervisor/$1-err.log
+stdout_logfile=/var/log/supervisor/$1-out.log
+autorestart=true
+autostart=true
+user=www-data
+EOF
+
+# Test nginx configuration then restart
+`which nginx` -t 2>/dev/null > /dev/null
+if [[ $? == 0 ]]; then
+    echo -e "\nReloading server configuration...\n"
+    systemctl reload nginx ; supervisorctl reread
+    systemctl restart supervisor
+else
+    echo -e "\nSomething wrong with configuration file..."
+    `which nginx` -t
+    exit
+fi
+
+echo -e "\nVirtualHost for $1 created...\n"
