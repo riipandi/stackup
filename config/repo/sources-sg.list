@@ -1,4 +1,4 @@
-deb http://mirror.0x.sg/ubuntu CODENAME main restricted universe multiverse
-deb http://mirror.0x.sg/ubuntu CODENAME-updates main restricted universe multiverse
-deb http://mirror.0x.sg/ubuntu CODENAME-security main restricted universe multiverse
-deb http://mirror.0x.sg/ubuntu CODENAME-proposed main restricted universe multiverse
+deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME main restricted universe multiverse
+deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-updates main restricted universe multiverse
+deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-security main restricted universe multiverse
+deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-proposed main restricted universe multiverse
