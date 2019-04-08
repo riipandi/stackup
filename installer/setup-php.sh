@@ -20,7 +20,7 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 
 if [[ "${install_php_73,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v7.3...${NC}"
-    apt -y install php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.3 php7.3-imagick php-pear
+    apt -y install php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.3 php7.3-imagick php-pear
     crudini --set /etc/php/7.3/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.3-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.3-fpm
@@ -28,7 +28,7 @@ fi
 
 if [[ "${install_php_72,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v7.2...${NC}"
-    apt -y install php7.2-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.2
+    apt -y install php7.2-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.2
     crudini --set /etc/php/7.2/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.2-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.2-fpm
@@ -36,7 +36,7 @@ fi
 
 if [[ "${install_php_56,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v5.6...${NC}"
-    apt -y install php5.6-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php5.6 php-apcu
+    apt -y install php5.6-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php5.6 php-apcu
     crudini --set /etc/php/5.6/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php5.6-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php5.6-fpm
@@ -57,6 +57,7 @@ chmod +x /usr/local/bin/* ; chown root: /usr/local/bin/*
 # Configure packages
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Configuring PHP-FPM...${NC}"
+find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "date.timezone"       "Asia/Jakarta"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize" "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"  "300"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_input_time"      "300"' {} \;
