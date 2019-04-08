@@ -24,7 +24,8 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
             done
             # Create new user
             pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
-            useradd -mg sudo -s `which bash` $username -c "$fullname" -p $pass
+            useradd -mg webmaster -s `which bash` $username -c "$fullname" -p $pass
+            usermod -a -G sudo $username
             if [ $? -eq 0 ] ; then
                 HOMEDIR=$(eval echo "~$username")
                 mkdir -p $HOMEDIR/.ssh ; chmod 0700 $_

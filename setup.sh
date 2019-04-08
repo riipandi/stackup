@@ -116,6 +116,13 @@ chmod +x /usr/local/bin/create-user
 echo -e "\n${OK}Installing StackUp utility...${NC}\n"
 chmod +x $WORKDIR/snippet/* ; cp $WORKDIR/snippet/* /usr/local/bin/.
 
+# Create webmaster group
+#-----------------------------------------------------------------------------------------
+[[ $(cat /etc/group | grep -c "webmaster") -eq 0 ]] && groupadd webmaster
+usermod -g webmaster www-data && usermod -a -G www-data www-data
+usermod -g webmaster `getent passwd 1000 | cut -d: -f1`
+usermod -a -G sudo `getent passwd 1000 | cut -d: -f1`
+
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Cleaning up installation...${NC}\n"
