@@ -13,22 +13,27 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     echo -e "\nVirtualHost already exist...\n"
     exit 1
 else
-    cp /etc/nginx/manifest/vhost-php.cnf /tmp/vhost_php_tmp.conf
-    sed -i "s/HOSTNAME/$1/" /tmp/vhost_php_tmp.conf
+    cp /etc/nginx/manifest/vhost-html.cnf /tmp/vhost_html_tmp.conf
+    sed -i "s/HOSTNAME/$1/" /tmp/vhost_html_tmp.conf
     echo
     read -ep "Do you want to use www subdomain?         yes/no : " answer
     if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-        sed -i "s/# server_name www/server_name www/" /tmp/vhost_php_tmp.conf
+        sed -i "s/# server_name www/server_name www/" /tmp/vhost_html_tmp.conf
     fi
 fi
 
-cat /tmp/vhost_php_tmp.conf > /etc/nginx/vhost.d/$1.conf
-rm /tmp/vhost_php_tmp.conf
+cat /tmp/vhost_html_tmp.conf > /etc/nginx/vhost.d/$1.conf
+rm /tmp/vhost_html_tmp.conf
 
 # Create Web directory and default index file
 [[ -d "/srv/$1/public" ]] || mkdir -p /srv/$1/public
-[[ -f "/srv/$1/public/index.php" ]] || cp /etc/nginx/manifest/default.php /srv/$1/public/index.php
-chown -R www-data: /srv/$1 && chmod -R 00775 /srv/$1
+[[ -f "/srv/$1/public/index.html" ]] || cp /etc/nginx/manifest/default.html /srv/$1/public/index.html
+
+# Fix directory permission
+chmod 0777 /srv/$1
+chmod -R 0770 /srv/$1/*
+chmod 0777 /srv/$1/public
+chown -R www-data:webmaster /srv/$1
 
 # Ask to generate LetsEncrypt certificate
 read -ep "Do you want to generate SSL certificate?  yes/no : " answer
