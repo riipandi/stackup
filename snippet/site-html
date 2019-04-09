@@ -1,0 +1,48 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+# Validate existing vhost
+if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
+    echo -e "\nVirtualHost already exist...\n"
+    exit 1
+else
+    cp /etc/nginx/manifest/vhost-php.cnf /tmp/vhost_php_tmp.conf
+    sed -i "s/HOSTNAME/$1/" /tmp/vhost_php_tmp.conf
+    echo
+    read -ep "Do you want to use www subdomain?         yes/no : " answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        sed -i "s/# server_name www/server_name www/" /tmp/vhost_php_tmp.conf
+    fi
+fi
+
+cat /tmp/vhost_php_tmp.conf > /etc/nginx/vhost.d/$1.conf
+rm /tmp/vhost_php_tmp.conf
+
+# Create Web directory and default index file
+[[ -d "/srv/$1/public" ]] || mkdir -p /srv/$1/public
+[[ -f "/srv/$1/public/index.php" ]] || cp /etc/nginx/manifest/default.php /srv/$1/public/index.php
+chown -R www-data: /srv/$1 && chmod -R 00775 /srv/$1
+
+# Ask to generate LetsEncrypt certificate
+read -ep "Do you want to generate SSL certificate?  yes/no : " answer
+[[ ! "${answer,,}" =~ ^(yes|y)$ ]] || bash /usr/local/bin/ssl-create $1
+
+# Test nginx configuration then restart
+`which nginx` -t 2>/dev/null > /dev/null
+if [[ $? == 0 ]]; then
+    echo -e "\nReloading Nginx configuration..."
+    systemctl reload nginx
+else
+    echo -e "\nNginx configuration fail..."
+    `which nginx` -t
+    exit
+fi
+
+echo -e "VirtualHost for $1 created...\n"

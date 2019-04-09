@@ -118,7 +118,7 @@ chmod +x $WORKDIR/snippet/* ; cp $WORKDIR/snippet/* /usr/local/bin/.
 
 # Create webmaster group
 #-----------------------------------------------------------------------------------------
-[[ $(cat /etc/group | grep -c "webmaster") -eq 0 ]] && groupadd webmaster
+[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
 usermod -g webmaster www-data && usermod -a -G www-data www-data
 usermod -g webmaster `getent passwd 1000 | cut -d: -f1`
 usermod -a -G sudo `getent passwd 1000 | cut -d: -f1`
