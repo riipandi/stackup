@@ -10,8 +10,11 @@ echo -e "\n${OK}Disabling Ubuntu motd message...${NC}"
 chmod -x /etc/update-motd.d/10-help-text
 chmod -x /etc/update-motd.d/50-motd-news
 chmod -x /etc/update-motd.d/51-cloudguest
+chmod -x /etc/update-motd.d/80-esm
 chmod -x /etc/update-motd.d/80-livepatch
 chmod -x /etc/update-motd.d/90-updates-available
+chmod -x /etc/update-motd.d/91-release-upgrade
+chmod -x /etc/update-motd.d/95-hwe-eol
 
 # Disable sudo password
 #-----------------------------------------------------------------------------------------
