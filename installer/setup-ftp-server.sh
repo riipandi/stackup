@@ -8,6 +8,7 @@ FTP_DB_PASS=`pwgen -1 16`
 
 # Create database
 USER_PASS=$(echo "{md5}"`/bin/echo -n "secret" | openssl dgst -binary -md5 | openssl enc -base64`)
+
 #-----------------------------------------------------------------------------------------
 mysql -e "CREATE DATABASE IF NOT EXISTS stackup_ftp"
 mysql -e "CREATE USER IF NOT EXISTS 'stackup_ftp'@'127.0.0.1' IDENTIFIED BY '$FTP_DB_PASS'"
@@ -21,7 +22,7 @@ apt update ; apt -y install proftpd-mod-mysql
 # Configure ProFTPd
 #-----------------------------------------------------------------------------------------
 [[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
-[[ $(cat /etc/passwd | grep -c ftpuser) -eq 1 ]] || useradd -u 2000 -s /bin/false -d /bin/null -g webmaster ftpuser
+[[ $(cat /etc/passwd | grep -c ftpuser) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster ftpuser
 [[ ! -d /home/public_ftp ]] && mkdir -p /home/public_ftp
 chown -R ftp:nogroup /home/public_ftp
 
@@ -37,3 +38,4 @@ sed -i "s/DB_NAME/stackup_ftp/"     /etc/proftpd/conf.d/sql.conf
 sed -i "s/DB_USER/stackup_ftp/"     /etc/proftpd/conf.d/sql.conf
 sed -i "s/DB_PASS/${FTP_DB_PASS}/"  /etc/proftpd/conf.d/sql.conf
 systemctl restart proftpd ; systemctl status -l proftpd
+# tail -f /var/log/proftpd/proftpd.log

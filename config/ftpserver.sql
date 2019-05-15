@@ -45,7 +45,7 @@ CREATE TABLE ftpuser (
   uid smallint(6) NOT NULL default '2001',
   gid smallint(6) NOT NULL default '1001',
   homedir varchar(255) NOT NULL default '',
-  shell varchar(16) NOT NULL default '/sbin/nologin',
+  shell varchar(40) NOT NULL default '/usr/sbin/nologin',
   count int(11) NOT NULL default '0',
   accessed datetime NOT NULL default '0000-00-00 00:00:00',
   modified datetime NOT NULL default '0000-00-00 00:00:00',
