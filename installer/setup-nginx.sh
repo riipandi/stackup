@@ -9,8 +9,8 @@ read -ep "Default PHP version for virtualhost?            : " -i "7.3" default_p
 # Installing packages
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Installing Nginx packages...${NC}"
-echo "deb http://ppa.launchpad.net/ondrej/nginx/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/nginx.list
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
+echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/nginx.list
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C300EE8C > /dev/null 2>&1 && apt update
 apt -y full-upgrade ; apt -y install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools \
 libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses python-dev
 
@@ -24,27 +24,20 @@ chmod a+x /usr/bin/certbot
 
 # Configure Nginx
 #-----------------------------------------------------------------------------------------
-systemctl enable --now haveged ; systemctl stop nginx
-mkdir -p /var/www/html ; rm -fr /etc/nginx/*
-cp -r $PARENT/config/nginx/* /etc/nginx/.
-chown -R root: /etc/nginx
-
-# Adjusting nginx configuration and default web page
+systemctl enable --now haveged && systemctl stop nginx && rm -fr /var/www/html
+rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/ ; chown -R root: /etc/nginx
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/vhost.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/vhost.d/default.conf
 cat /etc/nginx/manifest/default.php > /var/www/html/index.php
+
 chown -R www-data: /var/www ; chmod -R 0775 /var/www
 rm -f /var/www/html/index.nginx-debian.html
 
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
-if [[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]]; then
-    certbot certonly --standalone --agree-tos --rsa-key-size 4096 \
-    --register-unsafely-without-email --preferred-challenges http \
-    -d "$(hostname -f)"
-fi
+[[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]] && certbot certonly --standalone --agree-tos --rsa-key-size 4096 --register-unsafely-without-email --preferred-challenges http -d "$(hostname -f)"
 systemctl restart nginx
 
 # Default PHP-FPM on Nginx configuration

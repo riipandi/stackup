@@ -24,14 +24,10 @@ perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Upgrading system...${NC}"
 COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
-
-if [ $COUNTRY == "ID" ] ; then
-    cat $PARENT/config/repo/sources-id.list > /etc/apt/sources.list
-elif [ $COUNTRY == "SG" ] ; then
-    cat $PARENT/config/repo/sources-sg.list > /etc/apt/sources.list
-else
-    cat $PARENT/config/repo/sources.list > /etc/apt/sources.list
-fi
+if   [ $COUNTRY == "ID" ] ; then cat $PWD/config/repo/sources-id.list > /etc/apt/sources.list
+elif [ $COUNTRY == "SG" ] ; then cat $PWD/config/repo/sources-sg.list > /etc/apt/sources.list
+elif [ $COUNTRY == "US" ] ; then cat $PWD/config/repo/sources-us.list > /etc/apt/sources.list
+else cat $PWD/config/repo/sources.list > /etc/apt/sources.list ; fi
 sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
 apt update -qq ; apt -y full-upgrade ; apt -y autoremove
 

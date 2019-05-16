@@ -10,9 +10,7 @@ echo -e "\n${OK}Installing phpMyAdmin...${NC}"
 [[ ! -d /var/www/myadmin ]] || rm -fr /var/www/myadmin
 
 curl -fsSL https://phpmyadmin.net/downloads/phpMyAdmin-latest-english.zip | bsdtar -xvf- -C /tmp
-mv /tmp/phpMyAdmin*english /var/www/myadmin
-
-cat > /var/www/myadmin/config.inc.php <<EOF
+mv /tmp/phpMyAdmin*english /var/www/myadmin ; cat > /var/www/myadmin/config.inc.php <<EOF
 <?php
 \$cfg['blowfish_secret'] = '`openssl rand -hex 16`';
 \$i = 0; \$i++;
