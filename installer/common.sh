@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-[ -z $ROOT ] && PARENT=$(dirname `dirname $(readlink -f $0)`) || PARENT=$ROOT
+[ -z $ROOT ] && PWD=$(dirname `dirname $(readlink -f $0)`) || PWD=$ROOT
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Telegram Bot Key                                : " tg_bot_key
     read -ep "Telegram User Chat ID                           : " tg_chat_id
 
-    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $PARENT/stubs/tg-notif.sh
-    sed -i "s/VAR_CHATID/$tg_chat_id/" $PARENT/stubs/tg-notif.sh
-    cp $PARENT/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
+    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $PWD/stubs/tg-notif.sh
+    sed -i "s/VAR_CHATID/$tg_chat_id/" $PWD/stubs/tg-notif.sh
+    cp $PWD/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
 fi

@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-[ -z $ROOT ] && PARENT=$(dirname `dirname $(readlink -f $0)`) || PARENT=$ROOT
+[ -z $ROOT ] && PWD=$(dirname `dirname $(readlink -f $0)`) || PWD=$ROOT
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ echo -e "\n${OK}Installing Adminer...${NC}"
 [[ ! -d /var/www ]] && mkdir -p /var/www
 [[ ! -d /var/www/adminer ]] && mkdir -p /var/www/adminer/plugins
 
-cp $PARENT/stubs/adminer.php /var/www/adminer/index.php
+cp $PWD/stubs/adminer.php /var/www/adminer/index.php
 
 curl -fsSL https://github.com/vrana/adminer/releases/download/v4.7.1/adminer-4.7.1-en.php -o /var/www/adminer/adminer.php
 curl -fsSL https://raw.githubusercontent.com/vrana/adminer/master/designs/rmsoft/adminer.css -o /var/www/adminer/adminer.css

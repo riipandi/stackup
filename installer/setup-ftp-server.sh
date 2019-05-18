@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-[ -z $ROOT ] && PARENT=$(dirname `dirname $(readlink -f $0)`) || PARENT=$ROOT
+[ -z $ROOT ] && PWD=$(dirname `dirname $(readlink -f $0)`) || PWD=$ROOT
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
@@ -27,10 +27,10 @@ apt update ; apt -y install proftpd-mod-mysql
 chown -R ftp:nogroup /home/public_ftp
 
 rm -fr /etc/proftpd/*
-cp -r $PARENT/config/proftpd/* /etc/proftpd/.
+cp -r $PWD/config/proftpd/* /etc/proftpd/.
 chown -R root: /etc/proftpd
 
-mysql -uroot stackup_ftp < $PARENT/config/ftpserver.sql
+mysql -uroot stackup_ftp < $PWD/config/ftpserver.sql
 
 sed -i "s/HOSTNAME/$(hostname -f)/" /etc/proftpd/conf.d/tls.conf
 sed -i "s/DB_HOST/127.0.0.1/"       /etc/proftpd/conf.d/sql.conf
