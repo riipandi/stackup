@@ -9,8 +9,8 @@ read -ep "Default PHP version for virtualhost?            : " -i "7.3" default_p
 # Installing packages
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Installing Nginx packages...${NC}"
-echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/nginx.list
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C300EE8C > /dev/null 2>&1 && apt update
+echo "deb [arch=amd64] http://nginx.org/packages/mainline/ubuntu/ `lsb_release -cs` nginx" > /etc/apt/sources.list.d/nginx.list
+curl -sS http://nginx.org/keys/nginx_signing.key | apt-key add - && apt update
 apt -y full-upgrade ; apt -y install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools \
 libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses python-dev
 
