@@ -26,8 +26,15 @@ fi
 # Install required dependencies
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Installing required dependencies...${NC}"
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
-apt update -qq ; apt -yqq install git curl crudini openssl figlet perl python-click ; apt autoremove -y
+cat > /etc/apt/apt.conf.d/99force-config <<EOF
+Dpkg::Options {
+   "--force-confdef";
+   "--force-confold";
+}
+EOF
+apt update -qq ; apt -y full-upgrade
+apt -yqq install git curl crudini openssl figlet perl python-click
+apt -y autoremove
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
@@ -56,7 +63,7 @@ crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
 
 # Install StackUp cli utility
 #-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Installing StackUp utility...${NC}\n"
+echo -e "\n${OK}Installing StackUp utility...${NC}"
 chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
 
 # System configuration
