@@ -9,7 +9,7 @@ echo -e "\n${OK}Installing Adminer...${NC}"
 [[ ! -d /var/www ]] && mkdir -p /var/www
 [[ ! -d /var/www/adminer ]] && mkdir -p /var/www/adminer/plugins
 
-cp $PARENT/config/adminer.php /var/www/adminer/index.php
+cp $PARENT/stubs/adminer.php /var/www/adminer/index.php
 
 curl -fsSL https://github.com/vrana/adminer/releases/download/v4.7.1/adminer-4.7.1-en.php -o /var/www/adminer/adminer.php
 curl -fsSL https://raw.githubusercontent.com/vrana/adminer/master/designs/rmsoft/adminer.css -o /var/www/adminer/adminer.css

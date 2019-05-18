@@ -54,13 +54,17 @@ echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
 
+# Install StackUp cli utility
+#-----------------------------------------------------------------------------------------
+echo -e "\n${OK}Installing StackUp utility...${NC}\n"
+chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
+
 # System configuration
 #-----------------------------------------------------------------------------------------
 bash "$WORKDIR/installer/common.sh"
 bash "$WORKDIR/installer/config-ssh.sh"
 bash "$WORKDIR/installer/config-network.sh"
 bash "$WORKDIR/installer/config-swap.sh"
-bash "$WORKDIR/installer/config-telegram.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
@@ -109,12 +113,6 @@ fi
 bash "$WORKDIR/installer/config-user.sh"
 cat $WORKDIR/installer/config-user.sh > /usr/local/bin/create-user
 chmod +x /usr/local/bin/create-user
-
-# Install StackUp cli utility
-# sudo -H pip install .
-#-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Installing StackUp utility...${NC}\n"
-chmod +x $WORKDIR/snippet/* ; cp $WORKDIR/snippet/* /usr/local/bin/.
 
 # Create webmaster group
 #-----------------------------------------------------------------------------------------

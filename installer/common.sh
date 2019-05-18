@@ -44,3 +44,17 @@ python-{m2crypto,configparser,pip-whl} supervisor
 
 # crudini for Python3
 wget https://raw.githubusercontent.com/chenull/py3crudini/master/crudini -qO /usr/bin/crudini3
+
+# Telegram SSH Notification
+#-----------------------------------------------------------------------------------------
+read -ep "Use Telegram ssh notification ?             y/n : " -i "n" answer
+
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+
+    read -ep "Telegram Bot Key                                : " tg_bot_key
+    read -ep "Telegram User Chat ID                           : " tg_chat_id
+
+    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $PARENT/stubs/tg-notif.sh
+    sed -i "s/VAR_CHATID/$tg_chat_id/" $PARENT/stubs/tg-notif.sh
+    cp $PARENT/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
+fi
