@@ -1,11 +1,9 @@
 # Linux Stack Made Easy.
 
-The LEMP / LAMP software stack is a group of software that can be used
-to serve dynamic web pages and web applications. This is an acronym
-that describes a Linux operating system, with an Nginx or Apache web
-server. The backend data is stored in the MySQL/MariaDB database and
-or PostgreSQL as optional, and the dynamic processing is handled by
-PHP, Python, Nodejs, etc.
+The LEMP / LAMP software stack is a group of software that can be used to serve dynamic web pages
+and web applications. This is an acronym that describes a Linux operating systemm with an Nginx or
+Apache web server. The backend data is stored in the MySQL/MariaDB database and or PostgreSQL as
+optional, and the dynamic processing is handled by PHP, Python, Nodejs, etc.
 
 ## Prerequisites
 
@@ -32,19 +30,13 @@ Installation information stored at: `/usr/local/share/stackup.info`
 
 ### Installation notes in AWS
 
-AWS Lightsail doesn't use password by default for ssh authentication.
-Download SSH key from Lightsail management console, then:
+AWS Lightsail doesn't use password by default for ssh authentication. You will need to download
+SSH key from Lightsail management console. Also, AWS Lightsail use generated hostname for you
+instance, you must change your instance hostname.
 
 ```bash
-cat LightsailDefaultKey-zone.pem > ~/.ssh/id_rsa_aws_oregon
+ssh given_username@ip_address -i LightsailDefaultKey-zone.pem
 
-ssh given_username@ip_address -i ~/.ssh/id_rsa_aws_oregon
-```
-
-Also, AWS Lightsail use generated hostname for you instance. So, you will
-need change your instance hostname:
-
-```bash
 hostnamectl set-hostname myhostname.mydomain.tld
 ```
 
