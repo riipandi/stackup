@@ -13,7 +13,7 @@ if [[ -f "/etc/nginx/vhost.d/$1.conf" ]]; then
     echo -e "\nVirtualHost already exist...\n"
     exit 1
 else
-    cp /etc/nginx/stubs/vhost-php.cnf /tmp/vhost_php_tmp.conf
+    cp /etc/nginx/stubs/vhost-php.conf /tmp/vhost_php_tmp.conf
     sed -i "s/HOSTNAME/$1/" /tmp/vhost_php_tmp.conf
     echo
     read -ep "Do you want to use www subdomain?         yes/no : " answer

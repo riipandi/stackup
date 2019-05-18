@@ -98,7 +98,7 @@ fi
 
 echo -e "\nInstalling Ghost for ${NO}${1}${NC}"
 echo ; read -p "Press enter to continue or Ctrl + C to cancel ..."
-sudo cp /etc/nginx/stubs/vhost-ghost.cnf /etc/nginx/vhost.d/$1.conf
+sudo cp /etc/nginx/stubs/vhost-ghost.conf /etc/nginx/vhost.d/$1.conf
 sudo sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 sudo sed -i "s/GH_PORT/$GH_PORT/" /etc/nginx/vhost.d/$1.conf
 

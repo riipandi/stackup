@@ -55,7 +55,7 @@ APP_NAME=$(echo $1 | awk '{ gsub("[.]","-",$1); print $1 }')
 
 # Creating web directory and configuration file
 #-----------------------------------------------------------------------------------------
-echo ; cp /etc/nginx/stubs/vhost-proxy.cnf /etc/nginx/vhost.d/$1.conf
+echo ; cp /etc/nginx/stubs/vhost-proxy.conf /etc/nginx/vhost.d/$1.conf
 sed -i "s/HOSTNAME/$1/" /etc/nginx/vhost.d/$1.conf
 
 # Configure reverse proxy host

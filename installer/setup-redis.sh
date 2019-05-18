@@ -6,7 +6,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 read -ep "Redis bind address ?                            : " -i "127.0.0.1" bind_address
 read -ep "Redis password ?                                : " -i "no" redis_password
-read -ep "Redis max memory (in megabyte) ?                : " -i "256" max_memory
+read -ep "Redis max memory (in megabyte) ?                : " -i "128" max_memory
 
 [[ ! -d /var/run/redis ]] && mkdir -p /var/run/redis
 
