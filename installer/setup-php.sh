@@ -14,6 +14,9 @@ read -ep "Default PHP version ?                           : " -i "7.3" default_p
 echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/sury-php.list
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 
+# ionCube loader
+curl -fsSL https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz | bsdtar -xvf- -C /usr/share
+
 # Install packages
 #-----------------------------------------------------------------------------------------
 [[ -d /run/php ]] || mkdir -p /run/php ; [[ -d /var/run/php ]] || mkdir -p /var/run/php
@@ -21,6 +24,7 @@ apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C && apt update
 if [[ "${install_php_73,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v7.3...${NC}"
     apt -y install php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.3 php7.3-imagick php-pear
+    find /etc/php/7.3/. -name 'php.ini' -exec bash -c 'crudini --set "$0" "PHP" "zend_extension" "/usr/share/ioncube/ioncube_loader_lin_7.3.so"' {} \;
     crudini --set /etc/php/7.3/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.3-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.3-fpm
@@ -29,6 +33,7 @@ fi
 if [[ "${install_php_72,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v7.2...${NC}"
     apt -y install php7.2-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.2
+    find /etc/php/7.2/. -name 'php.ini' -exec bash -c 'crudini --set "$0" "PHP" "zend_extension" "/usr/share/ioncube/ioncube_loader_lin_7.2.so"' {} \;
     crudini --set /etc/php/7.2/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.2-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php7.2-fpm
@@ -37,6 +42,7 @@ fi
 if [[ "${install_php_56,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing PHP v5.6...${NC}"
     apt -y install php5.6-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql,opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php5.6 php-apcu
+    find /etc/php/5.6/. -name 'php.ini' -exec bash -c 'crudini --set "$0" "PHP" "zend_extension" "/usr/share/ioncube/ioncube_loader_lin_5.6.so"' {} \;
     crudini --set /etc/php/5.6/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php5.6-fpm.sock'
     phpenmod curl opcache imagick fileinfo
     systemctl restart php5.6-fpm
