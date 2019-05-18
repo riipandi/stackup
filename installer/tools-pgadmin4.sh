@@ -27,14 +27,10 @@ After = network.target
 
 [Service]
 PermissionsStartOnly = true
-PIDFile = /var/run/pgadmin/pgadmin.pid
 WorkingDirectory = /usr/share/pgadmin4/web
-ExecStartPre = /bin/mkdir -p /var/run/pgadmin /var/log/pgadmin
-ExecStartPre = /bin/chown -R www-data:www-data /var/run/pgadmin /var/log/pgadmin
 ExecStart = /usr/bin/python3 /usr/share/pgadmin4/web/pgAdmin4.py
 ExecReload = /bin/kill -s HUP $MAINPID
 ExecStop = /bin/kill -s TERM $MAINPID
-ExecStopPost = /bin/rm -rf /var/run/pgadmin
 PrivateTmp = true
 
 [Install]
