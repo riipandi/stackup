@@ -16,11 +16,13 @@ libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses pyth
 
 # Download latest certbot
 echo -e "\n${OK}Downloading certbot and trusted certificates...${NC}"
-# curl -L# https://dl.eff.org/certbot-auto -o /usr/bin/certbot ; chmod a+x /usr/bin/certbot
-bash <(curl -sLo- https://dl.eff.org/certbot-auto) --non-interactive --install-only
+bash <(curl -sLo- https://dl.eff.org/certbot-auto)
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam-4096.pem
 curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
+
+curl -L# https://dl.eff.org/certbot-auto -o /usr/bin/certbot ; chmod a+x /usr/bin/certbot
+/usr/bin/certbot --non-interactive --install-only
 
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
