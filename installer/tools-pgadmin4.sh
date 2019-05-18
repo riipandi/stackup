@@ -17,11 +17,7 @@ chown -R www-data: /usr/share/pgadmin4
 chown -R www-data: /var/cache/pgadmin
 python3 /usr/share/pgadmin4/web/setup.py
 
-# Nginx vhost
-mv /etc/nginx/conf.d/pgadmin.{conf-disable,conf}
-sed -i "s/HOSTNAME/$(hostname -f)/" /etc/nginx/conf.d/pgadmin.conf
-systemctl restart nginx
-
+# Systemd service
 touch /etc/systemd/system/pgadmin.service
 chmod 0755 /etc/systemd/system/pgadmin.service
 cat > /etc/systemd/system/pgadmin.service <<EOF
