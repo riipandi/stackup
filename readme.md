@@ -41,7 +41,7 @@ cat LightsailDefaultKey-zone.pem > ~/.ssh/id_rsa_aws_oregon
 ssh given_username@ip_address -i ~/.ssh/id_rsa_aws_oregon
 ```
 
-Also, AWS Lightsail use generated hostname for you instance. So, you will 
+Also, AWS Lightsail use generated hostname for you instance. So, you will
 need change your instance hostname:
 
 ```bash

@@ -16,34 +16,35 @@ libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses pyth
 
 # Download latest certbot
 echo -e "\n${OK}Downloading certbot and trusted certificates...${NC}"
+curl -L# https://dl.eff.org/certbot-auto -o /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam-4096.pem
 curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
-wget https://dl.eff.org/certbot-auto -qO /usr/bin/certbot
-chmod a+x /usr/bin/certbot
+
+# SSL certifiacte for default vhost
+#-----------------------------------------------------------------------------------------
+if [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
+    certbot certonly --standalone --agree-tos --rsa-key-size 4096 --register-unsafely-without-email --preferred-challenges http -d "$(hostname -f)"
+fi
+systemctl restart nginx
 
 # Configure Nginx
 #-----------------------------------------------------------------------------------------
 systemctl enable --now haveged && systemctl stop nginx && rm -fr /var/www/html
-rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/ ; chown -R root: /etc/nginx
+rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/ ; mkdir -p /etc/nginx/vhost.d
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
-sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/vhost.d/default.conf
-sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/vhost.d/default.conf
-cat /etc/nginx/manifest/default.php > /var/www/html/index.php
-
-chown -R www-data: /var/www ; chmod -R 0775 /var/www
-rm -f /var/www/html/index.nginx-debian.html
-
-# SSL certifiacte for default vhost
-#-----------------------------------------------------------------------------------------
-[[ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]] && certbot certonly --standalone --agree-tos --rsa-key-size 4096 --register-unsafely-without-email --preferred-challenges http -d "$(hostname -f)"
-systemctl restart nginx
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+chown -R root: /etc/nginx ; chown -R www-data: /var/www ; chmod -R 0775 /var/www
+# cat /etc/nginx/stubs/default.php > /var/www/html/index.php
+# rm -f /var/www/html/index.nginx-debian.html
+mv /var/www/html/index.{nginx-debian.html,html}
 
 # Default PHP-FPM on Nginx configuration
 #-----------------------------------------------------------------------------------------
-find /etc/nginx/manifest/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
-sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/vhost.d/default.conf
+find /etc/nginx/stubs/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
+sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
 systemctl restart nginx
 
 # Nginx Amplify
@@ -68,8 +69,6 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     crudini --set /etc/amplify-agent/agent.conf 'mysql' 'unix_socket' $DB_SOCKET_PATH
     crudini --set /etc/amplify-agent/agent.conf 'mysql' 'password'    $DB_ROOT_PASS
     crudini --set /etc/amplify-agent/agent.conf 'mysql' 'user'        $DB_ROOT_USER
-
-    mv /etc/nginx/conf.d/stub_status.{conf-disable,conf}
     systemctl restart amplify-agent
 fi
 

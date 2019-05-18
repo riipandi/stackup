@@ -1,9 +1,18 @@
 ## Changelog
 
-All notable changes to this project will be documented here, the changelog 
+All notable changes to this project will be documented here, the changelog
 format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
+
+### [3.2] - 2019/05/19
+- Change Nginx repo to mainline
+- Change default Python to 3.6
+
+### [3.1] - 2019/04/09
+- Added FTP server setup with SQL backend
+- Added Mail server setup (TODO: fix it)
+- Added snippet to create html vhost
 
 ### [3.0] - 2019/03/26
 - Each setup script as independent installer

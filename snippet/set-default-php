@@ -20,6 +20,6 @@ update-alternatives --set phar.phar /usr/bin/phar.phar$default >/dev/null 2>&1
 
 # Default PHP-FPM on Nginx configuration
 find /etc/nginx/server.d/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
-find /etc/nginx/manifest/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
+find /etc/nginx/stubs/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default}-fpm/g" {} +
 
 echo -e "Default PHP version has been set to v$default\n"
