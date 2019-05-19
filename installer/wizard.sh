@@ -2,7 +2,6 @@
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 [ -z $ROOT ] && PWD=$(dirname `dirname $(readlink -f $0)`) || PWD=$ROOT
 #------------------------------------------------------------------------------
-echo
 
 # System setup
 #-----------------------------------------------------------------------------------------
@@ -115,4 +114,6 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     crudini --set $PWD/stackup.ini '' 'amplify_key' $amplify_key
 fi
 
+echo
+read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 echo

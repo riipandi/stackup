@@ -61,6 +61,7 @@ echo -e "\n${OK}Starting StackUp installer...\n${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
 
+echo
 read -ep "Enter server hostname                           : " -i "$(hostname -f)" server_hostname
 hostnamectl set-hostname $server_hostname
 
