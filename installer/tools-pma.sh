@@ -9,6 +9,9 @@ echo -e "\n${OK}Installing phpMyAdmin...${NC}"
 [[ ! -d /var/www ]] && mkdir -p /var/www
 [[ ! -d /var/www/myadmin ]] || rm -fr /var/www/myadmin
 
+[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 2001 webmaster
+[[ $(cat /etc/passwd | grep -c webmaster) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster webmaster
+
 curl -fsSL https://phpmyadmin.net/downloads/phpMyAdmin-latest-english.zip | bsdtar -xvf- -C /tmp
 mv /tmp/phpMyAdmin*english /var/www/myadmin ; cat > /var/www/myadmin/config.inc.php <<EOF
 <?php
@@ -27,4 +30,4 @@ EOF
 chmod 0755 /var/www/myadmin
 find /var/www/myadmin/. -type d -exec chmod 0777 {} \;
 find /var/www/myadmin/. -type f -exec chmod 0644 {} \;
-chown -R webmaster: /var/www/myadmin
+chown -R webmaster:webmaster /var/www/myadmin
