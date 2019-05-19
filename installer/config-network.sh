@@ -29,7 +29,6 @@ crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
 sysctl -p -q >/dev/null 2>&1
 
 # Disable IPv6
-
 if [[ "${disable_ipv6,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Disabling IPv6...${NC}"
     sed -i "s/ListenAddress :://" /etc/ssh/sshd_config

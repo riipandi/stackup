@@ -68,13 +68,12 @@ bash "$WORKDIR/installer/wizard.sh"
 bash "$WORKDIR/installer/common.sh"
 bash "$WORKDIR/installer/config-swap.sh"
 bash "$WORKDIR/installer/config-network.sh"
-bash "$WORKDIR/installer/config-ssh.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
-read -ep "Install MySQL / MariaDB ?                   y/n : " -i "y" answer
+answer=$(crudini --get $PWD/stackup.ini 'mysql' 'install')
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
+    mysql_engine=$(crudini --get $PWD/stackup.ini 'mysql' 'engine')
     if [[ "$mysql_engine" == "mysql" ]] ; then
         bash "$WORKDIR/installer/setup-mysql.sh"
     else
@@ -85,30 +84,36 @@ fi
 
 # Install PostgreSQL
 #-----------------------------------------------------------------------------------------
-read -ep "Install PostgreSQL ?                        y/n : " -i "n" answer
+answer=$(crudini --get $PWD/stackup.ini 'pgsql' 'install')
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
-    #bash "$WORKDIR/installer/tools-pgadmin.sh"
     bash "$WORKDIR/installer/tools-pgadmin4.sh"
 fi
 
-# Install PHP-FPM
+# Install Redis Server
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/installer/setup-php.sh"
+answer=$(crudini --get $PWD/stackup.ini 'redis' 'install')
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-redis.sh"
 
 # Install NodeJS and Yarn
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/installer/setup-nodejs.sh"
+answer=$(crudini --get $PWD/stackup.ini 'setup' 'nodejs')
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-nodejs.sh"
 
-# Install Nginx
+# Install Nginx + PHP-FPM
 #-----------------------------------------------------------------------------------------
+bash "$WORKDIR/installer/setup-php.sh"
 bash "$WORKDIR/installer/setup-nginx.sh"
 
-# Install Redis Server
+# Telegram SSH Notification
 #-----------------------------------------------------------------------------------------
-read -ep "Install Redis Server ?                      y/n : " -i "y" answer
+answer=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'install')
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash "$WORKDIR/installer/setup-redis.sh"
+    tg_bot_key=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'tg_bot_key')
+    tg_chat_id=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'tg_chat_id')
+    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $WORKDIR/stubs/tg-notif.sh
+    sed -i "s/VAR_CHATID/$tg_chat_id/" $WORKDIR/stubs/tg-notif.sh
+    cp $WORKDIR/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
 fi
 
 # Create new user

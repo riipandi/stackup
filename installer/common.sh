@@ -7,18 +7,12 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 # Disable some motd banner
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Disabling Ubuntu motd message...${NC}"
-chmod -x /etc/update-motd.d/10-help-text
-chmod -x /etc/update-motd.d/50-motd-news
-chmod -x /etc/update-motd.d/51-cloudguest
-chmod -x /etc/update-motd.d/80-esm
-chmod -x /etc/update-motd.d/80-livepatch
-chmod -x /etc/update-motd.d/90-updates-available
-chmod -x /etc/update-motd.d/91-release-upgrade
-chmod -x /etc/update-motd.d/95-hwe-eol
-
-# Disable sudo password
-#-----------------------------------------------------------------------------------------
-perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
+chmod -x /etc/update-motd.d/*
+chmod +x /etc/update-motd.d/00-header
+chmod +x /etc/update-motd.d/97-overlayroot
+chmod +x /etc/update-motd.d/98-fsck-at-reboot
+chmod +x /etc/update-motd.d/98-reboot-required
+chmod +x /etc/update-motd.d/50-landscape-sysinfo
 
 # Change default repository
 #-----------------------------------------------------------------------------------------
@@ -42,17 +36,35 @@ s3cmd virtualenv libpython2.7 {libpython,libpython2.7,python2.7}-dev gunicorn gu
 python3-venv {python,python3}-{click,dev,pip,setuptools,gunicorn,virtualenv} \
 python-{m2crypto,configparser,pip-whl} supervisor
 
-# crudini for Python3
-wget https://raw.githubusercontent.com/chenull/py3crudini/master/crudini -qO /usr/bin/crudini3
-
-# Telegram SSH Notification
+# SSH Server + welcome message
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $PWD/stackup.ini 'telegram_notification' 'install')
-
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    tg_bot_key=$(crudini --get $PWD/stackup.ini 'telegram_notification' 'tg_bot_key')
-    tg_chat_id=$(crudini --get $PWD/stackup.ini 'telegram_notification' 'tg_chat_id')
-    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $PWD/stubs/tg-notif.sh
-    sed -i "s/VAR_CHATID/$tg_chat_id/" $PWD/stubs/tg-notif.sh
-    cp $PWD/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
+if [ -f "$PWD/stackup.ini" ]; then
+    [[ $(cat "$PWD/stackup.ini" | grep -c "ssh_port") -eq 1 ]] && ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'ssh_port')
+    [[ -z "$ssh_port" ]] && read -ep "Please specify SSH port                         : " -i "22" ssh_port
 fi
+
+perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
+sed -i "s/#ListenAddress :://" /etc/ssh/sshd_config
+sed -i "s/[#]*PasswordAuthentication/PasswordAuthentication/" /etc/ssh/sshd_config
+sed -i "s/[#]*PubkeyAuthentication/PubkeyAuthentication/" /etc/ssh/sshd_config
+sed -i "s/[#]*ClientAliveInterval/ClientAliveInterval/" /etc/ssh/sshd_config
+sed -i "s/[#]*AllowTcpForwarding/AllowTcpForwarding/" /etc/ssh/sshd_config
+sed -i "s/[#]*ClientAliveCountMax/ClientAliveCountMax/" /etc/ssh/sshd_config
+sed -i "s/[#]*PermitRootLogin/PermitRootLogin/" /etc/ssh/sshd_config
+sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
+sed -i "s/[#]*PermitTunnel/PermitTunnel/" /etc/ssh/sshd_config
+sed -i "s/[#]*X11Forwarding/X11Forwarding/" /etc/ssh/sshd_config
+sed -i "s/[#]*StrictModes/StrictModes/" /etc/ssh/sshd_config
+sed -i "s|\("^PasswordAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
+sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^ClientAliveCountMax" * *\).*|\13|" /etc/ssh/sshd_config
+sed -i "s|\("^ListenAddress" * *\).*|\10.0.0.0|" /etc/ssh/sshd_config
+sed -i "s|\("^PermitRootLogin" * *\).*|\1no|" /etc/ssh/sshd_config
+sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config
+sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
+echo -e "$(figlet node://`hostname -s`)\n" > /etc/motd
+systemctl restart ssh
