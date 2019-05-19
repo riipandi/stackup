@@ -24,13 +24,13 @@ apt update ; apt -y install proftpd-mod-mysql
 [[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
 [[ $(cat /etc/passwd | grep -c ftpuser) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster ftpuser
 [[ ! -d /home/public_ftp ]] && mkdir -p /home/public_ftp
-chown -R ftp:nogroup /home/public_ftp
+chown -R ftp:webmaster /home/public_ftp
 
 rm -fr /etc/proftpd/*
 cp -r $PWD/config/proftpd/* /etc/proftpd/.
 chown -R root: /etc/proftpd
 
-mysql -uroot stackup_ftp < $PWD/config/ftpserver.sql
+mysql -uroot stackup_ftp < $PWD/config/schemas/ftpserver.sql
 
 sed -i "s/HOSTNAME/$(hostname -f)/" /etc/proftpd/conf.d/tls.conf
 sed -i "s/DB_HOST/127.0.0.1/"       /etc/proftpd/conf.d/sql.conf
