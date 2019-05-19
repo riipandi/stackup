@@ -64,11 +64,6 @@ crudini --set $WORKDIR/stackup.ini '' 'setup_ready' 'no'
 bash "$WORKDIR/installer/wizard.sh"
 bash "$WORKDIR/installer/common.sh"
 
-# Create new user
-#-----------------------------------------------------------------------------------------
-read -ep "Create new system user?                     y/n : " -i "y" answer
-[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "/usr/local/bin/create-user"
-
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
 mysql_install=$(crudini --get $PWD/stackup.ini '' 'mysql_install')
@@ -113,6 +108,11 @@ if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/VAR_CHATID/$(crudini --get $WORKDIR/stackup.ini '' 'tgnotif_chat_id')/" $WORKDIR/stubs/tg-notif.sh
     cp $WORKDIR/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
 fi
+
+# Create new user
+#-----------------------------------------------------------------------------------------
+read -ep "Create new system user?                     y/n : " -i "y" answer
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "/usr/local/bin/create-user"
 
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
