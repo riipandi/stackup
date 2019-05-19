@@ -60,6 +60,10 @@ rm -fr /etc/apt/sources.list.d/*
 echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
+
+read -ep "Enter server hostname                           : " -i "$(hostname -f)" server_hostname
+hostnamectl set-hostname $server_hostname
+
 crudini --set $WORKDIR/stackup.ini '' 'setup_ready' 'no'
 bash "$WORKDIR/installer/wizard.sh"
 bash "$WORKDIR/installer/common.sh"
