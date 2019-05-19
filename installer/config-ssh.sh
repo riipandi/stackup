@@ -5,9 +5,8 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
 if [ -f "$PWD/stackup.ini" ]; then
-    ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'ssh_port')
-else
-    read -ep "Please specify SSH port                         : " -i "22" ssh_port
+    [[ $(cat "$PWD/stackup.ini" | grep -c "ssh_port") -eq 1 ]] && ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'ssh_port')
+    [[ -z "$ssh_port" ]] && read -ep "Please specify SSH port                         : " -i "22" ssh_port
 fi
 
 # SSH Server + welcome message

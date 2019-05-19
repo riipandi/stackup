@@ -2,6 +2,28 @@
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 [ -z $ROOT ] && PWD=$(dirname `dirname $(readlink -f $0)`) || PWD=$ROOT
 #------------------------------------------------------------------------------
+echo
+
+# Linux SWAP
+#-----------------------------------------------------------------------------------------
+memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
+if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y"; fi
+
+read -ep "Do you want to use Swap ?                   y/n : " -i "$opsi" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
+fi
+
+# System setup
+#-----------------------------------------------------------------------------------------
+read -ep "Please specify SSH port                         : " -i "22" ssh_port
+crudini --set $PWD/stackup.ini 'setup' 'ssh_port' $ssh_port
+
+read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+crudini --set $PWD/stackup.ini 'setup' 'timezone' $timezone
+
+read -ep "Do you want to disable IPv6 ?               y/n : " -i "n" disable_ipv6
+crudini --set $PWD/stackup.ini 'setup' 'disable_ipv6' $disable_ipv6
 
 read -ep "Use Telegram ssh notification ?             y/n : " -i "n" answer
 crudini --set $PWD/stackup.ini 'telegram_notification' 'install' $answer
@@ -12,11 +34,57 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     crudini --set $PWD/stackup.ini 'telegram_notification' 'chat_id' $tg_chat_id
 fi
 
-read -ep "Please specify SSH port                         : " -i "22" ssh_port
-crudini --set $PWD/stackup.ini 'setup' 'ssh_port' $ssh_port
+# MySQL / MariaDB
+#-----------------------------------------------------------------------------------------
+echo && read -ep "Install MySQL / MariaDB ?                   y/n : " -i "y" answer
+crudini --set $PWD/stackup.ini 'mysql' 'install' $answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
+    crudini --set $PWD/stackup.ini 'mysql' 'engine' $mysql_engine
 
-read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
-crudini --set $PWD/stackup.ini 'setup' 'timezone' $timezone
+    if [[ "$mysql_engine" == "mysql" ]] ; then
+        read -ep "Select MySQL version                (5.7 / 8.0) : " -i "8.0" mysql_version
+    else
+        read -ep "Select MariaDB version            (10.3 / 10.4) : " -i "10.3" mysql_version
+    fi
 
-read -ep "Do you want to disable IPv6?                y/n : " -i "n" disable_ipv6
-crudini --set $PWD/stackup.ini 'setup' 'disable_ipv6' $disable_ipv6
+    read -ep "Database bind address                           : " -i "127.0.0.1" mysql_bind_address
+    read -ep "Database listen port                            : " -i "3306" mysql_listen_port
+    read -ep "Database root user                              : " -i "root" mysql_root_user
+    read -ep "Database root password                          : " -i "auto" mysql_root_pass
+fi
+
+# PostgreSQL
+#-----------------------------------------------------------------------------------------
+echo && read -ep "Install PostgreSQL ?                        y/n : " -i "n" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Select PostgreSQL version?      (9.6 / 10 / 11) : " -i "10" pgsql_version
+    read -ep "Database bind address                           : " -i "127.0.0.1" pgsql_bind_address
+    read -ep "Database listen port                            : " -i "5432" pgsql_listen_port
+    read -ep "Database root user                              : " -i "postgres" pgsql_root_user
+    read -ep "Database root password                          : " -i "auto" pgsql_root_pass
+    read -ep "Install pgAdmin4 utilities ?                y/n : " -i "y" install_pgadmin
+fi
+
+# Redis Server
+#-----------------------------------------------------------------------------------------
+echo && read -ep "Install Redis Server ?                      y/n : " -i "y" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Redis bind address ?                            : " -i "127.0.0.1" bind_address
+    read -ep "Redis max memory (in megabyte) ?                : " -i "128" max_memory
+fi
+
+# Nginx + PHP
+#-----------------------------------------------------------------------------------------
+echo
+read -ep "Install PHP 7.3 ?                           y/n : " -i "y" install_php_73
+read -ep "Install PHP 7.2 ?                           y/n : " -i "y" install_php_72
+read -ep "Install PHP 5.6 ?                           y/n : " -i "y" install_php_56
+read -ep "Default PHP version ?                           : " -i "7.3" default_php
+
+read -ep "Do you want to use Nginx Amplify ?          y/n : " -i "n" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Nginx Amplify Key                               : " amplify_key
+fi
+
+echo

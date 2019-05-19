@@ -59,24 +59,20 @@ rm -fr /etc/apt/sources.list.d/*
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
+chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
 crudini --set $WORKDIR/stackup.ini 'setup' 'ready' 'no'
 bash "$WORKDIR/installer/wizard.sh"
-
-# Install StackUp cli utility
-#-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Installing StackUp utility...${NC}"
-chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
 
 # System configuration
 #-----------------------------------------------------------------------------------------
 bash "$WORKDIR/installer/common.sh"
-bash "$WORKDIR/installer/config-ssh.sh"
-bash "$WORKDIR/installer/config-network.sh"
 bash "$WORKDIR/installer/config-swap.sh"
+bash "$WORKDIR/installer/config-network.sh"
+bash "$WORKDIR/installer/config-ssh.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
-read -ep "Install MySQL / MariaDB ?                   y/n : " answer
+read -ep "Install MySQL / MariaDB ?                   y/n : " -i "y" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Select database Engine          (mariadb/mysql) : " -i "mariadb" mysql_engine
     if [[ "$mysql_engine" == "mysql" ]] ; then
@@ -84,13 +80,12 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     else
         bash "$WORKDIR/installer/setup-mariadb.sh"
     fi
-    # bash "$WORKDIR/installer/tools-adminer.sh"
     bash "$WORKDIR/installer/tools-pma.sh"
 fi
 
 # Install PostgreSQL
 #-----------------------------------------------------------------------------------------
-read -ep "Install PostgreSQL ?                        y/n : " answer
+read -ep "Install PostgreSQL ?                        y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
     #bash "$WORKDIR/installer/tools-pgadmin.sh"
@@ -111,23 +106,15 @@ bash "$WORKDIR/installer/setup-nginx.sh"
 
 # Install Redis Server
 #-----------------------------------------------------------------------------------------
-read -ep "Install Redis Server ?                      y/n : " -i "yes" answer
+read -ep "Install Redis Server ?                      y/n : " -i "y" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-redis.sh"
 fi
 
-# Crate sudo user
+# Create new user
 #-----------------------------------------------------------------------------------------
-bash "$WORKDIR/installer/config-user.sh"
-cat $WORKDIR/installer/config-user.sh > /usr/local/bin/create-user
-chmod +x /usr/local/bin/create-user
-
-# Create webmaster group
-#-----------------------------------------------------------------------------------------
-[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
-usermod -g webmaster www-data && usermod -a -G www-data www-data
-usermod -g webmaster `getent passwd 1000 | cut -d: -f1`
-usermod -a -G sudo `getent passwd 1000 | cut -d: -f1`
+read -ep "Create new system user?                     y/n : " -i "y" answer
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "/usr/local/bin/create-user"
 
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------
