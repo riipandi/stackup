@@ -123,4 +123,5 @@ read -ep "Create new system user?                     y/n : " -i "y" answer
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Cleaning up installation...${NC}\n"
 apt -y autoremove && apt clean && echo && netstat -pltn
+echo & cat /root/stackup.info && echo
 echo -e "\n${OK}Installation has been finish...${NC}\n"

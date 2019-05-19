@@ -65,6 +65,10 @@ HTTPS = TCP/443
 | :------------------ | :-------------------------------------------------- | :------------
 | create-deploybot    | Create new user for application deployment          | `sudo create-deploybot`
 | create-user         | Create new user with sudo privileges                | `sudo create-user`
+| ftp-site-add        | Create FTP virtualhost for specific domain          | `sudo ftp-site-add example.com`
+| ftp-site-del        | Delete FTP virtualhost for specific domain          | `sudo ftp-site-del example.com`
+| ftp-user-add        | Create new user for FTP                             | `sudo ftp-user-add username example.com`
+| ftp-user-del        | Delete new user for FTP                             | `sudo ftp-user-del username example.com`
 | set-default-php     | Set default PHP version                             | `sudo set-php 7.2`
 | set-default-python  | Set default Python version                          | `sudo set-python 3.5`
 | site-ghost          | Create or uninstall Ghost blogging platform         | `site-ghost example.com`
@@ -86,10 +90,10 @@ HTTPS = TCP/443
 - [x] Write the change logs
 - [x] Make each setup script as independent installer
 - [x] Add automatic installation wizard
+- [x] FTP server installation and snippets
 - [ ] Fix pgAdmin4 installation
 - [ ] Fix vhost proxy snippet
 - [ ] Mail server installation
-- [ ] Add more snippets
 
 ## License
 
