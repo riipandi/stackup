@@ -4,11 +4,23 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Select MySQL version                (5.7 / 8.0) : " -i "8.0" mysql_version
-read -ep "Database bind address                           : " -i "127.0.0.1" mysql_bind_address
-read -ep "Database listen port                            : " -i "3306" mysql_listen_port
-read -ep "Database root user                              : " -i "root" mysql_root_user
-read -ep "Database root password                          : " -i "auto" mysql_root_pass
+# Get configuration parameter
+#-----------------------------------------------------------------------------------------
+touch "$PWD/stackup.ini"
+[[ $(cat "$PWD/stackup.ini" | grep -c "mysql_version") -eq 1 ]] && mysql_version=$(crudini --get $PWD/stackup.ini '' 'mysql_version')
+[[ -z "$mysql_version" ]] && read -ep "Select MySQL version                (5.7 / 8.0) : " -i "8.0" mysql_version
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "mysql_bind_address") -eq 1 ]] && mysql_bind_address=$(crudini --get $PWD/stackup.ini '' 'mysql_bind_address')
+[[ -z "$mysql_bind_address" ]] && read -ep "Database bind address                           : " -i "127.0.0.1" mysql_bind_address
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "mysql_listen_port") -eq 1 ]] && mysql_listen_port=$(crudini --get $PWD/stackup.ini '' 'mysql_listen_port')
+[[ -z "$mysql_listen_port" ]] && read -ep "Database listen port                            : " -i "3306" mysql_listen_port
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "mysql_root_user") -eq 1 ]] && mysql_root_user=$(crudini --get $PWD/stackup.ini '' 'mysql_root_user')
+[[ -z "$mysql_root_user" ]] && read -ep "Database root user                              : " -i "root" mysql_root_user
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "mysql_root_pass") -eq 1 ]] && mysql_root_pass=$(crudini --get $PWD/stackup.ini '' 'mysql_root_pass')
+[[ -z "$mysql_root_pass" ]] && read -ep "Database root password                          : " -i "auto" mysql_root_pass
 
 if [[ "$mysql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)

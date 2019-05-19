@@ -4,11 +4,23 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Select PostgreSQL version?      (9.6 / 10 / 11) : " -i "10" pgsql_version
-read -ep "Database bind address                           : " -i "127.0.0.1" pgsql_bind_address
-read -ep "Database listen port                            : " -i "5432" pgsql_listen_port
-read -ep "Database root user                              : " -i "postgres" pgsql_root_user
-read -ep "Database root password                          : " -i "auto" pgsql_root_pass
+# Get configuration parameter
+#-----------------------------------------------------------------------------------------
+touch "$PWD/stackup.ini"
+[[ $(cat "$PWD/stackup.ini" | grep -c "pgsql_version") -eq 1 ]] && pgsql_version=$(crudini --get $PWD/stackup.ini '' 'pgsql_version')
+[[ -z "$pgsql_version" ]] && read -ep "Select PostgreSQL version?      (9.6 / 10 / 11) : " -i "10" pgsql_version
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "pgsql_bind_address") -eq 1 ]] && pgsql_bind_address=$(crudini --get $PWD/stackup.ini '' 'pgsql_bind_address')
+[[ -z "$pgsql_bind_address" ]] && read -ep "Database bind address                           : " -i "127.0.0.1" pgsql_bind_address
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "pgsql_listen_port") -eq 1 ]] && pgsql_listen_port=$(crudini --get $PWD/stackup.ini '' 'pgsql_listen_port')
+[[ -z "$pgsql_listen_port" ]] && read -ep "Database listen port                            : " -i "3306" pgsql_listen_port
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "pgsql_root_user") -eq 1 ]] && pgsql_root_user=$(crudini --get $PWD/stackup.ini '' 'pgsql_root_user')
+[[ -z "$pgsql_root_user" ]] && read -ep "Database root user                              : " -i "root" pgsql_root_user
+
+[[ $(cat "$PWD/stackup.ini" | grep -c "pgsql_root_pass") -eq 1 ]] && pgsql_root_pass=$(crudini --get $PWD/stackup.ini '' 'pgsql_root_pass')
+[[ -z "$pgsql_root_pass" ]] && read -ep "Database root password                          : " -i "auto" pgsql_root_pass
 
 if [[ "$pgsql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)

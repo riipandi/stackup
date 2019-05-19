@@ -39,7 +39,7 @@ python-{m2crypto,configparser,pip-whl} supervisor
 # SSH Server + welcome message
 #-----------------------------------------------------------------------------------------
 if [ -f "$PWD/stackup.ini" ]; then
-    [[ $(cat "$PWD/stackup.ini" | grep -c "ssh_port") -eq 1 ]] && ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'ssh_port')
+    [[ $(cat "$PWD/stackup.ini" | grep -c "ssh_port") -eq 1 ]] && ssh_port=$(crudini --get $PWD/stackup.ini '' 'ssh_port')
     [[ -z "$ssh_port" ]] && read -ep "Please specify SSH port                         : " -i "22" ssh_port
 fi
 
@@ -68,3 +68,56 @@ sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
 echo -e "$(figlet node://`hostname -s`)\n" > /etc/motd
 systemctl restart ssh
+
+# Sysctl tweak
+crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1'
+crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
+crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
+sysctl -p -q >/dev/null 2>&1
+
+# Linux SWAP
+#-----------------------------------------------------------------------------------------
+swap_install=$(crudini --get $WORKDIR/stackup.ini '' 'swap_install')
+if [[ "${swap_install,,}" =~ ^(yes|y)$ ]] ; then
+    if [ -f "$PWD/stackup.ini" ]; then
+        [[ $(cat "$PWD/stackup.ini" | grep -c "swap_size") -eq 1 ]] && swap_size=$(crudini --get $PWD/stackup.ini '' 'swap_size')
+        [[ -z "$swap_size" ]] && read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
+    fi
+    if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
+        echo -e "\n${OK}Configuring Linux SWAP...${NC}"
+        echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab
+        dd if=/dev/zero of=/swapfile count=$swap_size bs=1M
+        chmod 600 /swapfile && mkswap /swapfile
+        swapon /swapfile && swapon --show
+    else
+        echo -e "\n${OK}Swapfile already configured...${NC}"
+    fi
+fi
+
+# Timezone
+#-----------------------------------------------------------------------------------------
+if [ -f "$PWD/stackup.ini" ]; then
+    [[ $(cat "$PWD/stackup.ini" | grep -c "timezone") -eq 1 ]] && timezone=$(crudini --get $PWD/stackup.ini '' 'timezone')
+    [[ -z "$timezone" ]] && read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+fi
+[[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate
+timedatectl set-ntp true
+timedatectl set-timezone $timezone
+systemctl enable systemd-timesyncd
+systemctl restart systemd-timesyncd
+
+# Disable IPv6
+#-----------------------------------------------------------------------------------------
+if [ -f "$PWD/stackup.ini" ]; then
+    [[ $(cat "$PWD/stackup.ini" | grep -c "disable_ipv6") -eq 1 ]] && disable_ipv6=$(crudini --get $PWD/stackup.ini '' 'disable_ipv6')
+    if [[ "${disable_ipv6,,}" =~ ^(yes|y)$ ]] ; then
+        echo -e "\n${OK}Disabling IPv6...${NC}"
+        sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
+        sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
+        crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
+        crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
+        crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
+        echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+        sysctl -p -q
+    fi
+fi

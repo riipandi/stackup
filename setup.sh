@@ -60,20 +60,20 @@ rm -fr /etc/apt/sources.list.d/*
 echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
-crudini --set $WORKDIR/stackup.ini 'setup' 'ready' 'no'
+crudini --set $WORKDIR/stackup.ini '' 'setup_ready' 'no'
 bash "$WORKDIR/installer/wizard.sh"
-
-# System configuration
-#-----------------------------------------------------------------------------------------
 bash "$WORKDIR/installer/common.sh"
-bash "$WORKDIR/installer/config-swap.sh"
-bash "$WORKDIR/installer/config-network.sh"
+
+# Create new user
+#-----------------------------------------------------------------------------------------
+read -ep "Create new system user?                     y/n : " -i "y" answer
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "/usr/local/bin/create-user"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $PWD/stackup.ini 'mysql' 'install')
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    mysql_engine=$(crudini --get $PWD/stackup.ini 'mysql' 'engine')
+mysql_install=$(crudini --get $PWD/stackup.ini '' 'mysql_install')
+if [[ "${mysql_install,,}" =~ ^(yes|y)$ ]] ; then
+    mysql_engine=$(crudini --get $PWD/stackup.ini '' 'mysql_engine')
     if [[ "$mysql_engine" == "mysql" ]] ; then
         bash "$WORKDIR/installer/setup-mysql.sh"
     else
@@ -84,21 +84,21 @@ fi
 
 # Install PostgreSQL
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $PWD/stackup.ini 'pgsql' 'install')
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+pgsql_install=$(crudini --get $PWD/stackup.ini '' 'pgsql_install')
+if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
     bash "$WORKDIR/installer/tools-pgadmin4.sh"
 fi
 
 # Install Redis Server
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $PWD/stackup.ini 'redis' 'install')
-[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-redis.sh"
+redis_install=$(crudini --get $PWD/stackup.ini '' 'redis_install')
+[[ "${redis_install,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-redis.sh"
 
 # Install NodeJS and Yarn
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $PWD/stackup.ini 'setup' 'nodejs')
-[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-nodejs.sh"
+nodejs_install=$(crudini --get $PWD/stackup.ini '' 'nodejs_install')
+[[ "${nodejs_install,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-nodejs.sh"
 
 # Install Nginx + PHP-FPM
 #-----------------------------------------------------------------------------------------
@@ -107,19 +107,12 @@ bash "$WORKDIR/installer/setup-nginx.sh"
 
 # Telegram SSH Notification
 #-----------------------------------------------------------------------------------------
-answer=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'install')
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    tg_bot_key=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'tg_bot_key')
-    tg_chat_id=$(crudini --get $WORKDIR/stackup.ini 'telegram_notification' 'tg_chat_id')
-    sed -i "s/VAR_BOTKEY/$tg_bot_key/" $WORKDIR/stubs/tg-notif.sh
-    sed -i "s/VAR_CHATID/$tg_chat_id/" $WORKDIR/stubs/tg-notif.sh
+tgnotif_install=$(crudini --get $WORKDIR/stackup.ini '' 'tgnotif_install')
+if [[ "${tgnotif_install,,}" =~ ^(yes|y)$ ]] ; then
+    sed -i "s/VAR_BOTKEY/$(crudini --get $WORKDIR/stackup.ini '' 'tgnotif_bot_key')/" $WORKDIR/stubs/tg-notif.sh
+    sed -i "s/VAR_CHATID/$(crudini --get $WORKDIR/stackup.ini '' 'tgnotif_chat_id')/" $WORKDIR/stubs/tg-notif.sh
     cp $WORKDIR/stubs/tg-notif.sh /etc/profile.d/ ; chmod +x $_
 fi
-
-# Create new user
-#-----------------------------------------------------------------------------------------
-read -ep "Create new system user?                     y/n : " -i "y" answer
-[[ "${answer,,}" =~ ^(yes|y)$ ]] && bash "/usr/local/bin/create-user"
 
 # Cleanup and save some important information
 #-----------------------------------------------------------------------------------------

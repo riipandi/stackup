@@ -4,10 +4,22 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Install PHP 7.3 ?                           y/n : " -i "y" install_php_73
-read -ep "Install PHP 7.2 ?                           y/n : " -i "y" install_php_72
-read -ep "Install PHP 5.6 ?                           y/n : " -i "y" install_php_56
-read -ep "Default PHP version ?                           : " -i "7.3" default_php
+# Get configuration parameter
+#-----------------------------------------------------------------------------------------
+touch "$PWD/stackup.ini"
+if [ -f "$PWD/stackup.ini" ]; then
+    [[ $(cat "$PWD/stackup.ini" | grep -c "install_php_73") -eq 1 ]] && install_php_73=$(crudini --get $PWD/stackup.ini '' 'install_php_73')
+    [[ -z "$install_php_73" ]] && read -ep "Install PHP 7.3 ?                           y/n : " -i "y" install_php_73
+
+    [[ $(cat "$PWD/stackup.ini" | grep -c "install_php_72") -eq 1 ]] && install_php_72=$(crudini --get $PWD/stackup.ini '' 'install_php_72')
+    [[ -z "$install_php_72" ]] && read -ep "Install PHP 7.2 ?                           y/n : " -i "y" install_php_72
+
+    [[ $(cat "$PWD/stackup.ini" | grep -c "install_php_56") -eq 1 ]] && install_php_56=$(crudini --get $PWD/stackup.ini '' 'install_php_56')
+    [[ -z "$install_php_56" ]] && read -ep "Install PHP 5.6 ?                           y/n : " -i "y" install_php_56
+
+    [[ $(cat "$PWD/stackup.ini" | grep -c "default_php") -eq 1 ]] && default_php=$(crudini --get $PWD/stackup.ini '' 'default_php')
+    [[ -z "$default_php" ]] && read -ep "Default PHP version ?                           : " -i "7.3" default_php
+fi
 
 # Change PHP repository
 #-----------------------------------------------------------------------------------------

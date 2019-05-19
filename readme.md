@@ -54,7 +54,7 @@ Or, you can use your own SSH key.
 
 | Command             | Description                                         | Example Usage
 | :------------------ | :-------------------------------------------------- | :------------
-| create-buddy        | Create new user for application deployment          | `sudo create-buddy`
+| create-deploybot    | Create new user for application deployment          | `sudo create-deploybot`
 | create-user         | Create new user with sudo privileges                | `sudo create-user`
 | set-default-php     | Set default PHP version                             | `sudo set-php 7.2`
 | set-default-python  | Set default Python version                          | `sudo set-python 3.5`
@@ -76,21 +76,20 @@ Or, you can use your own SSH key.
 - [x] Change license from MIT to Apache 2.0
 - [x] Write the change logs
 - [x] Make each setup script as independent installer
-- [ ] Add automatic installation wizard
+- [x] Add automatic installation wizard
 - [ ] Fix pgAdmin4 installation
 - [ ] Fix vhost proxy snippet
+- [ ] Mail server installation
 - [ ] Add more snippets
 
 ## License
 
 Copyright (c) 2018-2019 Aris Ripandi
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at: <http://www.apache.org/licenses/LICENSE-2.0>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+in compliance with the License. You may obtain a copy of the License at: <http://www.apache.org/licenses/LICENSE-2.0>
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Unless required by applicable law or agreed to in writing, software distributed under the License
+is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the License for the specific language governing permissions and limitations under
+the License.
