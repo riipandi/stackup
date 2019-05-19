@@ -34,13 +34,16 @@ systemctl restart nginx
 
 # Configure Nginx
 #-----------------------------------------------------------------------------------------
+[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 2001 webmaster
+[[ $(cat /etc/passwd | grep -c webmaster) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster webmaster
+
 systemctl enable --now haveged && systemctl stop nginx && rm -fr /var/www/html
 rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/ ; mkdir -p /etc/nginx/vhost.d
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
-chown -R root: /etc/nginx ; chown -R www-data: /var/www ; chmod -R 0775 /var/www
+chown -R root: /etc/nginx ; chown -R webmaster: /var/www ; chmod -R 0775 /var/www
 mkdir -p /var/www/html ; cat /usr/share/nginx/html/index.html > /var/www/html/index.html
 
 # Default PHP-FPM on Nginx configuration

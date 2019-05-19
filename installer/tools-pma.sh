@@ -27,4 +27,4 @@ EOF
 chmod 0755 /var/www/myadmin
 find /var/www/myadmin/. -type d -exec chmod 0777 {} \;
 find /var/www/myadmin/. -type f -exec chmod 0644 {} \;
-chown -R www-data: /var/www/myadmin
+chown -R webmaster: /var/www/myadmin

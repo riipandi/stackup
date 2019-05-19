@@ -21,9 +21,11 @@ apt update ; apt -y install proftpd-mod-mysql
 
 # Configure ProFTPd
 #-----------------------------------------------------------------------------------------
-[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
-[[ $(cat /etc/passwd | grep -c ftpuser) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster ftpuser
-[[ ! -d /var/www/public_ftp ]] && mkdir -p /var/www/public_ftp && chown -R www-data:webmaster /var/www/public_ftp
+[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 2001 webmaster
+[[ $(cat /etc/passwd | grep -c webmaster) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster webmaster
+[[ ! -d /var/www/public_ftp ]] && mkdir -p /var/www/public_ftp
+chown -R webmaster:webmaster /var/www/public_ftp
+chmod -R 0755 /var/www/public_ftp
 
 rm -fr /etc/proftpd/*
 cp -r $PWD/config/proftpd/* /etc/proftpd/.

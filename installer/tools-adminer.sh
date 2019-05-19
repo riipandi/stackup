@@ -23,4 +23,4 @@ curl -fsSL https://raw.github.com/vrana/adminer/master/plugins/dump-zip.php -o /
 chmod 0755 /var/www/adminer
 find /var/www/adminer/. -type d -exec chmod 0777 {} \;
 find /var/www/adminer/. -type f -exec chmod 0644 {} \;
-chown -R www-data: /var/www/adminer
+chown -R webmaster: /var/www/adminer

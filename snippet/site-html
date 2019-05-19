@@ -33,7 +33,7 @@ rm /tmp/vhost_html_tmp.conf
 chmod 0777 /srv/$1
 chmod -R 0770 /srv/$1/*
 chmod 0777 /srv/$1/public
-chown -R www-data:webmaster /srv/$1
+chown -R webmaster:webmaster /srv/$1
 
 # Ask to generate LetsEncrypt certificate
 read -ep "Do you want to generate SSL certificate?  yes/no : " answer

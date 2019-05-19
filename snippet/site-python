@@ -92,7 +92,7 @@ echo -e "\nCrafting sample application...\n"
 # Fix directory permission
 chmod 0777 /srv/$1
 chmod -R 0775 /srv/$1/*
-chown -R www-data:webmaster /srv/$1
+chown -R webmaster:webmaster /srv/$1
 
 # Supervisor configuration (gunicorn is a sample)
 APP_ID=$(echo $ApplicationName | awk '{ gsub("[-]","_",$1); print $1 }')
@@ -105,7 +105,7 @@ stderr_logfile=/var/log/supervisor/$1-err.log
 stdout_logfile=/var/log/supervisor/$1-out.log
 autorestart=true
 autostart=true
-user=www-data
+user=webmaster
 EOF
 
 # Test nginx configuration then restart

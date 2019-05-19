@@ -13,8 +13,8 @@ apt update ; apt -y full-upgrade
 apt -y install pgadmin4 python3-flask python3-flask-babelex uwsgi-plugin-python3 libgmp3-dev libpq-dev
 
 mkdir -p /var/cache/pgadmin/sessions
-chown -R www-data: /usr/share/pgadmin4
-chown -R www-data: /var/cache/pgadmin
+chown -R webmaster: /usr/share/pgadmin4
+chown -R webmaster: /var/cache/pgadmin
 python3 /usr/share/pgadmin4/web/setup.py
 
 # Systemd service

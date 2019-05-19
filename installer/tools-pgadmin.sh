@@ -46,4 +46,4 @@ EOF
 chmod 0755 /var/www/pgadmin
 find /var/www/pgadmin/. -type d -exec chmod 0777 {} \;
 find /var/www/pgadmin/. -type f -exec chmod 0644 {} \;
-chown -R www-data: /var/www/pgadmin
+chown -R webmaster: /var/www/pgadmin

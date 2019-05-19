@@ -5,11 +5,11 @@
 DROP TABLE IF EXISTS ftpgroup;
 CREATE TABLE ftpgroup (
   groupname varchar(16) NOT NULL default '',
-  gid smallint(6) NOT NULL default '1001',
+  gid smallint(6) NOT NULL default '2001',
   members varchar(16) NOT NULL default '',
   KEY groupname (groupname)
 ) ENGINE=InnoDB;
-INSERT INTO ftpgroup (`gid`, `groupname`) VALUE (1001, 'default');
+INSERT INTO ftpgroup (`gid`, `groupname`) VALUE (2001, 'default');
 
 DROP TABLE IF EXISTS ftpquotalimits;
 CREATE TABLE ftpquotalimits (
@@ -43,7 +43,7 @@ CREATE TABLE ftpuser (
   userid varchar(32) NOT NULL,
   passwd varchar(64) NOT NULL,
   uid smallint(6) NOT NULL default '2001',
-  gid smallint(6) NOT NULL default '1001',
+  gid smallint(6) NOT NULL default '2001',
   homedir varchar(255) NOT NULL default '/var/www/public_ftp',
   shell varchar(40) NOT NULL default '/usr/sbin/nologin',
   count int(11) NOT NULL default '0',
