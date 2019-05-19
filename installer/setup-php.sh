@@ -92,6 +92,14 @@ find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.max_requests"         "256"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.process_idle_timeout"  "5s"' {} \;
 find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "pm.status_path"      "/status"' {} \;
+find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "listen.owner"      "webmaster"' {} \;
+find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "listen.group"      "webmaster"' {} \;
+find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "user"   "webmaster"' {} \;
+find /etc/php/. -name 'www.conf' -exec bash -c 'crudini --set "$0" "www" "group"  "webmaster"' {} \;
+
+[[ "${install_php_73,,}" =~ ^(yes|y)$ ]] && systemctl restart php7.3-fpm
+[[ "${install_php_72,,}" =~ ^(yes|y)$ ]] && systemctl restart php7.2-fpm
+[[ "${install_php_56,,}" =~ ^(yes|y)$ ]] && systemctl restart php5.6-fpm
 
 # Set default PHP version
 #-----------------------------------------------------------------------------------------
