@@ -57,7 +57,7 @@ rm -fr /etc/apt/sources.list.d/*
 
 # Begin installation process
 #-----------------------------------------------------------------------------------------
-echo -e "\n${OK}Starting StackUp installer...${NC}"
+echo -e "\n${OK}Starting StackUp installer...\n${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
 chmod +x $WORKDIR/snippet/* && cp $WORKDIR/snippet/* /usr/local/bin/.
 
