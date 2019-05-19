@@ -1,9 +1,0 @@
-# Disable delete and write operation.
-<Limit WRITE>
-    DenyAll
-</Limit>
-
-# Allow upload and download.
-<Limit READ STOR>
-    AllowAll
-</Limit>

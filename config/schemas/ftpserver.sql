@@ -40,11 +40,11 @@ CREATE TABLE ftpquotatallies (
 DROP TABLE IF EXISTS ftpuser;
 CREATE TABLE ftpuser (
   id int(10) unsigned NOT NULL auto_increment,
-  userid varchar(32) NOT NULL default '',
-  passwd varchar(64) NOT NULL default '',
+  userid varchar(32) NOT NULL,
+  passwd varchar(64) NOT NULL,
   uid smallint(6) NOT NULL default '2001',
   gid smallint(6) NOT NULL default '1001',
-  homedir varchar(255) NOT NULL default '',
+  homedir varchar(255) NOT NULL default '/var/www/public_ftp',
   shell varchar(40) NOT NULL default '/usr/sbin/nologin',
   count int(11) NOT NULL default '0',
   accessed datetime NOT NULL default '0000-00-00 00:00:00',

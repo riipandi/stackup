@@ -91,6 +91,7 @@ HTTPS = TCP/443
 - [x] Make each setup script as independent installer
 - [x] Add automatic installation wizard
 - [x] FTP server installation and snippets
+- [ ] Fix FTP server site snippet
 - [ ] Fix pgAdmin4 installation
 - [ ] Fix vhost proxy snippet
 - [ ] Mail server installation

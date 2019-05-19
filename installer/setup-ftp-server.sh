@@ -23,19 +23,19 @@ apt update ; apt -y install proftpd-mod-mysql
 #-----------------------------------------------------------------------------------------
 [[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 1001 webmaster
 [[ $(cat /etc/passwd | grep -c ftpuser) -eq 1 ]] || useradd -u 2001 -s /usr/sbin/nologin -d /bin/null -g webmaster ftpuser
-[[ ! -d /home/public_ftp ]] && mkdir -p /home/public_ftp
-chown -R ftp:webmaster /home/public_ftp
+[[ ! -d /var/www/public_ftp ]] && mkdir -p /var/www/public_ftp && chown -R www-data:webmaster /var/www/public_ftp
 
 rm -fr /etc/proftpd/*
 cp -r $PWD/config/proftpd/* /etc/proftpd/.
+mkdir -p /etc/proftpd/vhost.d
 chown -R root: /etc/proftpd
 
 mysql -uroot stackup_ftp < $PWD/config/schemas/ftpserver.sql
 
-sed -i "s/HOSTNAME/$(hostname -f)/" /etc/proftpd/conf.d/tls.conf
-sed -i "s/DB_HOST/127.0.0.1/"       /etc/proftpd/conf.d/sql.conf
-sed -i "s/DB_NAME/stackup_ftp/"     /etc/proftpd/conf.d/sql.conf
-sed -i "s/DB_USER/stackup_ftp/"     /etc/proftpd/conf.d/sql.conf
-sed -i "s/DB_PASS/${FTP_DB_PASS}/"  /etc/proftpd/conf.d/sql.conf
+sed -i "s/HOSTNAME/$(hostname -f)/" /etc/proftpd/tls.conf
+sed -i "s/DB_HOST/127.0.0.1/"       /etc/proftpd/sql.conf
+sed -i "s/DB_NAME/stackup_ftp/"     /etc/proftpd/sql.conf
+sed -i "s/DB_USER/stackup_ftp/"     /etc/proftpd/sql.conf
+sed -i "s/DB_PASS/${FTP_DB_PASS}/"  /etc/proftpd/sql.conf
 systemctl restart proftpd ; systemctl status -l proftpd
 # tail -f /var/log/proftpd/proftpd.log

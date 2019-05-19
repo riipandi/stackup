@@ -5,9 +5,10 @@ format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
 
-### [3.2] - 2019/05/19
+### [3.2] - 2019/05/20
+- Add installation wizard
+- Add FTP server setup
 - Change Nginx repo to mainline
-- Change default Python to 3.6
 
 ### [3.1] - 2019/04/09
 - Added FTP server setup with SQL backend

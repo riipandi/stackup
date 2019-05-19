@@ -8,6 +8,8 @@ if [ -z "$1" ] ; then
     exit 1
 fi
 
+password=$(echo "{md5}"`echo -n "secret" | openssl dgst -binary -md5 | openssl enc -base64`)
+
 echo 'TODO!'
 
 echo -e "FTP virtualHost for $1 created...\n"
