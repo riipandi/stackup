@@ -33,7 +33,7 @@ Dpkg::Options {
 }
 EOF
 apt update -qq ; apt -y full-upgrade
-apt -yqq install git curl crudini openssl figlet perl python-click
+apt -yqq install git curl crudini openssl figlet perl bsdtar python-click
 apt -y autoremove
 
 # Clone setup file and begin instalation process
