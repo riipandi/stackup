@@ -16,7 +16,6 @@ libimage-exiftool-perl libaugeas0 openssl haveged gamin nginx augeas-lenses pyth
 
 # Download latest certbot
 echo -e "\n${OK}Downloading certbot and trusted certificates...${NC}"
-bash <(curl -sLo- https://dl.eff.org/certbot-auto)
 curl -L# https://dl.eff.org/certbot-auto -o /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam-4096.pem
@@ -31,14 +30,14 @@ systemctl restart nginx
 
 # Configure Nginx
 #-----------------------------------------------------------------------------------------
-systemctl enable --now haveged && systemctl stop nginx
+systemctl enable --now haveged && systemctl stop nginx && rm -fr /var/www/html
 rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/ ; mkdir -p /etc/nginx/vhost.d
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
 chown -R root: /etc/nginx ; chown -R www-data: /var/www ; chmod -R 0775 /var/www
-mv /var/www/html/index.{nginx-debian.html,html}
+mkdir -p /var/www/html ; cat /usr/share/nginx/html/index.html > /var/www/html/index.html
 
 # Default PHP-FPM on Nginx configuration
 #-----------------------------------------------------------------------------------------

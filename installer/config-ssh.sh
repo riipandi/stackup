@@ -4,7 +4,11 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #------------------------------------------------------------------------------
 
-read -ep "Please specify SSH port                         : " -i "22" ssh_port
+if [ -f "$PWD/stackup.ini" ]; then
+    ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'ssh_port')
+else
+    read -ep "Please specify SSH port                         : " -i "22" ssh_port
+fi
 
 # SSH Server + welcome message
 #-----------------------------------------------------------------------------------------

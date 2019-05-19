@@ -59,7 +59,8 @@ rm -fr /etc/apt/sources.list.d/*
 #-----------------------------------------------------------------------------------------
 echo -e "\n${OK}Starting StackUp installer...${NC}"
 read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
-crudini --set $WORKDIR/config/stackup.ini 'setup' 'ready' 'no'
+crudini --set $WORKDIR/stackup.ini 'setup' 'ready' 'no'
+bash "$WORKDIR/installer/wizard.sh"
 
 # Install StackUp cli utility
 #-----------------------------------------------------------------------------------------

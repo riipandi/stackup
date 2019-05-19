@@ -6,7 +6,13 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 # Configure the system
 #-----------------------------------------------------------------------------------------
-read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+if [ -f "$PWD/stackup.ini" ]; then
+    ssh_port=$(crudini --get $PWD/stackup.ini 'setup' 'timezone')
+    disable_ipv6=$(crudini --get $PWD/stackup.ini 'setup' 'disable_ipv6')
+else
+    read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+    read -ep "Do you want to disable IPv6?                y/n : " -i "n" disable_ipv6
+fi
 
 # Timezone Synchronization
 if [[ $(which ntp) -ne 0 ]]; then apt purge -yqq ntp ntpdate ; fi
@@ -23,8 +29,8 @@ crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
 sysctl -p -q >/dev/null 2>&1
 
 # Disable IPv6
-read -ep "Do you want to disable IPv6?                y/n : " -i "n" answer
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+
+if [[ "${disable_ipv6,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Disabling IPv6...${NC}"
     sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
     sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
