@@ -71,9 +71,9 @@ bash "$WORKDIR/installer/common.sh"
 
 # Install MySQL / MariaDB
 #-----------------------------------------------------------------------------------------
-mysql_install=$(crudini --get $PWD/stackup.ini '' 'mysql_install')
+mysql_install=$(crudini --get $WORKDIR/stackup.ini '' 'mysql_install')
 if [[ "${mysql_install,,}" =~ ^(yes|y)$ ]] ; then
-    mysql_engine=$(crudini --get $PWD/stackup.ini '' 'mysql_engine')
+    mysql_engine=$(crudini --get $WORKDIR/stackup.ini '' 'mysql_engine')
     if [[ "$mysql_engine" == "mysql" ]] ; then
         bash "$WORKDIR/installer/setup-mysql.sh"
     else
@@ -84,7 +84,7 @@ fi
 
 # Install PostgreSQL
 #-----------------------------------------------------------------------------------------
-pgsql_install=$(crudini --get $PWD/stackup.ini '' 'pgsql_install')
+pgsql_install=$(crudini --get $WORKDIR/stackup.ini '' 'pgsql_install')
 if [[ "${pgsql_install,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/installer/setup-pgsql.sh"
     bash "$WORKDIR/installer/tools-pgadmin4.sh"
@@ -92,12 +92,12 @@ fi
 
 # Install Redis Server
 #-----------------------------------------------------------------------------------------
-redis_install=$(crudini --get $PWD/stackup.ini '' 'redis_install')
+redis_install=$(crudini --get $WORKDIR/stackup.ini '' 'redis_install')
 [[ "${redis_install,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-redis.sh"
 
 # Install NodeJS and Yarn
 #-----------------------------------------------------------------------------------------
-nodejs_install=$(crudini --get $PWD/stackup.ini '' 'nodejs_install')
+nodejs_install=$(crudini --get $WORKDIR/stackup.ini '' 'nodejs_install')
 [[ "${nodejs_install,,}" =~ ^(yes|y)$ ]] && bash "$WORKDIR/installer/setup-nodejs.sh"
 
 # Install Nginx + PHP-FPM

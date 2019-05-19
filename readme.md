@@ -50,6 +50,15 @@ sudo chown new_username /home/new_username/.ssh/authorized_keys
 
 Or, you can use your own SSH key.
 
+### Port that needs to be opened
+
+```
+FTP   = TCP/21 and TCP 50000-50100
+SSH   = TCP/22 (or according to your configuration)
+HTTP  = TCP/80
+HTTPS = TCP/443
+```
+
 ## Some Useful Snippets
 
 | Command             | Description                                         | Example Usage
