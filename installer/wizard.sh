@@ -115,5 +115,5 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
 fi
 
 echo
-read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
+read -p "Press [Enter] to Begin installation process or [Ctrl+C] to Cancel..."
 echo
