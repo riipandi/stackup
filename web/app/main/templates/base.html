@@ -1,0 +1,114 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/utils.html" as utils %}
+
+<!-- BLOCK: html_attribs -->
+{% block html_attribs %}{{super()}} lang="en"{% endblock %}
+
+<!-- BLOCK: metas -->
+{% block metas %}{{super()}}{% endblock %}
+
+<!-- BLOCK: styles -->
+{% block styles %}
+    {% block scripts %}{{super()}}
+        <script src="{{url_for('static', filename='js/flaskapp.js')}}"></script>
+    {% endblock %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flaskapp.css') }}">
+{% endblock %}
+
+<!-- BLOCK: body_attribs -->
+{% block body_attribs %}{{super()}}{% endblock %}
+
+<!-- BLOCK: title -->
+{% block title %}{{super()}}FlaskApp{% endblock %}
+
+<!-- BLOCK: body, navbar, header, main, footer, scripts -->
+{% block body %}
+
+    {% block navbar %}{% include 'navbar_main.html' %}{% endblock %}
+    {% block header %}
+    <div id="header" class="container-fluid">
+        <div class="row">
+            <div id="header_left" class="col-md-4">
+                {% block header_left %}
+<a href="{{ url_for('main.main_home') }}">
+<img id="site_logo" src="{{ url_for('static', filename='media/pdxcodeguild.png') }}" width="80" />
+</a>
+<span id="site_title">FlaskApp</span>
+                {% endblock %}
+            </div>
+            <div id="header_center" class="col-md-4 text-center">
+                {% block header_center %}{% endblock %}
+            </div>
+            <div id="header_right" class="col-md-4 text-right">
+                {% block header_right %}{% endblock %}
+                {% if current_user.user_email %}
+                    <a href="{{ url_for('user.user_profile') }}">{{ current_user.user_email }}</a>
+                {% else %}
+                    <a href="{{ url_for('user.user_login') }}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div id="breadcrumb" class="col-md-12">
+                <ol class="breadcrumb">
+                {% block breadcrumb %}<li><a href="{{ url_for('main.main_home') }}">Home</a></li>{% endblock %}
+                </ol>
+            </div>
+        </div>
+    </div>
+    <hr id="header_hr" size="1"/>
+    {% endblock %}
+
+    <div id="messages" class="container-fluid flashed-messages">
+        <div class="row">
+            <div class="col-md-12">
+                {{ utils.flashed_messages(container=False, dismissible=True) }}
+            </div>
+        </div>
+    </div>
+
+    {% block main %}
+    <div id="main" class="container-fluid layout-1col">
+        <div class="row">
+            <div id="content" class="col-md-12">
+                {% block content %}block content{% endblock %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block footer %}
+    <hr id="footer_hr" size="1"/>
+    <div id="footer" class="container-fluid">
+        <div class="row">
+            <div id="footer_left" class="col-md-4">
+                <p>{% block footer_left %}{% endblock %}</p>
+            </div>
+            <div id="footer_center" class="col-md-4 text-center">
+                <p>{% block footer_center %}<b>&lt;PDXCodeGuild /&gt;</b>{% endblock %}</p>
+            </div>
+            <div id="footer_right" class="col-md-4 text-right">
+                <p>{% block footer_right %}{% endblock %}</p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% if config['DEBUG'] %}
+<div id="debuginfo"><pre>
+DEBUG:
+{% if current_user.user_email %}<b>LOGGED IN:</b> {{ current_user.user_email }}{% else %}<b>LOGGED OUT</b>{% endif %}
+<b>TEMPLATES:</b> {% block templates %}base.html{% endblock %}
+<b>REQUEST.ARGS:</b> {{ request.args }}
+<b>REQUEST.COOKIES:</b> {{ request.cookies }}
+<b>SESSION:</b> {{ session }}
+<b>QUERIES :</b> {{ debug_queries() }}
+<b>DATETIME :</b> {{ current_datetime() }}
+</pre></div>
+    {% endif %}
+
+{% endblock %}
+
+
+{# end web/app/main/templates/base.html #}

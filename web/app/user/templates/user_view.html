@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+
+<!-- BLOCK: title -->
+{% block title %}{{super()}} - Admin - User '{{ user.keyname }}'{% endblock %}
+
+
+<!-- BLOCK: breadcrumb -->
+{% block breadcrumb %}
+{{super()}}
+<li><a href="{{ url_for('main.main_page', page='admin') }}">Admin</a></li>
+<li><a href="{{ url_for('.user_list') }}">Users</a></li>
+<li><a href="{{ url_for('.user_view', id=user.id) }}">View '{{ user.keyname }}'</a></li>
+{% endblock %}
+
+
+<!-- BLOCK: content -->
+{% block content %}
+<div id="user_list_panel" class="panel {%
+        if user.user_role == config['USER_ROLE_ADMIN'] %}panel-success{%
+        elif user.user_role == config['USER_ROLE_EDIT'] %}panel-warning{%
+        elif user.user_role == config['USER_ROLE_NONE'] %}panel-danger{%
+        else %}panel-info{%
+        endif %}">
+    <div class="panel-heading">
+<p style="float: right;">
+[ <a href="{{ url_for('.user_view', id=user.id) }}">View User</a> ]
+[ <a href="{{ url_for('.user_edit', id=user.id) }}">Edit User</a> ]
+</p>
+        <h3 class="condensed">User '{{ user.keyname }}'</h3>
+    </div>
+    <div class="panel-body">
+
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<tr>
+    <th>column</th>
+    <th>value</th>
+</tr>
+
+{% for col in cols %}
+    <tr>
+    <td>{{ col }}</td>
+    <td>
+    {% if col == "user_role" %}
+        {{ config['USER_ROLE'][(user[col]|int)] }}
+    {% else %}
+        {{ user[col] }}
+    {% endif %}
+    </td>
+    </tr>
+{% endfor %}
+
+<tr>
+<td>User Items</td>
+<td><ul>
+{% for item in user.items %}
+    <li><a href="{{ url_for('item.item_view', id=item.id) }}">{{ item.keyname }}</a></li>
+{% endfor %}
+</ul></td>
+</tr>
+
+</table>
+</div>
+
+    </div> <!-- end class="panel-body" -->
+</div> <!-- end class="panel" -->
+{% endblock %}
+
+
+<!-- BLOCK: templates -->
+{% block templates %}{{super()}} - user_view.html{% endblock %}
+
+{# end web/app/user/templates/user_view.html #}
