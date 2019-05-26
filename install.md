@@ -17,7 +17,7 @@ sudo pip install pipenv
 cd /opt/elsacp/web
 python -m venv venv
 source venv/bin/activate
-venv/bin/pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Systemd Daemon
