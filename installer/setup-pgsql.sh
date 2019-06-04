@@ -36,6 +36,9 @@ if [ $pgsql_version == "9.6" ] ; then apt install -y postgresql-{9.6,client-9.6,
 if [ $pgsql_version == "10" ] ; then apt install -y postgresql-{10,client-10} ; fi
 if [ $pgsql_version == "11" ] ; then apt install -y postgresql-{11,client-11} ; fi
 
+sed -i "s/[#]*listen_addresses/listen_addresses/" /etc/postgresql/${pgsql_version}/main/postgresql.conf
+sed -i "s|\("^listen_addresses" * *\).*|\1='127.0.0.1'|" /etc/postgresql/${pgsql_version}/main/postgresql.conf
+
 systemctl restart postgresql
 
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD '$DB_ROOT_PASS'"
