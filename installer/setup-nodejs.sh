@@ -6,11 +6,11 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 touch "$PWD/stackup.ini"
 if [ -f "$PWD/stackup.ini" ]; then
-    [[ $(cat "$PWD/stackup.ini" | grep -c "install_nodejs") -eq 1 ]] && install_nodejs=$(crudini --get $PWD/stackup.ini '' 'install_nodejs')
-    [[ -z "$install_nodejs" ]] && read -ep "Install NodeJS and Yarn ?                   y/n : " -i "y" install_nodejs
+    [[ $(cat "$PWD/stackup.ini" | grep -c "nodejs_install") -eq 1 ]] && nodejs_install=$(crudini --get $PWD/stackup.ini '' 'nodejs_install')
+    [[ -z "$nodejs_install" ]] && read -ep "Install NodeJS and Yarn ?                   y/n : " -i "y" nodejs_install
 fi
 
-if [[ "${install_nodejs,,}" =~ ^(yes|y)$ ]] ; then
+if [[ "${nodejs_install,,}" =~ ^(yes|y)$ ]] ; then
     echo -e "\n${OK}Installing Nodejs and Yarn...${NC}\n"
     echo "deb https://deb.nodesource.com/node_10.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodejs.list
     echo 'deb https://dl.yarnpkg.com/debian/ stable main' > /etc/apt/sources.list.d/yarn.list
