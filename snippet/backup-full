@@ -19,6 +19,9 @@ bash /usr/local/bin/backup-mysql
 echo -e "\n${OK}Backing up web directory...${NC}"
 bash /usr/local/bin/backup-dir
 
+echo -e "\n${OK}Backing up configuration...${NC}"
+cp -r /etc/nginx/vhost.d $BACKUP_DIR/$TIMESTAMP-$HOSTNAME/
+
 echo -e "\n${OK}Compressing backup files...${NC}"
 cd $BACKUP_DIR && tar -cpzf $FILENAME $TIMESTAMP-$HOSTNAME &>/dev/null
 
