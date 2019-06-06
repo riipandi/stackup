@@ -45,7 +45,9 @@ PIDFile      /var/run/pure-ftpd.pid
 CertFile     /etc/letsencrypt/live/$(hostname -f)/cert.pem
 MinUID       1000
 EOF
-rm -fr /etc/pure-ftpd/db/ && rm -fr /etc/pure-ftpd/conf/*
+rm -fr /etc/pure-ftpd/db/
+mkdir -p /etc/pure-ftpd/conf
+rm -fr /etc/pure-ftpd/conf/*
 echo 'clf:/var/log/pure-ftpd/transfer.log' > /etc/pure-ftpd/conf/AltLog
 echo '/etc/pure-ftpd/db-mysql.conf' > /etc/pure-ftpd/conf/MySQLConfigFile
 echo '/etc/pure-ftpd/pureftpd.pdb' > /etc/pure-ftpd/conf/PureDB
