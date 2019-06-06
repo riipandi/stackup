@@ -61,7 +61,7 @@ fi
 
 # PostgreSQL
 #-----------------------------------------------------------------------------------------
-echo && read -ep "Install PostgreSQL ?                        y/n : " -i "y" answer
+echo && read -ep "Install PostgreSQL ?                        y/n : " -i "n" answer
 crudini --set $PWD/stackup.ini '' 'pgsql_install' $answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Select PostgreSQL version?      (9.6 / 10 / 11) : " -i "10" pgsql_version
