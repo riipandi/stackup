@@ -38,16 +38,6 @@ instance, you must change your instance hostname.
 ssh given_username@ip_address -i LightsailDefaultKey-zone.pem
 ```
 
-If you create new sudo user, you will need execute this command:
-
-```bash
-sudo cp /home/ubuntu/.ssh/authorized_keys /home/new_username/.ssh/authorized_keys
-sudo chmod 0600 /home/new_username/.ssh/authorized_keys
-sudo chown new_username /home/new_username/.ssh/authorized_keys
-```
-
-Or, you can use your own SSH key.
-
 ### Port that needs to be opened
 
 ```
