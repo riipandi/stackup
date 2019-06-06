@@ -104,7 +104,7 @@ nodejs_install=$(crudini --get $WORKDIR/stackup.ini '' 'nodejs_install')
 #-----------------------------------------------------------------------------------------
 bash "$WORKDIR/installer/setup-php.sh"
 bash "$WORKDIR/installer/setup-nginx.sh"
-bash "$WORKDIR/installer/setup-ftp-server.sh"
+# bash "$WORKDIR/installer/setup-ftp-server.sh"
 
 # Telegram SSH Notification
 #-----------------------------------------------------------------------------------------
