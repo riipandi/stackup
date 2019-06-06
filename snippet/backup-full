@@ -25,4 +25,5 @@ cp -r /etc/nginx/vhost.d $BACKUP_DIR/$TIMESTAMP-$HOSTNAME/
 echo -e "\n${OK}Compressing backup files...${NC}"
 cd $BACKUP_DIR && tar -cpzf $FILENAME $TIMESTAMP-$HOSTNAME &>/dev/null
 
+rm -fr $BACKUP_DIR/$TIMESTAMP-$HOSTNAME
 chown -R webmaster:webmaster ${BACKUP_DIR}
