@@ -7,7 +7,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
 while true; do
     read -ep "Enter username for this user                    : " -i "admin" username
-    read -ep "Enter new user real name                        : " -i "Admin Sistem" fullname
+    read -ep "Enter new user real name                        : " -i "${username^}" fullname
     egrep "^$username" /etc/passwd >/dev/null
     if [ $? -eq 0 ]; then
         echo -e "${NO}User $username already exists!${NC}"
