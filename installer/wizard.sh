@@ -98,14 +98,14 @@ echo
 read -ep "Install PHP 7.3 ?                           y/n : " -i "y" install_php_73
 read -ep "Install PHP 7.2 ?                           y/n : " -i "y" install_php_72
 read -ep "Install PHP 5.6 ?                           y/n : " -i "y" install_php_56
-read -ep "Install NodeJS and Yarn ?                   y/n : " -i "y" install_nodejs
+read -ep "Install NodeJS and Yarn ?                   y/n : " -i "y" nodejs_install
 read -ep "Default PHP version ?                           : " -i "7.3" default_php
 
 crudini --set $PWD/stackup.ini '' 'default_php' $default_php
 crudini --set $PWD/stackup.ini '' 'install_php_73' $install_php_73
 crudini --set $PWD/stackup.ini '' 'install_php_72' $install_php_72
 crudini --set $PWD/stackup.ini '' 'install_php_56' $install_php_56
-crudini --set $PWD/stackup.ini '' 'install_nodejs' $install_nodejs
+crudini --set $PWD/stackup.ini '' 'nodejs_install' $nodejs_install
 
 read -ep "Do you want to use Nginx Amplify ?          y/n : " -i "n" answer
 crudini --set $PWD/stackup.ini '' 'amplify_install' $answer
