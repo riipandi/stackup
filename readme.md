@@ -36,8 +36,6 @@ instance, you must change your instance hostname.
 
 ```bash
 ssh given_username@ip_address -i LightsailDefaultKey-zone.pem
-
-hostnamectl set-hostname myhostname.mydomain.tld
 ```
 
 If you create new sudo user, you will need execute this command:
