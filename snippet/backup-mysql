@@ -2,3 +2,32 @@
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 
+# Initial Setup
+#-----------------------------------------------------------------------------------------
+TIMESTAMP=$(date +"%y%m%d")
+HOSTNAME=$(hostname -s)
+BACKUP_DIR="/usr/backup/$TIMESTAMP-$HOSTNAME"
+BACKUP_PATH="$BACKUP_DIR/mysql"
+
+mkdir -p $BACKUP_DIR
+
+[ -d $BACKUP_PATH ] && rm -fr $BACKUP_PATH
+[ -d $$BACKUP_PATH ] || mkdir -p $BACKUP_PATH
+
+# Backup MySQL / MariaDB
+#-----------------------------------------------------------------------------------------
+MYSQL=$(which mysql)
+MYSQLDUMP=$(which mysqldump)
+MYSQL_USER=$(crudini --get /etc/mysql/conf.d/mysql.cnf 'mysql' 'user')
+MYSQL_PASS="$(crudini --get /etc/mysql/conf.d/mysql.cnf 'mysql' 'password')"
+DB_EXCLUDE="Database|information_schema|mysql|performance_schema|phpmyadmin"
+
+databases=`$MYSQL --user=$MYSQL_USER -p$MYSQL_PASS -e "SHOW DATABASES;" | grep -Ev "(${DB_EXCLUDE})"`
+for db in $databases; do
+    # $MYSQLDUMP --force --opt --user=$MYSQL_USER -p$MYSQL_PASS --databases $db | gzip > "$BACKUP_DIR/mysql/$db.gz"
+    $MYSQLDUMP --force --opt --user=$MYSQL_USER -p$MYSQL_PASS --databases $db > "$BACKUP_DIR/mysql/$db.sql"
+done
+
+# Change permissions
+#-----------------------------------------------------------------------------------------
+chown -R webmaster:webmaster ${BACKUP_DIR}
