@@ -5,6 +5,14 @@ format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
 
+### [3.3] - 2019/06/07
+- Fix FTP server setup and configuration
+- FTP server are optional (not installed by default)
+- Change FTP server from ProFTPd to PureFTPd
+- Fix Nginx configuration
+- Add backup snippets
+- Some other fixes
+
 ### [3.2] - 2019/05/20
 - Add installation wizard
 - Add FTP server setup
