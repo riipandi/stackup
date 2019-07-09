@@ -61,7 +61,7 @@ if [[ "${install_php_56,,}" =~ ^(yes|y)$ ]] ; then
 fi
 
 # Required package for all php version
-apt -y install composer gettext gamin mcrypt imagemagick aspell graphviz
+apt -y install composer gettext gamin mcrypt imagemagick aspell graphviz php-mailparse
 
 # PHP development packages
 #-----------------------------------------------------------------------------------------
