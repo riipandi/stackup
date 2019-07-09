@@ -67,5 +67,14 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password'     $DB_ROOT_PA
 
 systemctl restart mysql
 
+# Reset db root password
+#-----------------------------------------------------------------------------------------
+systemctl stop mysql
+mysqld_safe --skip-grant-tables &
+mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASS';"
+killall mysqld && systemctl restart mysql
+
+# Disable plugin
+#-----------------------------------------------------------------------------------------
 mysql -uroot -p$DB_ROOT_PASS -e "update mysql.user SET plugin='' where User='root';
 drop database if exists test; flush privileges;"
