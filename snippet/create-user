@@ -38,7 +38,7 @@ while true; do
                 # Composer environment
                 if [ -x "$(command -v composer)" ]; then
                     echo -e "${OK}\nConfiguring Composer environment..${NC}"
-                    runuser -l $username -c 'composer global require hirak/prestissimo laravel/installer'
+                    runuser -l $username -c 'composer global require hirak/prestissimo'
                     if ! grep -q 'composer' /home/$username/.bashrc ; then
                         echo 'export PATH=$PATH:$HOME/.config/composer/vendor/bin' >> "/home/$username/.bashrc"
                     fi
