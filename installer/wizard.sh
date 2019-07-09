@@ -44,7 +44,7 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     if [[ "$mysql_engine" == "mysql" ]] ; then
         read -ep "Select MySQL version                (5.7 / 8.0) : " -i "8.0" mysql_version
     else
-        read -ep "Select MariaDB version            (10.3 / 10.4) : " -i "10.3" mysql_version
+        read -ep "Select MariaDB version            (10.3 / 10.4) : " -i "10.4" mysql_version
     fi
     read -ep "Database bind address                           : " -i "127.0.0.1" mysql_bind_address
     read -ep "Database listen port                            : " -i "3306" mysql_listen_port

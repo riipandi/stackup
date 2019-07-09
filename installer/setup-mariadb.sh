@@ -24,7 +24,7 @@ touch "$PWD/stackup.ini"
 
 if [[ "$mysql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
-    echo "MSQL_ROOT_PASS = $DB_ROOT_PASS" >> /root/stackup.info
+    echo "MSQL_ROOT_PASS = $DB_ROOT_PASS" >> /root/server.info
 else
     DB_ROOT_PASS=$mysql_root_pass
 fi
@@ -35,11 +35,11 @@ echo -e "\n${OK}Installing MariaDB ${mysql_version}...${NC}"
 COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ $COUNTRY == "ID" ] ; then
-    REPO="deb http://mirror.biznetgio.com/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
+    REPO="deb [arch=amd64] http://mirror.biznetgio.com/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
 elif [ $COUNTRY == "SG" ] ; then
-    REPO="deb http://download.nus.edu.sg/mirror/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
+    REPO="deb [arch=amd64] http://download.nus.edu.sg/mirror/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
 else
-    REPO="deb http://mirror.rackspace.com/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
+    REPO="deb [arch=amd64] http://mirror.rackspace.com/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
 fi
 
 echo $REPO > /etc/apt/sources.list.d/mariadb.list

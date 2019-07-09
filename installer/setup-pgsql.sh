@@ -24,7 +24,7 @@ touch "$PWD/stackup.ini"
 
 if [[ "$pgsql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
-    echo "PGQL_ROOT_PASS = $DB_ROOT_PASS" >> /root/stackup.info
+    echo "PGQL_ROOT_PASS = $DB_ROOT_PASS" >> /root/server.info
 else
     DB_ROOT_PASS=$pgsql_root_pass
 fi
