@@ -8,7 +8,7 @@ NO='\033[0;33m' ; OK='\033[0;32m' ; NC='\033[0m'
 #-----------------------------------------------------------------------------------------
 touch "$PWD/stackup.ini"
 [[ $(cat "$PWD/stackup.ini" | grep -c "mysql_version") -eq 1 ]] && mysql_version=$(crudini --get $PWD/stackup.ini '' 'mysql_version')
-[[ -z "$mysql_version" ]] && read -ep "Select MariaDB version            (10.3 / 10.4) : " -i "10.3" mysql_version
+[[ -z "$mysql_version" ]] && read -ep "Select MariaDB version            (10.3 / 10.4) : " -i "10.4" mysql_version
 
 [[ $(cat "$PWD/stackup.ini" | grep -c "mysql_bind_address") -eq 1 ]] && mysql_bind_address=$(crudini --get $PWD/stackup.ini '' 'mysql_bind_address')
 [[ -z "$mysql_bind_address" ]] && read -ep "Database bind address                           : " -i "127.0.0.1" mysql_bind_address
@@ -35,7 +35,7 @@ echo -e "\n${OK}Installing MariaDB ${mysql_version}...${NC}"
 COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ $COUNTRY == "ID" ] ; then
-    REPO="deb http://mariadb.biz.net.id/repo/$mysql_version/ubuntu `lsb_release -cs` main"
+    REPO="deb http://mirror.biznetgio.com/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
 elif [ $COUNTRY == "SG" ] ; then
     REPO="deb http://download.nus.edu.sg/mirror/mariadb/repo/$mysql_version/ubuntu `lsb_release -cs` main"
 else
