@@ -128,3 +128,4 @@ echo -e "\n${GREEN}------------------------------------------------------${NOCOL
 echo -e "${GREEN}--- Installation has been finish!${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
 echo & cat /tmp/stackup-install.log
+echo & netstat -pltnu46
