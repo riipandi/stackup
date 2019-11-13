@@ -81,6 +81,82 @@ createNewUser() {
     done
 }
 
+perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 [[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 3000 webmaster
 read -ep "Create new system user?                     y/n : " -i "n" answer
 [[ "${answer,,}" =~ ^(yes|y)$ ]] && createNewUser && echo
+
+# Configure SSH server + welcome message
+#-----------------------------------------------------------------------------------------
+read -ep "Please specify SSH port                         : " -i "22" ssh_port
+read -ep "Dou you want to enable root login ?      yes/no : " -i "no" ssh_root_login
+
+sed -i "s/#ListenAddress :://" /etc/ssh/sshd_config
+sed -i "s|\("^PermitRootLogin" * *\).*|\1$ssh_root_login|" /etc/ssh/sshd_config
+sed -i "s/[#]*PasswordAuthentication/PasswordAuthentication/" /etc/ssh/sshd_config
+sed -i "s/[#]*PubkeyAuthentication/PubkeyAuthentication/" /etc/ssh/sshd_config
+sed -i "s/[#]*ClientAliveInterval/ClientAliveInterval/" /etc/ssh/sshd_config
+sed -i "s/[#]*AllowTcpForwarding/AllowTcpForwarding/" /etc/ssh/sshd_config
+sed -i "s/[#]*ClientAliveCountMax/ClientAliveCountMax/" /etc/ssh/sshd_config
+sed -i "s/[#]*PermitRootLogin/PermitRootLogin/" /etc/ssh/sshd_config
+sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config
+sed -i "s/[#]*PermitTunnel/PermitTunnel/" /etc/ssh/sshd_config
+sed -i "s/[#]*X11Forwarding/X11Forwarding/" /etc/ssh/sshd_config
+sed -i "s/[#]*StrictModes/StrictModes/" /etc/ssh/sshd_config
+sed -i "s|\("^PasswordAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config
+sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^ClientAliveCountMax" * *\).*|\13|" /etc/ssh/sshd_config
+sed -i "s|\("^ListenAddress" * *\).*|\10.0.0.0|" /etc/ssh/sshd_config
+sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config
+sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config
+sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
+echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd
+
+# Timezone
+#-----------------------------------------------------------------------------------------
+read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+[[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate
+timedatectl set-ntp true
+timedatectl set-timezone $timezone
+systemctl enable systemd-timesyncd
+systemctl restart systemd-timesyncd
+
+# Disable IPv6
+#-----------------------------------------------------------------------------------------
+read -ep "Do you want to disable IPv6?                y/n : " -i "y" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    echo -e "\n${BLUE}Disabling IPv6...${NOCOLOR}"
+    sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
+    sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1'
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1'
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1'
+    echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+    sysctl -p -q
+fi
+
+# Sysctl tweak
+#-----------------------------------------------------------------------------------------
+crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1'
+crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50'
+crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10'
+sysctl -p -q >/dev/null 2>&1
+
+# Linux SWAP
+#-----------------------------------------------------------------------------------------
+read -ep "Do you want to setup Linux Swap?            y/n : " -i "n" answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
+    if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
+        echo -e "\n${BLUE}Configuring Linux SWAP...${NOCOLOR}"
+        echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab
+        dd if=/dev/zero of=/swapfile count=$swap_size bs=1M
+        chmod 600 /swapfile && mkswap /swapfile
+        swapon /swapfile && swapon --show
+    else
+        echo -e "\n${BLUE}Swapfile already configured...${NOCOLOR}"
+    fi
+fi

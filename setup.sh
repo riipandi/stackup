@@ -67,7 +67,7 @@ if [ -z $(which crudini) ]; then
     echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
     apt -yqq install sudo lsb-release apt-transport-https software-properties-common
     apt -yqq install wget curl git zip unzip jq crudini openssl ca-certificates bsdtar
-    apt -yqq install figlet perl dnsutils binutils net-tools pwgen
+    apt -yqq install figlet perl dnsutils binutils net-tools pwgen openssh-server
 fi
 
 # Clone setup file and begin instalation process
@@ -100,6 +100,7 @@ echo -e "\n${GREEN}------------------------------------------------------${NOCOL
 echo -e "${GREEN}--- Starting StackUp installation wizard${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
 
+[[ -f "$WORKDIR/stackup.ini" ]] || touch "$WORKDIR/stackup.ini"
 touch /tmp/stackup-install.log && bash "$WORKDIR/install/common.sh" && echo
 read -ep "Do you want customize installation ?        y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
