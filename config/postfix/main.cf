@@ -1,0 +1,98 @@
+smtpd_banner = $myhostname ESMTP $mail_name (Ruhay Creative)
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+
+# TLS parameters
+smtpd_tls_key_file = /etc/letsencrypt/live/MAIL_HOSTNAME/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/MAIL_HOSTNAME/cert.pem
+smtpd_tls_CAfile = /etc/letsencrypt/live/MAIL_HOSTNAME/chain.pem
+smtpd_use_tls=yes
+smtpd_tls_auth_only = yes
+smtp_tls_security_level = may
+smtpd_tls_security_level = may
+smtpd_sasl_security_options = noanonymous, noplaintext
+smtpd_sasl_tls_security_options = noanonymous
+
+# Authentication
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+
+# Restrictions
+smtpd_helo_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_invalid_helo_hostname,
+        reject_non_fqdn_helo_hostname
+smtpd_recipient_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_non_fqdn_recipient,
+        reject_unknown_recipient_domain,
+        reject_unlisted_recipient,
+        reject_unauth_destination,
+        check_policy_service unix:private/policyd-spf
+smtpd_sender_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_non_fqdn_sender,
+        reject_unknown_sender_domain
+smtpd_relay_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        defer_unauth_destination
+
+myhostname = MAIL_HOSTNAME
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+mydomain = MAIL_HOSTNAME
+myorigin = $mydomain
+mydestination = localhost
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = all
+
+# Handing off local delivery to Dovecot's LMTP, and telling it where to store mail
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+
+# Virtual domains, users, and aliases
+virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf,
+        mysql:/etc/postfix/mysql-virtual-email2email.cf
+
+# Even more Restrictions and MTA params
+disable_vrfy_command = yes
+strict_rfc821_envelopes = yes
+#smtpd_etrn_restrictions = reject
+#smtpd_reject_unlisted_sender = yes
+#smtpd_reject_unlisted_recipient = yes
+smtpd_delay_reject = yes
+smtpd_helo_required = yes
+smtp_always_send_ehlo = yes
+#smtpd_hard_error_limit = 1
+smtpd_timeout = 30s
+smtp_helo_timeout = 15s
+smtp_rcpt_timeout = 15s
+smtpd_recipient_limit = 40
+minimal_backoff_time = 180s
+maximal_backoff_time = 3h
+
+# Reply Rejection Codes
+invalid_hostname_reject_code = 550
+non_fqdn_reject_code = 550
+unknown_address_reject_code = 550
+unknown_client_reject_code = 550
+unknown_hostname_reject_code = 550
+unverified_recipient_reject_code = 550
+unverified_sender_reject_code = 550
+
+# SPF Policy and OpenDKIM
+policyd-spf_time_limit = 3600
+milter_default_action = accept
+milter_protocol = 6
+smtpd_milters = local:opendkim/opendkim.sock
+non_smtpd_milters = local:opendkim/opendkim.sock

@@ -1,0 +1,6 @@
+__pycache__/
+/web/logs/*
+!/web/logs/.gitkeep
+
+stackup.ini
+*.log

@@ -1,0 +1,5 @@
+hosts = 127.0.0.1
+user = stackup_mail
+dbname = stackup_mail
+password = secret
+query = SELECT destination FROM virtual_aliases WHERE source='%s'
