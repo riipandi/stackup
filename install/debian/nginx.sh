@@ -32,11 +32,14 @@ curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
+ip6Check=$(crudini --get /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6')
+
 systemctl enable --now haveged && rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+[[ $ip6Check -ne 1 ]] && sed -i "s/# listen/listen/" /etc/nginx/conf.d/default.conf
 
 mkdir -p /etc/nginx/vhost.d /var/www/html /srv/web
 cat /etc/nginx/stubs/default.html > /usr/share/nginx/html/index.html
@@ -50,9 +53,10 @@ systemctl restart nginx
 setupNginxDefaultHttps() {
     # Update nginxconfiguration
     # mv /etc/nginx/conf.d/force-https.conf{-disable,}
-    cat /etc/nginx/stubs/vhost-default.conf > /etc/nginx/conf.d/default.conf
+    cat /etc/nginx/vhost.tpl/default-ssl.conf > /etc/nginx/conf.d/default.conf
     sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
     sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+    [[ $ip6Check -ne 1 ]] && sed -i "s/# include/# include/" /etc/nginx/conf.d/default.conf
     systemctl restart nginx
 }
 
@@ -66,6 +70,13 @@ elif [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
             --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
         setupNginxDefaultHttps
     fi
+fi
+
+# Use IPv6 or not?
+#-----------------------------------------------------------------------------------------
+
+if [[ $ip6Check -ne 1 ]]; then
+    sed -i "s/# listenlisten/" /etc/nginx/conf.d/default.conf
 fi
 
 # Crontab for renewing LetsEncrypt certificates
