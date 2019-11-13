@@ -145,7 +145,9 @@ sysctl -p -q >/dev/null 2>&1
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
+memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
 if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y"; fi
+
 read -ep "Do you want to setup Linux Swap?            y/n : " -i "$opsi" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
