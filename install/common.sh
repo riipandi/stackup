@@ -8,7 +8,7 @@ CURRENT=$(dirname $(readlink -f $0))
 [ -z $ROOTDIR ] && PWD=$(dirname $CURRENT) || PWD=$ROOTDIR
 
 #----------------------------------------------------------------------------------
-# StackUp installation script.
+# --
 #----------------------------------------------------------------------------------
 
 echo -e "${BLUE}\nCurrent server hostname is: ${RED}$(hostname -f)\n${NOCOLOR}"
