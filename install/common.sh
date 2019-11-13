@@ -83,4 +83,4 @@ createNewUser() {
 
 [[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 3000 webmaster
 read -ep "Create new system user?                     y/n : " -i "n" answer
-[[ "${answer,,}" =~ ^(yes|y)$ ]] && createNewUser
+[[ "${answer,,}" =~ ^(yes|y)$ ]] && createNewUser && echo

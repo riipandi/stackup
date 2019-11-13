@@ -100,13 +100,11 @@ echo -e "\n${GREEN}------------------------------------------------------${NOCOL
 echo -e "${GREEN}--- Starting StackUp installation wizard${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
 
-touch /tmp/stackup-install.log
+touch /tmp/stackup-install.log && bash "$WORKDIR/install/common.sh" && echo
 read -ep "Do you want customize installation ?        y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash "$WORKDIR/install/common.sh"
     bash "$WORKDIR/install/custom.sh"
 else
-    bash "$WORKDIR/install/common.sh"
     bash "$WORKDIR/install/essential.sh"
 fi
 
