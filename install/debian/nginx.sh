@@ -56,7 +56,9 @@ setupNginxDefaultHttps() {
     cat /etc/nginx/vhost.tpl/default-ssl.conf > /etc/nginx/conf.d/default.conf
     sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
     sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
-    [[ $ip6Check -ne 1 ]] && sed -i "s/# include/# include/" /etc/nginx/conf.d/default.conf
+    if [[ $ip6Check -ne 1 ]]; then
+        sed -i "s/# include listen_ipv6/include listen_ipv6/" /etc/nginx/conf.d/default.conf
+    fi
     systemctl restart nginx
 }
 
