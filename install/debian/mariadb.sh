@@ -18,8 +18,12 @@ mysql_root_pass="auto"
 #-----------------------------------------------------------------------------------------
 echo -e "\n${BLUE}Installing MariaDB ${mariadb_version}...${NOCOLOR}"
 #-----------------------------------------------------------------------------------------
+! [[ -z $(which mysql) ]] && echo -e "${BLUE}Already installed...\n${NOCOLOR}" && exit 1
+
+# Install packages
+#-----------------------------------------------------------------------------------------
 COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 &>/dev/null
 
 if [ $COUNTRY == "ID" ] ; then
     REPO="deb [arch=amd64] http://mirror.biznetgio.com/mariadb/repo/$mariadb_version/debian `lsb_release -cs` main"
@@ -40,7 +44,7 @@ fi
 
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
-apt update -qq ; apt full-upgrade -y ; apt -yqq install mariadb-server mariadb-client
+apt update -qq ; apt full-upgrade -yqq ; apt -yqq install mariadb-server mariadb-client
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
