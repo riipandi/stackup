@@ -46,20 +46,25 @@ systemctl restart nginx
 
 # SSL certifiacte for default vhost
 #-----------------------------------------------------------------------------------------
-if [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
-    read -ep "Generate ssl cert for default vhost ?       y/n : " -i "n" answer
-    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-        systemctl stop nginx
-        certbot certonly --standalone --agree-tos --register-unsafely-without-email \
-            --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
-    fi
-else
+setupNginxDefaultHttps() {
     # Update nginxconfiguration
     # mv /etc/nginx/conf.d/force-https.conf{-disable,}
     cat /etc/nginx/stubs/vhost-default.conf > /etc/nginx/conf.d/default.conf
     sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
     sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
     systemctl restart nginx
+}
+
+if [ -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
+    setupNginxDefaultHttps
+elif [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
+    read -ep "Generate ssl cert for default vhost ?       y/n : " -i "n" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        systemctl stop nginx
+        certbot certonly --standalone --agree-tos --register-unsafely-without-email \
+            --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
+        setupNginxDefaultHttps
+    fi
 fi
 
 # Crontab for renewing LetsEncrypt certificates
