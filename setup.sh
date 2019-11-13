@@ -121,4 +121,4 @@ apt -yqq autoremove && apt clean
 echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
 echo -e "${GREEN}--- Installation has been finish!${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
-echo & cat /tmp/stackup-install.log
+echo & cat /tmp/stackup-install.log && exit 1
