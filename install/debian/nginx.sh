@@ -40,6 +40,7 @@ sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
 
 mkdir -p /etc/nginx/vhost.d /var/www/html /srv/web
 cat /etc/nginx/stubs/default.html > /usr/share/nginx/html/index.html
+cat /etc/nginx/stubs/error404.html > /usr/share/nginx/html/404.html
 chown -R webmaster: /var/www && chmod -R 0775 /var/www
 chown -R root:root /etc/nginx
 systemctl restart nginx
@@ -72,9 +73,3 @@ fi
 echo -e "\n${BLUE}Configuring cron for renewing certificates...${NOCOLOR}"
 echo "01 01 01 */3 * /usr/local/bin/ssl-renew >/var/log/ssl-renew.log" > /tmp/ssl_renew
 crontab /tmp/ssl_renew ; rm /tmp/ssl_renew
-
-# Default PHP-FPM on Nginx configuration
-#-----------------------------------------------------------------------------------------
-# find /etc/nginx/stubs/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
-# sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
-# systemctl restart nginx

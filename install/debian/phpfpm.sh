@@ -18,3 +18,9 @@ apt update -qq ; apt full-upgrade -yqq ; apt -yqq install xxxxxxxxxxxxxxxx
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
+
+# Default PHP-FPM on Nginx configuration
+#-----------------------------------------------------------------------------------------
+# find /etc/nginx/stubs/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
+# sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
+# systemctl restart nginx
