@@ -1,0 +1,19 @@
+# Global restrticttion
+location = /favicon.ico { log_not_found off; access_log off; allow all; }
+location = /robots.txt  { log_not_found off; access_log off; allow all; }
+location ~ \.well-known { log_not_found off; access_log off; allow all; }
+location ~ \.(htaccess|htpasswd|db|yml|log|svn|git|twig|cfg|conf|ini|tpl)$ {
+    return 444;
+}
+
+# Enhanced security
+add_header X-Frame-Options SAMEORIGIN;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection '1; mode=block';
+add_header Strict-Transport-Security 'max-age=15768000; preload';
+
+# Header control
+#add_header X-Permitted-Cross-Domain-Policies master-only;
+#add_header X-Download-Options noopen;
+#add_header Referrer-Policy same-origin;
+#add_header Cache-Control 'public, max-age=7200';
