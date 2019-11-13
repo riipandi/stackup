@@ -94,6 +94,12 @@ fi
 find $WORKDIR/ -type f -name '*.py' -exec chmod +x {} \;
 find $WORKDIR/ -type f -name '*.sh' -exec chmod +x {} \;
 
+# Configure toolkit
+#----------------------------------------------------------------------------------
+find $WORKDIR/toolkit/. -type f -name '*.sh' | while read f; do mv "$f" "${f%.sh}"; done
+find $WORKDIR/toolkit/. -type f -exec chmod 0777 {} \;
+cp $WORKDIR/toolkit/* /usr/local/bin/.
+
 # Run setup wizard
 #----------------------------------------------------------------------------------
 echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
@@ -121,4 +127,4 @@ apt -yqq autoremove && apt clean
 echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
 echo -e "${GREEN}--- Installation has been finish!${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
-echo & cat /tmp/stackup-install.log && exit 1
+echo & cat /tmp/stackup-install.log
