@@ -45,7 +45,7 @@ else
     msgContinue
 fi
 
-# Install required dependencies
+# Preparing setup
 #----------------------------------------------------------------------------------
 cat > /etc/apt/apt.conf.d/99force-config <<EOF
 Dpkg::Options {
@@ -54,15 +54,21 @@ Dpkg::Options {
 }
 EOF
 
-echo -e "${BLUE}Updating base system packages...\n${NOCOLOR}"
-apt update -qq && apt -yqq full-upgrade && apt -y autoremove
-
-if [ -z $(which crudini) ]; then
-    echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
-    apt -yqq install lsb-release apt-transport-https software-properties-common
-    apt -yqq install sudo wget curl git crudini openssl figlet perl bsdtar
+# Update base system packages.
+# -mmin -360 finds files that have a change time in the last 6 hours.
+# You can use -mtime if you care about longer times (days).
+if [ -z "$(find -H /var/lib/apt/lists -maxdepth 0 -mtime -360)" ]; then
+    echo -e "${BLUE}Updating base system packages...\n${NOCOLOR}"
+    apt update -qq && apt -yqq full-upgrade && apt -y autoremove
 fi
 
+# Install required dependencies
+if [ -z $(which crudini) ]; then
+    echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
+    apt -yqq install sudo lsb-release apt-transport-https software-properties-common
+    apt -yqq install wget curl git zip unzip jq crudini openssl ca-certificates bsdtar
+    apt -yqq install figlet perl dnsutils binutils net-tools pwgen
+fi
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
@@ -93,7 +99,9 @@ find $WORKDIR/ -type f -name '*.sh' -exec chmod +x {} \;
 echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
 echo -e "${GREEN}--- Starting StackUp installation wizard${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
-read -ep "Do you want customize installation ?   y/n : " -i "n" answer
+
+touch /tmp/stackup-install.log
+read -ep "Do you want customize installation ?        y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/install/common.sh"
     bash "$WORKDIR/install/custom.sh"
@@ -101,3 +109,12 @@ else
     bash "$WORKDIR/install/common.sh"
     bash "$WORKDIR/install/essential.sh"
 fi
+
+# Cleanup and save some important information
+#-----------------------------------------------------------------------------------------
+echo -e "\n${GREEN}Cleaning up installation...${NOCOLOR}\n"
+apt -yqq autoremove && apt clean
+echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
+echo -e "${GREEN}--- Installation has been finish!${NOCOLOR}"
+echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
+echo & cat /tmp/stackup-install.log
