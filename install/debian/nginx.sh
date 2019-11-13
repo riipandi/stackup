@@ -30,5 +30,39 @@ curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam-4096.pem
 curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
 
+# SSL certifiacte for default vhost
+#-----------------------------------------------------------------------------------------
+if [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
+    read -ep "Generate ssl cert for default vhost ?       y/n : " -i "n" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        systemctl enable --now haveged && systemctl stop nginx
+        certbot certonly --standalone --agree-tos --register-unsafely-without-email \
+            --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
+    fi
+fi
+
 # Configure packages
 #-----------------------------------------------------------------------------------------
+rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/
+sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
+sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
+sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+
+mkdir -p /etc/nginx/vhost.d /var/www/html /srv/web
+cat /etc/nginx/stubs/default.html > /usr/share/nginx/html/index.html
+chown -R root:root /etc/nginx
+chown -R webmaster: /var/www
+chmod -R 0775 /var/www
+
+# Crontab for renewing LetsEncrypt certificates
+#-----------------------------------------------------------------------------------------
+echo -e "\n${BLUE}Configuring cron for renewing certificates...${NOCOLOR}"
+echo "01 01 01 */3 * /usr/local/bin/ssl-renew >/var/log/ssl-renew.log" > /tmp/ssl_renew
+crontab /tmp/ssl_renew ; rm /tmp/ssl_renew
+
+# Default PHP-FPM on Nginx configuration
+#-----------------------------------------------------------------------------------------
+# find /etc/nginx/stubs/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
+# sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
+# systemctl restart nginx

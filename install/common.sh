@@ -82,7 +82,8 @@ createNewUser() {
 }
 
 perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
-[[ $(cat /etc/group | grep -c webmaster) -eq 1 ]] || groupadd -g 3000 webmaster
+[[ $(cat /etc/group  | grep -c webmaster) -eq 1 ]] || groupadd -g 3000 webmaster
+[[ $(cat /etc/passwd | grep -c webmaster) -eq 1 ]] || useradd -u 3000 -s /usr/sbin/nologin -d /bin/null -g webmaster webmaster
 read -ep "Create new system user?                     y/n : " -i "n" answer
 [[ "${answer,,}" =~ ^(yes|y)$ ]] && createNewUser && echo
 
