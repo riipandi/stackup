@@ -79,7 +79,7 @@ systemctl restart php7.3-fpm
 
 # Set default PHP version
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Set default PHP to v$default_php${NOCOLOR}\n"
+echo -e "\n${BLUE}Set default PHP to v$default_php${NOCOLOR}"
 update-alternatives --set php /usr/bin/php$default_php >/dev/null 2>&1
 update-alternatives --set phar /usr/bin/phar$default_php >/dev/null 2>&1
 update-alternatives --set phar.phar /usr/bin/phar.phar$default_php >/dev/null 2>&1
