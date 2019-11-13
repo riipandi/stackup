@@ -38,10 +38,10 @@ Dpkg::Options {
    "--force-confold";
 }
 EOF
-# apt update -qq && apt -y full-upgrade
-# apt -yqq install lsb-release apt-transport-https software-properties-common
-# apt -yqq install sudo wget curl git crudini openssl figlet perl bsdtar
-# apt -y autoremove
+apt update -qq && apt -y full-upgrade
+apt -yqq install lsb-release apt-transport-https software-properties-common
+apt -yqq install sudo wget curl git crudini openssl figlet perl bsdtar
+apt -y autoremove
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
