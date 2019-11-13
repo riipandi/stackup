@@ -14,7 +14,7 @@ default_php="7.3"
 #-----------------------------------------------------------------------------------------
 echo -e "\n${BLUE}Installing PHP ${mariadb_version}...${NOCOLOR}"
 #-----------------------------------------------------------------------------------------
-# ! [[ -z $(which php) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
+! [[ -z $(which php) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
 [[ -d /run/php ]] || mkdir -p /run/php ; [[ -d /var/run/php ]] || mkdir -p /var/run/php
 
 # Install packages
