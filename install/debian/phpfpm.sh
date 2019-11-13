@@ -86,6 +86,7 @@ update-alternatives --set phar.phar /usr/bin/phar.phar$default_php >/dev/null 2>
 
 # Default PHP-FPM on Nginx configuration
 #-----------------------------------------------------------------------------------------
+cat /etc/nginx/stubs/default.php > /usr/share/nginx/html/index.php
 cat /etc/nginx/vhost.tpl/default-php.conf > /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
