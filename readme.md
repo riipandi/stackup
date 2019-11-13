@@ -23,15 +23,15 @@ Run this command as root and follow the wizard:
 
 ```sh
 # Stable channel
-bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7)
+bash <(curl -sLo- git.io/fhiA7 || wget -qO- git.io/fhiA7)
 
 # Master branch
-bash <(curl -sLo- https://git.io/fhiA7 || wget -qO- https://git.io/fhiA7) --dev
+bash <(curl -sLo- git.io/fhiA7 || wget -qO- git.io/fhiA7) --dev
 ```
 
-If you prefer to run installation manually, you just clone this repo then run provided scripts in `install` directory.
+If you prefer to run installation manually, you have clone this repo then run `setup.sh` as root.
 
-Installation information stored at: `/usr/src/stackup/install.log`
+After finish, installation information stored at: `/tmp/stackup-install.log`
 
 ### Installation notes in AWS
 

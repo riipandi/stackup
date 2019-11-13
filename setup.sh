@@ -13,35 +13,56 @@ BLUE='\033[0;34m'
 ROOTDIR=$(dirname "$(readlink -f "$0")")
 CLONE_DIR=/usr/src/stackup
 
-# Check OS support
-distr=`echo $(lsb_release -i | cut -d':' -f 2)`
-osver=`echo $(lsb_release -c | cut -d':' -f 2)`
-if ! [[ $distr == "Ubuntu" && $osver =~ ^(xenial|bionic)$ ]]; then
+# Common functions
+#----------------------------------------------------------------------------------
+msgNotSupported() {
     echo "$(tput setaf 1)"
-    echo "**************************************************************"
-    echo "****   This OS distribution is not supported by StackUp   ****"
-    echo "**************************************************************"
+    echo "************************************************************"
+    echo "*****    This distribution not supported by StackUp    *****"
+    echo "************************************************************"
     echo "$(tput sgr0)"
-    exit 1
-else
+}
+
+msgContinue() {
     echo -e "${GREEN}"
     read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
     echo -e "${NOCOLOR}"
+}
+
+# Check OS support
+#----------------------------------------------------------------------------------
+distr=`echo $(lsb_release -i | cut -d':' -f 2)`
+osver=`echo $(lsb_release -c | cut -d':' -f 2)`
+
+if ! [[ $distr == "Debian" || $distr == "Ubuntu" ]]; then
+    msgNotSupported && exit 1
+else
+    if [[ $distr == "Debian" && ! $osver =~ ^(stretch|buster)$ ]]; then
+        msgNotSupported && exit 1
+    elif [[ $distr == "Ubuntu" && ! $osver =~ ^(xenial|bionic)$ ]]; then
+        msgNotSupported && exit 1
+    fi
+    msgContinue
 fi
 
 # Install required dependencies
 #----------------------------------------------------------------------------------
-echo -e "\n${OK}Installing required dependencies...${NC}"
 cat > /etc/apt/apt.conf.d/99force-config <<EOF
 Dpkg::Options {
    "--force-confdef";
    "--force-confold";
 }
 EOF
-apt update -qq && apt -y full-upgrade
-apt -yqq install lsb-release apt-transport-https software-properties-common
-apt -yqq install sudo wget curl git crudini openssl figlet perl bsdtar
-apt -y autoremove
+
+echo -e "${BLUE}Updating base system packages...\n${NOCOLOR}"
+apt update -qq && apt -yqq full-upgrade && apt -y autoremove
+
+if [ -z $(which crudini) ]; then
+    echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
+    apt -yqq install lsb-release apt-transport-https software-properties-common
+    apt -yqq install sudo wget curl git crudini openssl figlet perl bsdtar
+fi
+
 
 # Clone setup file and begin instalation process
 #-----------------------------------------------------------------------------------------
