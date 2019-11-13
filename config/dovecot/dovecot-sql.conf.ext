@@ -1,6 +1,0 @@
-driver = mysql
-connect = host=127.0.0.1 dbname=stackup_mail user=stackup_mail password=secret
-default_pass_scheme = SHA512-CRYPT
-password_query = SELECT email as user, password FROM virtual_users WHERE email='%u';
-# If you want to use alias as the username:
-# password_query = SELECT email as user, password FROM virtual_users WHERE email=(SELECT destination FROM virtual_aliases WHERE source = '%u');

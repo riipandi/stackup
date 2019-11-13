@@ -1,4 +1,0 @@
-deb mirror://mirrors.ubuntu.com/mirrors.txt CODENAME main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt CODENAME-updates main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt CODENAME-security main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt CODENAME-proposed main restricted universe multiverse

@@ -1,5 +1,0 @@
-hosts = 127.0.0.1
-user = stackup_mail
-dbname = stackup_mail
-password = secret
-query = SELECT 1 FROM virtual_domains WHERE name='%s'

@@ -1,5 +1,0 @@
-
-MySQL driver written in Python which does not depend on MySQL C client
-libraries and implements the DB API v2.0 specification (PEP-249).
-
-
