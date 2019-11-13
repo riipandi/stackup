@@ -7,6 +7,24 @@ BLUE='\033[0;34m'
 CURRENT=$(dirname $(readlink -f $0))
 [ -z $ROOTDIR ] && PWD=$(dirname $CURRENT) || PWD=$ROOTDIR
 
+# Determine current distro
+distro=`echo $(lsb_release -i | cut -d':' -f 2) | tr '[:upper:]' '[:lower:]'`
+
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+
+# Setup core packages
+bash "$PWD/install/$distro/core.sh"
+
+# Setup MariaDB
+bash "$PWD/install/$distro/mariadb.sh"
+
+# Setup Nginx
+bash "$PWD/install/$distro/nginx.sh"
+
+# Setup PHP-FPM
+bash "$PWD/install/$distro/phpfpm.sh"
+
+# Setup Nodejs + Yarn
+bash "$PWD/install/$distro/nodejs.sh"

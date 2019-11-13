@@ -1,0 +1,3 @@
+deb http://cloudfront.debian.net/debian CODENAME main contrib non-free
+deb http://cloudfront.debian.net/debian CODENAME-updates main contrib non-free
+deb http://cloudfront.debian.net/debian-security CODENAME/updates main contrib non-free

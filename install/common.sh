@@ -145,7 +145,8 @@ sysctl -p -q >/dev/null 2>&1
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
-read -ep "Do you want to setup Linux Swap?            y/n : " -i "n" answer
+if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y"; fi
+read -ep "Do you want to setup Linux Swap?            y/n : " -i "$opsi" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
     if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
