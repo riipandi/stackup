@@ -145,19 +145,17 @@ sysctl -p -q >/dev/null 2>&1
 
 # Linux SWAP
 #-----------------------------------------------------------------------------------------
-memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
-if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y"; fi
+if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
+    memoryTotal=`grep MemTotal /proc/meminfo | awk '{print $2}'`
+    if (( $memoryTotal >= 2097152 )); then opsi="n"; else opsi="y"; fi
 
-read -ep "Do you want to setup Linux Swap?            y/n : " -i "$opsi" answer
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
-    if [[ $(cat /etc/fstab | grep -c "swapfile") -eq 0 ]]; then
+    read -ep "Do you want to setup Linux Swap?            y/n : " -i "$opsi" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        read -ep "Enter size of Swap (in megabyte)                : " -i "2048" swap_size
         echo -e "\n${BLUE}Configuring Linux SWAP...${NOCOLOR}\n"
         echo "/swapfile  none  swap  sw  0 0" >> /etc/fstab
         dd if=/dev/zero of=/swapfile count=$swap_size bs=1M
         chmod 600 /swapfile && mkswap /swapfile
         swapon /swapfile && swapon --show
-    else
-        echo -e "\n${BLUE}Swapfile already configured...${NOCOLOR}"
     fi
 fi
