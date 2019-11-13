@@ -21,7 +21,7 @@ EOF
 
 apt update -qq ; apt full-upgrade -yqq
 apt -yqq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-exiftool-perl \
-libaugeas0 haveged gamin nginx augeas-lenses python-dev openssl
+libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv
 
 # Download latest certbot
 echo -e "\n${BLUE}Downloading certbot and trusted certificates...${NOCOLOR}"

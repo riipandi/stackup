@@ -67,7 +67,7 @@ if [ -z $(which crudini) ]; then
     echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
     apt -yqq install sudo lsb-release apt-transport-https software-properties-common
     apt -yqq install wget curl git zip unzip jq crudini openssl ca-certificates bsdtar
-    apt -yqq install figlet perl dnsutils binutils net-tools pwgen openssh-server
+    apt -yqq install figlet perl dnsutils binutils net-tools pwgen openssh-server nano
 fi
 
 # Clone setup file and begin instalation process
