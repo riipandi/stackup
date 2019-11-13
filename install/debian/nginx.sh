@@ -10,3 +10,11 @@ CURRENT=$(dirname $(readlink -f $0))
 #-----------------------------------------------------------------------------------------
 echo -e "\n${BLUE}Installing Nginx...${NOCOLOR}"
 #-----------------------------------------------------------------------------------------
+! [[ -z $(which nginx) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
+
+# Install packages
+#-----------------------------------------------------------------------------------------
+apt update -qq ; apt full-upgrade -yqq ; apt -yqq install xxxxxxxxxxxxxxxx
+
+# Configure packages
+#-----------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ mysql_root_pass="auto"
 #-----------------------------------------------------------------------------------------
 echo -e "\n${BLUE}Installing MariaDB ${mariadb_version}...${NOCOLOR}"
 #-----------------------------------------------------------------------------------------
-! [[ -z $(which mysql) ]] && echo -e "${BLUE}Already installed...\n${NOCOLOR}" && exit 1
+! [[ -z $(which mysql) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
 
 # Install packages
 #-----------------------------------------------------------------------------------------
