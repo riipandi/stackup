@@ -52,14 +52,14 @@ if [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
         systemctl stop nginx
         certbot certonly --standalone --agree-tos --register-unsafely-without-email \
             --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
-
-        # Update nginxconfiguration
-        # mv /etc/nginx/conf.d/force-https.conf{-disable,}
-        cat /etc/nginx/stubs/vhost-default.conf > /etc/nginx/conf.d/default.conf
-        sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
-        sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
-        systemctl restart nginx
     fi
+else
+    # Update nginxconfiguration
+    # mv /etc/nginx/conf.d/force-https.conf{-disable,}
+    cat /etc/nginx/stubs/vhost-default.conf > /etc/nginx/conf.d/default.conf
+    sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
+    sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+    systemctl restart nginx
 fi
 
 # Crontab for renewing LetsEncrypt certificates

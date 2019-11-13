@@ -90,8 +90,8 @@ read -ep "Create new system user?                     y/n : " -i "n" answer
 # Configure Timezone, SSH server + welcome message
 #-----------------------------------------------------------------------------------------
 read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
-read -ep "Dou you want to enable root login ?      yes/no : " -i "no" ssh_root_login
 read -ep "Please specify SSH port                         : " -i "22" ssh_port
+read -ep "Dou you want to enable root login ?      yes/no : " -i "no" ssh_root_login
 
 sed -i "s/#ListenAddress :://" /etc/ssh/sshd_config
 sed -i "s/[#]*PasswordAuthentication/PasswordAuthentication/" /etc/ssh/sshd_config
