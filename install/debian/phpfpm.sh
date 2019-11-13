@@ -36,7 +36,7 @@ crudini --set /etc/php/7.3/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7
 phpenmod curl opcache imagick fileinfo && systemctl restart php7.3-fpm
 
 # Required package for all php version
-apt -y install composer gettext gamin mcrypt imagemagick aspell graphviz php-mailparse
+apt -yqq install composer gettext gamin mcrypt imagemagick aspell graphviz php-mailparse
 
 # PHP development packages
 #-----------------------------------------------------------------------------------------
