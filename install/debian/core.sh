@@ -10,13 +10,12 @@ CURRENT=$(dirname $(readlink -f $0))
 # Determine os version codename
 osver=`echo $(lsb_release -c | cut -d':' -f 2) | tr '[:upper:]' '[:lower:]'`
 
-#----------------------------------------------------------------------------------
-# --
-#----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+echo -e "\n${BLUE}Upgrading system...${NOCOLOR}"
+#-----------------------------------------------------------------------------------------
 
 # Change default repository mirror
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Upgrading system...${NOCOLOR}"
 # COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 # if   [ $COUNTRY == "ID" ] ; then REPOFILE="$PWD/config/repo/debian-id.list"
 # elif [ $COUNTRY == "SG" ] ; then REPOFILE="$PWD/config/repo/debian-id.list"
