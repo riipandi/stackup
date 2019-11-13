@@ -126,7 +126,7 @@ systemctl restart ssh
 
 # Disable IPv6
 #-----------------------------------------------------------------------------------------
-read -ep "Do you want to disable IPv6?                y/n : " -i "y" answer
+read -ep "Do you want to disable IPv6?                y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     sed -i "s/ListenAddress :://" /etc/ssh/sshd_config
     sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
