@@ -19,7 +19,7 @@ add_header Strict-Transport-Security 'max-age=15768000; preload';
 #add_header Cache-Control 'public, max-age=7200';
 
 # Custom 404 page
-error_page 404 /50x.html;
+error_page 404 /404.html;
 location = /404.html { root /usr/share/nginx/html; }
 
 # Custom error page
