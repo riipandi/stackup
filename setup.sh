@@ -101,8 +101,13 @@ echo -e "${GREEN}--- Starting StackUp installation wizard${NOCOLOR}"
 echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
 
 [[ -f "$WORKDIR/stackup.ini" ]] || touch "$WORKDIR/stackup.ini"
-touch /tmp/stackup-install.log && bash "$WORKDIR/install/common.sh" && echo
-read -ep "Do you want customize installation ?        y/n : " -i "n" answer
+touch /tmp/stackup-install.log && bash "$WORKDIR/install/common.sh"
+
+echo -e "\n${GREEN} You can choose between automatic installation or custom installation."
+echo -e " By default this script will install latest stable version of Nginx,"
+echo -e " PHP, MariaDB, and Nodejs + Yarn.${NOCOLOR}\n"
+
+read -ep "Do you want to customize installation ?     y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/install/custom.sh"
 else
