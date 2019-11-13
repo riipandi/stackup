@@ -14,7 +14,7 @@ default_php="7.3"
 #-----------------------------------------------------------------------------------------
 echo -e "\n${BLUE}Installing PHP ${mariadb_version}...${NOCOLOR}"
 #-----------------------------------------------------------------------------------------
-# ! [[ -z $(which php) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
+! [[ -z $(which php) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
 [[ -d /run/php ]] || mkdir -p /run/php ; [[ -d /var/run/php ]] || mkdir -p /var/run/php
 
 # Install packages
@@ -90,6 +90,12 @@ cat /etc/nginx/stubs/default.php > /usr/share/nginx/html/index.php
 cat /etc/nginx/vhost.tpl/default-php.conf > /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
+
+if [ -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
+    sed -i "s/# listen/listen/" /etc/nginx/conf.d/default.conf
+    sed -i "s/# ssl_certificate/ssl_certificate/" /etc/nginx/conf.d/default.conf
+    sed -i "s/# ssl_certificate_key/ssl_certificate_key/" /etc/nginx/conf.d/default.conf
+fi
 
 find /etc/nginx/vhost.tpl/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
 sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
