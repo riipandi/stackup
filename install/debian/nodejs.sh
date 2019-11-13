@@ -14,7 +14,11 @@ echo -e "\n${BLUE}Installing Nodejs + Yarn...${NOCOLOR}"
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-apt update -qq ; apt full-upgrade -yqq ; apt -yqq install xxxxxxxxxxxxxxxx
+cat > /etc/apt/sources.list.d/nodejs.list <<EOF
+deb https://deb.nodesource.com/node_12.x `lsb_release -cs` main
+deb https://dl.yarnpkg.com/debian/ stable main
+EOF
+curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - &>/dev/null
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &>/dev/null
 
-# Configure packages
-#-----------------------------------------------------------------------------------------
+apt update -qq ; apt full-upgrade -yqq ; apt -yqq install nodejs yarn
