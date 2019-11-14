@@ -12,10 +12,10 @@ or PostgreSQL as optional, and the dynamic processing is handled by PHP, Python,
 
 ### Supported Distribution
 
-- Debian 9 (Stretch)
-- Debian 10 (Buster)
-- Ubuntu 16.04 (Xenial)
-- Ubuntu 18.04 (Bionic)
+- Debian 9 (stretch)
+- Debian 10 (buster)
+- Ubuntu 16.04 (xenial)
+- Ubuntu 18.04 (bionic)
 
 ## Quick Start
 
