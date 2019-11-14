@@ -18,11 +18,10 @@ mysql_root_pass="auto"
 #-----------------------------------------------------------------------------------------
 msgSuccess "\n--- Installing MariaDB ${mariadb_version}"
 #-----------------------------------------------------------------------------------------
-[[ -z $(which mysql) ]] || msgError "Already installed..." && exit 1
+! [[ -z $(which mysql) ]] && msgError "Already installed..." && exit 1
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-checkCountry=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 &>/dev/null
 
 if [ $checkCountry == "ID" ] ; then
@@ -46,10 +45,11 @@ writeLogInfo 'mysql_password' $DB_ROOT_PASS
 
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
-apt update -qq ; apt full-upgrade -yqq ; apt -yqq install mariadb-server mariadb-client
+pkgUpgrade && apt -yqq install mariadb-server mariadb-client &>/dev/null
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
+msgSuccess "\n--- Configuring MariaDB ${mariadb_version}"
 sed -i "s/skip-external-locking//" /etc/mysql/my.cnf
 
 crudini --set /etc/mysql/conf.d/mysqld.cnf 'mysqld' 'bind-address'  $mysql_bind_address

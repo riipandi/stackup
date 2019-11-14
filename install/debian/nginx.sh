@@ -10,7 +10,7 @@ source "$PWD/common.sh"
 #-----------------------------------------------------------------------------------------
 msgSuccess "\n--- Installing Nginx Mainline"
 #-----------------------------------------------------------------------------------------
-[[ -z $(which nginx) ]] || msgError "Already installed..." && exit 1
+! [[ -z $(which nginx) ]] && msgError "Already installed..." && exit 1
 
 # Install packages
 #-----------------------------------------------------------------------------------------
@@ -32,6 +32,7 @@ curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
+msgSuccess "\n--- Configuring Nginx Mainline"
 ip6Check=$(crudini --get /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6')
 
 systemctl enable --now haveged && rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/

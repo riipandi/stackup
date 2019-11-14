@@ -14,7 +14,7 @@ default_php="7.3"
 #-----------------------------------------------------------------------------------------
 msgSuccess "\n--- Installing PHP v${default_php}"
 #-----------------------------------------------------------------------------------------
-[[ -z $(which php) ]] || msgError "Already installed..." && exit 1
+! [[ -z $(which php) ]] && msgError "Already installed..." && exit 1
 
 # Create runtime directory
 [[ -d /var/run/php ]] || mkdir -p /var/run/php
@@ -52,7 +52,7 @@ chmod +x /usr/local/bin/* && chown root:root /usr/local/bin/*
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
-msgInfo "Configuring PHP-FPM..."
+msgSuccess "\n--- Configuring PHP v${default_php}"
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "date.timezone"  "Asia/Jakarta"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize"     "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"      "300"' {} \;
