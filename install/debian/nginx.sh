@@ -14,14 +14,14 @@ msgSuccess "\n--- Installing Nginx Mainline"
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-curl -sS http://nginx.org/keys/nginx_signing.key | apt-key add - &>/dev/null
+curl -sS http://nginx.org/keys/nginx_signing.key | apt-key add - &>${logInstall}
 cat > /etc/apt/sources.list.d/nginx.list <<EOF
 deb [arch=amd64] https://nginx.org/packages/mainline/debian `lsb_release -cs` nginx
 EOF
 
 pkgUpgrade
 apt -yqq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-exiftool-perl \
-libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv &>/dev/null
+libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv &>${logInstall}
 
 # Download latest certbot
 msgInfo "\nDownloading certbot and trusted certificates..."

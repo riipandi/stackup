@@ -68,7 +68,7 @@ createNewUser() {
                     echo && read -ep "Configure NodeJS environment?               y/n : " -i "y" answer
                     if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
                         msgInfo "\nConfiguring NodeJS environment.."
-                        runuser -l $username -c 'sudo npm i -g ghost-cli@latest &>/dev/null'
+                        runuser -l $username -c 'sudo npm i -g ghost-cli@latest &>${logInstall}'
                     fi
                 fi
 
@@ -93,55 +93,55 @@ read -ep "Please specify time zone                        : " -i "Asia/Jakarta" 
 read -ep "Please specify SSH port                         : " -i "22" ssh_port
 read -ep "Dou you want to enable root login?       yes/no : " -i "no" ssh_root_login
 
-sed -i "s/#ListenAddress :://" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*PasswordAuthentication/PasswordAuthentication/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*PubkeyAuthentication/PubkeyAuthentication/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*ClientAliveInterval/ClientAliveInterval/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*AllowTcpForwarding/AllowTcpForwarding/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*ClientAliveCountMax/ClientAliveCountMax/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*PermitRootLogin/PermitRootLogin/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*PermitTunnel/PermitTunnel/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*X11Forwarding/X11Forwarding/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*StrictModes/StrictModes/" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^PermitRootLogin" * *\).*|\1$ssh_root_login|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^PasswordAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^ClientAliveCountMax" * *\).*|\13|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^ListenAddress" * *\).*|\10.0.0.0|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config &>/dev/null
-sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config &>/dev/null
-echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd &>/dev/null
+sed -i "s/#ListenAddress :://" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*PasswordAuthentication/PasswordAuthentication/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*PubkeyAuthentication/PubkeyAuthentication/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*ClientAliveInterval/ClientAliveInterval/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*AllowTcpForwarding/AllowTcpForwarding/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*ClientAliveCountMax/ClientAliveCountMax/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*PermitRootLogin/PermitRootLogin/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*ListenAddress/ListenAddress/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*PermitTunnel/PermitTunnel/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*X11Forwarding/X11Forwarding/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*StrictModes/StrictModes/" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^PermitRootLogin" * *\).*|\1$ssh_root_login|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^PasswordAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^PubkeyAuthentication" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^ClientAliveInterval" * *\).*|\1600|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^AllowTcpForwarding" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^ClientAliveCountMax" * *\).*|\13|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^ListenAddress" * *\).*|\10.0.0.0|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
+sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config &>${logInstall}
+echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd &>${logInstall}
 
-[[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>/dev/null
-timedatectl set-ntp true &>/dev/null
-timedatectl set-timezone $timezone &>/dev/null
-systemctl enable systemd-timesyncd &>/dev/null
-systemctl restart systemd-timesyncd &>/dev/null
-systemctl restart ssh &>/dev/null
+[[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
+timedatectl set-ntp true &>${logInstall}
+timedatectl set-timezone $timezone &>${logInstall}
+systemctl enable systemd-timesyncd &>${logInstall}
+systemctl restart systemd-timesyncd &>${logInstall}
+systemctl restart ssh &>${logInstall}
 
 # Disable IPv6
 #-----------------------------------------------------------------------------------------
 read -ep "Do you want to disable IPv6?                y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    sed -i "s/ListenAddress :://" /etc/ssh/sshd_config &>/dev/null
-    sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf &>/dev/null
-    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1' &>/dev/null
-    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1' &>/dev/null
-    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1' &>/dev/null
-    echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4 &>/dev/null
+    sed -i "s/ListenAddress :://" /etc/ssh/sshd_config &>${logInstall}
+    sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf &>${logInstall}
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6'     '1' &>${logInstall}
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.default.disable_ipv6' '1' &>${logInstall}
+    crudini --set /etc/sysctl.conf '' 'net.ipv6.conf.lo.disable_ipv6'      '1' &>${logInstall}
+    echo -e 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4 &>${logInstall}
     sysctl -p -q >/dev/null 2>&1
 fi
 
 # Sysctl tweak
 #-----------------------------------------------------------------------------------------
-crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1' &>/dev/null
-crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50' &>/dev/null
-crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10' &>/dev/null
+crudini --set /etc/sysctl.conf '' 'net.ipv4.ip_forward'   '1' &>${logInstall}
+crudini --set /etc/sysctl.conf '' 'vm.vfs_cache_pressure' '50' &>${logInstall}
+crudini --set /etc/sysctl.conf '' 'vm.swappiness'         '10' &>${logInstall}
 sysctl -p -q >/dev/null 2>&1
 
 # Linux SWAP

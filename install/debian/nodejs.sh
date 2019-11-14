@@ -18,7 +18,7 @@ cat > /etc/apt/sources.list.d/nodejs.list <<EOF
 deb https://deb.nodesource.com/node_12.x `lsb_release -cs` main
 deb https://dl.yarnpkg.com/debian/ stable main
 EOF
-curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - &>/dev/null
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &>/dev/null
+curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - &>${logInstall}
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &>${logInstall}
 
-pkgUpgrade && apt -yqq install nodejs yarn &>/dev/null
+pkgUpgrade && apt -yqq install nodejs yarn &>${logInstall}

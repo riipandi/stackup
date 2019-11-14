@@ -43,14 +43,14 @@ msgError() {
 # pkgUpdate() {}
 
 pkgUpgrade() {
-    apt update -qq &>/dev/null
-    apt -yqq full-upgrade &>/dev/null
-    apt -y autoremove &>/dev/null
+    apt update -qq &>${logInstall}
+    apt -yqq full-upgrade &>${logInstall}
+    apt -y autoremove &>${logInstall}
 }
 
 pkgClean() {
-    apt -yqq autoremove &>/dev/null
-    apt clean &>/dev/null
+    apt -yqq autoremove &>${logInstall}
+    apt clean &>${logInstall}
 }
 
 writeLogInfo () {

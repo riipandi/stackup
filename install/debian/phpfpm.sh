@@ -22,7 +22,7 @@ msgSuccess "\n--- Installing PHP v${default_php}"
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - &>/dev/null
+curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - &>${logInstall}
 cat > /etc/apt/sources.list.d/php.list <<EOF
 deb https://packages.sury.org/php/ $(lsb_release -sc) main
 EOF
@@ -33,13 +33,13 @@ curl -fsSL https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x8
 
 # PHP v7.3
 apt -y install php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql} \
-php7.3-{opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.3 php7.3-imagick php-pear &>/dev/null
+php7.3-{opcache,pgsql,readline,soap,sqlite3,xml,xmlrpc,zip,zip} php7.3 php7.3-imagick php-pear &>${logInstall}
 find /etc/php/7.3/. -name 'php.ini' -exec bash -c 'crudini --set "$0" "PHP" "zend_extension" "/usr/share/ioncube/ioncube_loader_lin_7.3.so"' {} \;
 crudini --set /etc/php/7.3/fpm/pool.d/www.conf 'www' 'listen' '/var/run/php/php7.3-fpm.sock'
 phpenmod curl opcache imagick fileinfo && systemctl restart php7.3-fpm
 
 # Required package for all php version
-apt -yqq install composer gettext gamin mcrypt imagemagick aspell graphviz php-mailparse &>/dev/null
+apt -yqq install composer gettext gamin mcrypt imagemagick aspell graphviz php-mailparse &>${logInstall}
 
 # PHP development packages
 #-----------------------------------------------------------------------------------------
