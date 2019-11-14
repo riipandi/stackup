@@ -21,4 +21,4 @@ EOF
 curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - &>${logInstall}
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &>${logInstall}
 
-pkgUpgrade && apt -yqq install nodejs yarn &>${logInstall}
+pkgUpgrade && apt -yq install nodejs yarn &>${logInstall}

@@ -45,7 +45,7 @@ writeLogInfo 'mysql_password' $DB_ROOT_PASS
 
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
-pkgUpgrade && apt -yqq install mariadb-server mariadb-client &>${logInstall}
+pkgUpgrade && apt -yq install mariadb-server mariadb-client &>${logInstall}
 
 # Configure packages
 #-----------------------------------------------------------------------------------------

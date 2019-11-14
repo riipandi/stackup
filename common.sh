@@ -44,12 +44,12 @@ msgError() {
 
 pkgUpgrade() {
     apt update -qq &>${logInstall}
-    apt -yqq full-upgrade &>${logInstall}
+    apt -yq full-upgrade &>${logInstall}
     apt -y autoremove &>${logInstall}
 }
 
 pkgClean() {
-    apt -yqq autoremove &>${logInstall}
+    apt -yq autoremove &>${logInstall}
     apt clean &>${logInstall}
 }
 

@@ -20,7 +20,7 @@ deb [arch=amd64] https://nginx.org/packages/mainline/debian `lsb_release -cs` ng
 EOF
 
 pkgUpgrade
-apt -yqq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-exiftool-perl \
+apt -yq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-exiftool-perl \
 libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv &>${logInstall}
 
 # Download latest certbot

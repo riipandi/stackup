@@ -56,10 +56,10 @@ fi
 # Install required dependencies
 if [ -z $(which crudini) ]; then
     msgInfo "\nInstalling required dependencies..."
-    apt -yqq install lsb-release apt-transport-https software-properties-common &>${logInstall}
-    apt -yqq install nano sudo perl wget curl git zip unzip jq crudini bsdtar &>${logInstall}
-    apt -yqq install openssl ca-certificates figlet dnsutils binutils net-tools &>${logInstall}
-    apt -yqq install pwgen openssh-server htop &>${logInstall}
+    apt -yq install lsb-release apt-transport-https software-properties-common &>${logInstall}
+    apt -yq install nano sudo perl wget curl git zip unzip jq crudini bsdtar &>${logInstall}
+    apt -yq install openssl ca-certificates figlet dnsutils binutils net-tools &>${logInstall}
+    apt -yq install pwgen openssh-server htop &>${logInstall}
 fi
 
 # Clone setup file and begin instalation process

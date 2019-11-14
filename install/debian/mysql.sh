@@ -14,7 +14,7 @@ msgSuccess "\n--- Installing MySQL"
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-apt update -qq ; apt full-upgrade -yqq ; apt -yqq install xxxxxxxxxxxxxxxx
+apt update -qq ; apt full-upgrade -yqq ; apt -yq install xxxxxxxxxxxxxxxx
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
