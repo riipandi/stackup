@@ -29,7 +29,8 @@ EOF
 pkgUpgrade
 
 # ionCube loader extension
-curl -fsSL https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz | bsdtar -xvf- -C /usr/share
+ioncubeUrl="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz"
+curl -fsSL ${ioncubeUrl} | bsdtar -xvf- -C /usr/share &>${logInstall}
 
 # PHP v7.3
 apt -y install php7.3-{bcmath,cgi,cli,common,curl,fpm,gd,gmp,imap,intl,json,ldap,mbstring,mysql} \
