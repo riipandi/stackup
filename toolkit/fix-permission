@@ -8,3 +8,26 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+if [ -z $1 ] ; then
+    echo -e "\nPlease input the directory name."
+    echo -e "\nExample: $(basename $0) /srv/web/domain.com\n"
+    exit 1
+fi
+
+# Check directory
+if [ ! -d $1 ]; then
+    echo -e "\n${red}Directory $1 doesn't exists!\n${nocolor}"
+    exit 1
+fi
+
+echo -e "\n${green}Setting up file and directory permission...${nocolor}"
+
+# Change permission
+find "$1/." -type d -exec chmod 0777 {} \;
+find "$1/." -type f -exec chmod 0644 {} \;
+chmod -R 0770 $1/* && chmod 0777 $1
+
+# Change owner
+[[ $2 ]] && chown -R $2 $1|| chown -R webmaster:webmaster $1
+
+echo -e "\n${green}Permission for directory $1 has been fixed!${nocolor}"
