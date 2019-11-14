@@ -1,10 +1,6 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-
-# Determine root directory
 [ -z $ROOTDIR ] && PWD=$(dirname `dirname $(dirname $(readlink -f $0))`) || PWD=$ROOTDIR
-
-# Common global variables
 source "$PWD/common.sh"
 
 # Parameter
@@ -43,9 +39,10 @@ fi
 # Write log information
 writeLogInfo 'mysql_password' $DB_ROOT_PASS
 
+pkgUpgrade
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"
-pkgUpgrade && apt -yq install mariadb-server mariadb-client &>${logInstall}
+apt -yq install mariadb-server mariadb-client &>${logInstall}
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
@@ -66,15 +63,18 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'user'         $mysql_root
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password'     $DB_ROOT_PASS
 
 systemctl restart mysql
+systemctl enable mysql
 
 # Reset db root password
 #-----------------------------------------------------------------------------------------
 systemctl stop mysql
 mysqld_safe --skip-grant-tables &
-mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASS';"
-killall mysqld && systemctl restart mysql
+mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';"
+killall mysqld
+systemctl restart mysql
+systemctl status mysql
 
 # Disable plugin
 #-----------------------------------------------------------------------------------------
-mysql -uroot -p$DB_ROOT_PASS -e "update mysql.user SET plugin='' where User='root';
-drop database if exists test; flush privileges;"
+mysql -uroot -p${DB_ROOT_PASS} -e "update mysql.user SET plugin='' where User='root';"
+mysql -uroot -p${DB_ROOT_PASS} -e "drop database if exists test; flush privileges;"

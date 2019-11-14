@@ -31,7 +31,7 @@ bash <(curl -sLo- git.io/fhiA7 || wget -qO- git.io/fhiA7) --dev
 
 If you prefer to run installation manually, you have clone this repo then run `setup.sh` as root.
 
-After finish, installation information stored at: `/tmp/stackup-info.log`
+After finish, installation information stored at: `/root/stackup-info.log`
 
 ### Installation notes in AWS
 

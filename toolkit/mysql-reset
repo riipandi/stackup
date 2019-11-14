@@ -1,0 +1,69 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+nocolor='\033[0m'
+green='\033[0;32m'
+red='\033[0;33m'
+blue='\033[0;34m'
+
+#----------------------------------------------------------------------------------
+# --
+#----------------------------------------------------------------------------------
+
+# Please confirm that you want to reset the MySQL passwords
+CONFIRM="n"
+echo -en "\nPlease confirm MySQL password reset. Continue? (y/N): "
+read -n 1 CONFIRM_INPUT
+if [ -n "$CONFIRM_INPUT" ]; then
+    CONFIRM=$CONFIRM_INPUT
+fi
+
+echo
+
+# check if we are resetting the MySQL password
+if [[ "${CONFIRM}" =~ ^[Yy]$ ]]; then
+
+    # Kill any mysql processes currently running
+    echo -e '\nShutting down any mysql processes...'
+    service mysql stop
+    killall -vw mysqld
+
+    # Start mysql without grant tables
+    mysqld_safe --skip-grant-tables >res 2>&1 &
+
+    echo -e '\nResetting password... hold on'
+
+    # Sleep for 5 while the new mysql process loads (if get a connection error you might need to increase this.)
+    sleep 5
+
+    # Creating the password
+    DB_ROOT_PASS_LEN=`shuf -i 20-30 -n 1`
+    DB_ROOT_PASS=`pwgen -scn $DB_ROOT_PASS_LEN 1`
+    DB_ROOT_USER='root'
+
+    # Update root user with new password
+    mysql -uroot -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';"
+    # mysql mysql -e "UPDATE user SET Password=PASSWORD('$DB_ROOT_PASS') WHERE User='$DB_ROOT_USER';FLUSH PRIVILEGES;"
+
+    echo 'Cleaning up...'
+
+    # Kill the insecure mysql process
+    killall -v mysqld
+
+    # Starting mysql again
+    service mysql restart
+
+    # Update Configuration
+    crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql'     'password' $DB_ROOT_PASS
+    crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password' $DB_ROOT_PASS
+
+    echo
+    echo "Password reset has been completed"
+    echo
+    echo "MySQL root password: $DB_ROOT_PASS"
+    echo
+    echo "Remember to store this password safely!"
+else
+    echo "Password reset was aborted"
+fi
+
+echo
