@@ -10,7 +10,8 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 osDistro=`echo $(lsb_release -i | cut -d':' -f 2)`
 osVersion=`echo $(lsb_release -c | cut -d':' -f 2)`
-logFile="/tmp/stackup-install.log"
+logFile="/tmp/stackup-info.log"
+logInstall="/tmp/stackup-install.log"
 checkCountry=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 # Display message
