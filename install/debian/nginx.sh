@@ -19,9 +19,9 @@ cat > /etc/apt/sources.list.d/nginx.list <<EOF
 deb [arch=amd64] https://nginx.org/packages/mainline/debian `lsb_release -cs` nginx
 EOF
 
-apt update -qq ; apt full-upgrade -yqq
+pkgUpgrade
 apt -yqq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-exiftool-perl \
-libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv
+libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv &>/dev/null
 
 # Download latest certbot
 msgInfo "\nDownloading certbot and trusted certificates..."

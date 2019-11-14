@@ -21,4 +21,4 @@ EOF
 curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - &>/dev/null
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &>/dev/null
 
-apt update -qq ; apt full-upgrade -yqq ; apt -yqq install nodejs yarn
+pkgUpgrade && apt -yqq install nodejs yarn &>/dev/null
