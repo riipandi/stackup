@@ -1,11 +1,11 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-NOCOLOR='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[0;33m'
-BLUE='\033[0;34m'
-CURRENT=$(dirname $(readlink -f $0))
-[ -z $ROOTDIR ] && PWD=$(dirname `dirname $CURRENT`) || PWD=$ROOTDIR
+
+# Determine root directory
+[ -z $ROOTDIR ] && PWD=$(dirname `dirname $(dirname $(readlink -f $0))`) || PWD=$ROOTDIR
+
+# Common global variables
+source "$PWD/common.sh"
 
 # Parameter
 #-----------------------------------------------------------------------------------------
@@ -16,18 +16,18 @@ mysql_root_user="root"
 mysql_root_pass="auto"
 
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Installing MariaDB ${mariadb_version}...${NOCOLOR}"
+msgSuccess "\n--- Installing MariaDB ${mariadb_version}"
 #-----------------------------------------------------------------------------------------
-! [[ -z $(which mysql) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
+[[ -z $(which mysql) ]] || msgError "Already installed..." && exit 1
 
 # Install packages
 #-----------------------------------------------------------------------------------------
-COUNTRY=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
+checkCountry=$(wget -qO- ipapi.co/json | grep '"country":' | sed -E 's/.*"([^"]+)".*/\1/')
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com C74CD1D8 &>/dev/null
 
-if [ $COUNTRY == "ID" ] ; then
+if [ $checkCountry == "ID" ] ; then
     REPO="deb [arch=amd64] http://mirror.biznetgio.com/mariadb/repo/$mariadb_version/debian `lsb_release -cs` main"
-elif [ $COUNTRY == "SG" ] ; then
+elif [ $checkCountry == "SG" ] ; then
     REPO="deb [arch=amd64] http://download.nus.edu.sg/mirror/mariadb/repo/$mariadb_version/debian `lsb_release -cs` main"
 else
     REPO="deb [arch=amd64] http://mirror.rackspace.com/mariadb/repo/$mariadb_version/debian `lsb_release -cs` main"
@@ -37,10 +37,12 @@ echo $REPO > /etc/apt/sources.list.d/mariadb.list
 # Database root password
 if [[ "$mysql_root_pass" == "auto" ]] ; then
     DB_ROOT_PASS=$(openssl rand -base64 12 | tr -d "=+/" | cut -c1-25)
-    echo "MYSQL_ROOT_PASS = $DB_ROOT_PASS" >> /tmp/stackup-install.log
 else
     DB_ROOT_PASS=$mysql_root_pass
 fi
+
+# Write log information
+writeLogInfo 'mysql_password' $DB_ROOT_PASS
 
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASS"

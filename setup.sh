@@ -1,20 +1,17 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-NOCOLOR='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[0;33m'
-BLUE='\033[0;34m'
-
-#----------------------------------------------------------------------------------
-# StackUp Installation Script.
-#----------------------------------------------------------------------------------
 
 # Define working directory
 ROOTDIR=$(dirname "$(readlink -f "$0")")
 CLONE_DIR=/usr/src/stackup
 
-# Common functions
+source "$ROOTDIR/common.sh"
+
 #----------------------------------------------------------------------------------
+# StackUp Installation Script.
+#----------------------------------------------------------------------------------
+
+# Check OS support
 msgNotSupported() {
     echo "$(tput setaf 1)"
     echo "************************************************************"
@@ -23,23 +20,12 @@ msgNotSupported() {
     echo "$(tput sgr0)"
 }
 
-msgContinue() {
-    echo -e "${GREEN}"
-    read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
-    echo -e "${NOCOLOR}"
-}
-
-# Check OS support
-#----------------------------------------------------------------------------------
-distr=`echo $(lsb_release -i | cut -d':' -f 2)`
-osver=`echo $(lsb_release -c | cut -d':' -f 2)`
-
-if ! [[ $distr == "Debian" || $distr == "Ubuntu" ]]; then
+if ! [[ $osDistro == "Debian" || $osDistro == "Ubuntu" ]]; then
     msgNotSupported && exit 1
 else
-    if [[ $distr == "Debian" && ! $osver =~ ^(stretch|buster)$ ]]; then
+    if [[ $osDistro == "Debian" && ! $osVersion =~ ^(stretch|buster)$ ]]; then
         msgNotSupported && exit 1
-    elif [[ $distr == "Ubuntu" && ! $osver =~ ^(xenial|bionic)$ ]]; then
+    elif [[ $osDistro == "Ubuntu" && ! $osVersion =~ ^(xenial|bionic)$ ]]; then
         msgNotSupported && exit 1
     fi
     msgContinue
@@ -58,13 +44,13 @@ EOF
 # -mmin -360 finds files that have a change time in the last 6 hours.
 # You can use -mtime if you care about longer times (days).
 if [ -z "$(find -H /var/lib/apt/lists -maxdepth 0 -mtime -360)" ]; then
-    echo -e "${BLUE}Updating base system packages...\n${NOCOLOR}"
-    apt update -qq && apt -yqq full-upgrade && apt -y autoremove
+    msgInfo "\nUpdating base system packages..."
+    pkgUpgrade
 fi
 
 # Install required dependencies
 if [ -z $(which crudini) ]; then
-    echo -e "${BLUE}\nInstalling required dependencies...\n${NOCOLOR}"
+    msgInfo "\nInstalling required dependencies..."
     apt -yqq install sudo perl lsb-release apt-transport-https software-properties-common
     apt -yqq install wget curl git zip unzip jq crudini openssl ca-certificates bsdtar
     apt -yqq install nano figlet dnsutils binutils net-tools pwgen openssh-server htop
@@ -96,39 +82,42 @@ find $WORKDIR/ -type f -name '*.sh' -exec chmod +x {} \;
 
 # Run setup wizard
 #----------------------------------------------------------------------------------
-echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
-echo -e "${GREEN}--- Starting StackUp installation wizard${NOCOLOR}"
-echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
-
+msgSuccess "----------------------------------------------------------"
+msgSuccess "---        Starting StackUp installation wizard        ---"
+msgSuccess "----------------------------------------------------------"
 [[ -f "$WORKDIR/stackup.ini" ]] || touch "$WORKDIR/stackup.ini"
-touch /tmp/stackup-install.log && bash "$WORKDIR/install/common.sh"
+[[ -f "${logFile}" ]] || touch touch ${logFile}
+bash "$WORKDIR/install/common.sh"
 
-echo -e "\n${GREEN} You can choose between automatic installation or custom installation."
-echo -e " By default this script will install latest stable version of Nginx,"
-echo -e " PHP, MariaDB, and Nodejs + Yarn.${NOCOLOR}\n"
+msgSuccess "\n You can choose between automatic installation or custom installation."
+msgSuccess " By default this script will install latest stable version of PHP FPM,"
+msgSuccess " MariaDB, Nodejs + Yarn, and Nginx mainline.\n"
 
-read -ep "Do you want to customize installation ?     y/n : " -i "n" answer
+read -ep "Do you want to customize installation?      y/n : " -i "n" answer
 if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
     bash "$WORKDIR/install/custom.sh"
 else
     bash "$WORKDIR/install/essential.sh"
 fi
 
-# Configure toolkit
+# Ask to install utilities
 #----------------------------------------------------------------------------------
-read -ep "Do you want to use StackUp utilities ?      y/n : " -i "y" answer
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    find $WORKDIR/toolkit/. -type f -name '*.sh' | while read f; do mv "$f" "${f%.sh}"; done
-    find $WORKDIR/toolkit/. -type f -exec chmod 0777 {} \;
-    cp $WORKDIR/toolkit/* /usr/local/bin/.
+if [ ! -f "/usr/local/bin/pkg-update" ]; then
+    echo && read -ep "Do you want to use StackUp utilities?       y/n : " -i "y" answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        find $WORKDIR/toolkit/. -type f -name '*.sh' | while read f; do mv "$f" "${f%.sh}"; done
+        find $WORKDIR/toolkit/. -type f -exec chmod 0777 {} \;
+        cp $WORKDIR/toolkit/* /usr/local/bin/.
+    fi
 fi
 
-# Cleanup and save some important information
+# Cleanup and display finish message
 #-----------------------------------------------------------------------------------------
-echo -e "\n${GREEN}Cleaning up installation...${NOCOLOR}\n"
-apt -yqq autoremove && apt clean
-echo -e "\n${GREEN}------------------------------------------------------${NOCOLOR}"
-echo -e "${GREEN}--- Installation has been finish!${NOCOLOR}"
-echo -e "${GREEN}------------------------------------------------------\n${NOCOLOR}"
-echo & cat /tmp/stackup-install.log
-echo & netstat -pltnu46
+msgSuccess "\n--- Cleaning up installation" && pkgClean
+echo "$(tput setaf 1)"
+echo "***************************************************************"
+echo "*****   Congratulation, installation has been finished!   *****"
+echo "***************************************************************"
+echo "$(tput sgr0)"
+echo & cat ${logFile}
+echo & netstat -pltnu

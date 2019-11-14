@@ -1,19 +1,20 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-NOCOLOR='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[0;33m'
-BLUE='\033[0;34m'
-CURRENT=$(dirname $(readlink -f $0))
-[ -z $ROOTDIR ] && PWD=$(dirname `dirname $CURRENT`) || PWD=$ROOTDIR
+
+# Determine root directory
+[ -z $ROOTDIR ] && PWD=$(dirname `dirname $(dirname $(readlink -f $0))`) || PWD=$ROOTDIR
+
+# Common global variables
+source "$PWD/common.sh"
 
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Installing Nginx Amplify...${NOCOLOR}"
+msgSuccess "\n--- Installing Nginx Amplify"
 #-----------------------------------------------------------------------------------------
-if [ -f "$PWD/stackup.ini" ]; then
-    [[ $(cat "$PWD/stackup.ini" | grep -c "amplify_install") -eq 1 ]] && amplify_install=$(crudini --get $PWD/stackup.ini '' 'amplify_install')
-    [[ -z "$amplify_install" ]] && read -ep "Do you want to use Nginx Amplify ?          y/n : " amplify_install
-fi
+
+# if [ -f "$PWD/stackup.ini" ]; then
+#     [[ $(cat "$PWD/stackup.ini" | grep -c "amplify_install") -eq 1 ]] && amplify_install=$(crudini --get $PWD/stackup.ini '' 'amplify_install')
+#     [[ -z "$amplify_install" ]] && read -ep "Do you want to use Nginx Amplify?           y/n : " amplify_install
+# fi
 
 if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
     if [ -f "$PWD/stackup.ini" ]; then

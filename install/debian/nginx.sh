@@ -1,16 +1,16 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-NOCOLOR='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[0;33m'
-BLUE='\033[0;34m'
-CURRENT=$(dirname $(readlink -f $0))
-[ -z $ROOTDIR ] && PWD=$(dirname `dirname $CURRENT`) || PWD=$ROOTDIR
+
+# Determine root directory
+[ -z $ROOTDIR ] && PWD=$(dirname `dirname $(dirname $(readlink -f $0))`) || PWD=$ROOTDIR
+
+# Common global variables
+source "$PWD/common.sh"
 
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Installing Nginx...${NOCOLOR}"
+msgSuccess "\n--- Installing Nginx Mainline"
 #-----------------------------------------------------------------------------------------
-! [[ -z $(which nginx) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
+[[ -z $(which nginx) ]] || msgError "Already installed..." && exit 1
 
 # Install packages
 #-----------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ apt -yqq install {libpng,libssl,libffi,libexpat1}-dev libarchive-tools libimage-
 libaugeas0 haveged gamin nginx augeas-lenses openssl python-dev python-virtualenv
 
 # Download latest certbot
-echo -e "\n${BLUE}Downloading certbot and trusted certificates...${NOCOLOR}"
+msgInfo "\nDownloading certbot and trusted certificates..."
 curl -L# https://dl.eff.org/certbot-auto -o /usr/bin/certbot ; chmod a+x /usr/bin/certbot
 curl -L# https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt -o /etc/ssl/certs/chain.pem
 curl -L# https://2ton.com.au/dhparam/4096 -o /etc/ssl/certs/dhparam-4096.pem
@@ -61,7 +61,7 @@ setupNginxDefaultHttps() {
 if [ -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
     setupNginxDefaultHttps
 elif [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
-    read -ep "Generate ssl cert for default vhost ?       y/n : " -i "n" answer
+    read -ep "Generate ssl cert for default vhost?        y/n : " -i "n" answer
     if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
         systemctl stop nginx
         certbot certonly --standalone --agree-tos --register-unsafely-without-email \
@@ -80,6 +80,6 @@ fi
 
 # Crontab for renewing LetsEncrypt certificates
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Configuring cron for renewing certificates...${NOCOLOR}"
+msgInfo "Configuring cron for renewing certificates..."
 echo "01 01 01 */3 * /usr/local/bin/ssl-renew >/var/log/ssl-renew.log" > /tmp/ssl_renew
 crontab /tmp/ssl_renew ; rm /tmp/ssl_renew

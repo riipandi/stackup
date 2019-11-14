@@ -13,7 +13,12 @@ osver=`echo ${osVersion} | tr '[:upper:]' '[:lower:]'`
 #-----------------------------------------------------------------------------------------
 msgSuccess "\n--- Upgrade system and install core packages"
 #-----------------------------------------------------------------------------------------
-cat "$PWD/config/repo/debian.list" > /etc/apt/sources.list
+if   [ $checkCountry == "ID" ] ; then REPOFILE="$PWD/config/repo/ubuntu-id.list"
+elif [ $checkCountry == "SG" ] ; then REPOFILE="$PWD/config/repo/ubuntu-sg.list"
+elif [ $checkCountry == "US" ] ; then REPOFILE="$PWD/config/repo/ubuntu-us.list"
+else REPOFILE="$PWD/config/repo/ubuntu-xx.list" ; fi
+
+cat "${REPOFILE}" > /etc/apt/sources.list
 sed -i "s/CODENAME/$(lsb_release -cs)/" /etc/apt/sources.list
 rm -fr /etc/apt/sources.list.d/*
 

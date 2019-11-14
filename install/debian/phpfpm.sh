@@ -1,21 +1,24 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
-NOCOLOR='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[0;33m'
-BLUE='\033[0;34m'
-CURRENT=$(dirname $(readlink -f $0))
-[ -z $ROOTDIR ] && PWD=$(dirname `dirname $CURRENT`) || PWD=$ROOTDIR
+
+# Determine root directory
+[ -z $ROOTDIR ] && PWD=$(dirname `dirname $(dirname $(readlink -f $0))`) || PWD=$ROOTDIR
+
+# Common global variables
+source "$PWD/common.sh"
 
 # Parameter
 #-----------------------------------------------------------------------------------------
 default_php="7.3"
 
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Installing PHP ${mariadb_version}...${NOCOLOR}"
+msgSuccess "\n--- Installing PHP v${default_php}"
 #-----------------------------------------------------------------------------------------
-! [[ -z $(which php) ]] && echo -e "${BLUE}Already installed...${NOCOLOR}" && exit 1
-[[ -d /run/php ]] || mkdir -p /run/php ; [[ -d /var/run/php ]] || mkdir -p /var/run/php
+[[ -z $(which php) ]] || msgError "Already installed..." && exit 1
+
+# Create runtime directory
+[[ -d /var/run/php ]] || mkdir -p /var/run/php
+[[ -d /run/php ]] || mkdir -p /run/php
 
 # Install packages
 #-----------------------------------------------------------------------------------------
@@ -40,7 +43,7 @@ apt -yqq install composer gettext gamin mcrypt imagemagick aspell graphviz php-m
 
 # PHP development packages
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Downloading PHP development packages...${NOCOLOR}"
+msgInfo "Downloading PHP development packages..."
 curl -L# "https://git.io/vN3Ff" -o /usr/local/bin/wp
 curl -L# "https://git.io/fAFyN" -o /usr/local/bin/phpcs
 curl -L# "https://git.io/fAFyb" -o /usr/local/bin/phpcbf
@@ -49,7 +52,7 @@ chmod +x /usr/local/bin/* && chown root:root /usr/local/bin/*
 
 # Configure packages
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Configuring PHP-FPM...${NOCOLOR}"
+msgInfo "Configuring PHP-FPM..."
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "date.timezone"  "Asia/Jakarta"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "upload_max_filesize"     "32M"' {} \;
 find /etc/php/. -name 'php.ini'  -exec bash -c 'crudini --set "$0" "PHP" "max_execution_time"      "300"' {} \;
@@ -79,7 +82,7 @@ systemctl restart php7.3-fpm
 
 # Set default PHP version
 #-----------------------------------------------------------------------------------------
-echo -e "\n${BLUE}Set default PHP to v$default_php${NOCOLOR}"
+msgInfo "Set default PHP to v${default_php}"
 update-alternatives --set php /usr/bin/php$default_php >/dev/null 2>&1
 update-alternatives --set phar /usr/bin/phar$default_php >/dev/null 2>&1
 update-alternatives --set phar.phar /usr/bin/phar.phar$default_php >/dev/null 2>&1
