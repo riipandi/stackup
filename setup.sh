@@ -5,7 +5,12 @@ if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
 ROOTDIR=$(dirname "$(readlink -f "$0")")
 CLONE_DIR=/usr/src/stackup
 
-source "$ROOTDIR/common.sh"
+if ! [ $(pwd) == $ROOTDIR ]; then
+    wget -qO /tmp/stackup-common.sh
+    source "/tmp/stackup-common.sh"
+else
+    source "$ROOTDIR/common.sh"
+fi
 
 #----------------------------------------------------------------------------------
 # StackUp Installation Script.
