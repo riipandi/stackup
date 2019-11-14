@@ -67,12 +67,10 @@ systemctl enable mysql
 
 # Reset db root password
 #-----------------------------------------------------------------------------------------
-systemctl stop mysql
-mysqld_safe --skip-grant-tables &
+systemctl stop mysql && killall -vw mysqld
+mysqld_safe --skip-grant-tables >res 2>&1 &
 mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';"
-killall mysqld
-systemctl restart mysql
-systemctl status mysql
+killall -v mysqld && systemctl restart mysql
 
 # Disable plugin
 #-----------------------------------------------------------------------------------------
