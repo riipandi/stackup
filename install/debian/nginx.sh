@@ -66,7 +66,7 @@ elif [ ! -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
     if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
         systemctl stop nginx
         certbot certonly --standalone --agree-tos --register-unsafely-without-email \
-            --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
+            --no-bootstrap --rsa-key-size 4096 --preferred-challenges http -d "$(hostname -f)"
         setupNginxDefaultHttps
     fi
 fi
