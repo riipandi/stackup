@@ -1,6 +1,6 @@
-__pycache__/
 /web/logs/*
 !/web/logs/.gitkeep
 
+__pycache__/
 stackup.ini
 *.log

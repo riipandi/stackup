@@ -11,14 +11,14 @@ source "$PWD/common.sh"
 msgSuccess "\n--- Installing Nginx Amplify"
 #-----------------------------------------------------------------------------------------
 
-# if [ -f "$PWD/stackup.ini" ]; then
-#     [[ $(cat "$PWD/stackup.ini" | grep -c "amplify_install") -eq 1 ]] && amplify_install=$(crudini --get $PWD/stackup.ini '' 'amplify_install')
+# if [ -f "$PWD/config/stackup.ini" ]; then
+#     [[ $(cat "$PWD/config/stackup.ini" | grep -c "amplify_install") -eq 1 ]] && amplify_install=$(crudini --get $PWD/config/stackup.ini '' 'amplify_install')
 #     [[ -z "$amplify_install" ]] && read -ep "Do you want to use Nginx Amplify?           y/n : " amplify_install
 # fi
 
 if [[ "${amplify_install,,}" =~ ^(yes|y)$ ]] ; then
-    if [ -f "$PWD/stackup.ini" ]; then
-        [[ $(cat "$PWD/stackup.ini" | grep -c "amplify_key") -eq 1 ]] && amplify_key=$(crudini --get $PWD/stackup.ini '' 'amplify_key')
+    if [ -f "$PWD/config/stackup.ini" ]; then
+        [[ $(cat "$PWD/config/stackup.ini" | grep -c "amplify_key") -eq 1 ]] && amplify_key=$(crudini --get $PWD/config/stackup.ini '' 'amplify_key')
         [[ -z "$amplify_key" ]] && read -ep "Nginx Amplify Key                               : " amplify_key
     fi
 
