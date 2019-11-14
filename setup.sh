@@ -6,7 +6,7 @@ ROOTDIR=$(dirname "$(readlink -f "$0")")
 CLONE_DIR=/usr/src/stackup
 
 if ! [ $(pwd) == $ROOTDIR ]; then
-    wget -qO /tmp/stackup-common.sh
+    wget -qO /tmp/stackup-common.sh https://raw.githubusercontent.com/riipandi/stackup/master/common.sh
     source "/tmp/stackup-common.sh"
 else
     source "$ROOTDIR/common.sh"
