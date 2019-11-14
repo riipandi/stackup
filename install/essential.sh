@@ -24,3 +24,6 @@ bash "$PWD/install/$distro/phpfpm.sh"
 
 # Setup Nodejs + Yarn
 bash "$PWD/install/$distro/nodejs.sh"
+
+# Setup phpMyAdmin
+bash "$PWD/install/$distro/phpmyadmin.sh"
