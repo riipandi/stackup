@@ -22,12 +22,18 @@ fi
 
 echo -e "\n${green}Setting up file and directory permission...${nocolor}"
 
+# Convert path type
+dirPath=$1
+if [[ $1 =~ "." ]] ; then
+    dirPath=$(cd ${1}; pwd)
+fi
+
 # Change permission
-find "$1/." -type d -exec chmod 0777 {} \;
-find "$1/." -type f -exec chmod 0644 {} \;
-chmod -R 0770 $1/* && chmod 0777 $1
+find "$dirPath/." -type d -exec chmod 0777 {} \;
+find "$dirPath/." -type f -exec chmod 0644 {} \;
+chmod -R 0770 $dirPath/* && chmod 0777 $dirPath
 
 # Change owner
-[[ $2 ]] && chown -R $2 $1|| chown -R webmaster:webmaster $1
+[[ $2 ]] && chown -R $2 $dirPath|| chown -R webmaster:webmaster $dirPath
 
-echo -e "\n${green}Permission for directory $1 has been fixed!${nocolor}"
+echo -e "\n${green}Permission for directory $dirPath has been fixed!\n${nocolor}"
