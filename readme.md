@@ -52,16 +52,6 @@ ssh username@ip_address -i LightsailDefaultKey-zone.pem
 | SSH       | tcp   | 22 (or, according to your configuration)
 | FTP       | tcp   | 21 and 50000-50100
 
-## TODO List
-
-- [x] Make each setup script as independent installer
-- [x] Add automatic installation wizard
-- [x] FTP server installation and snippets
-- [ ] Fix FTP server site snippet
-- [ ] Fix pgAdmin4 installation
-- [ ] Fix vhost proxy snippet
-- [ ] Mail server installation
-
 ## License
 
 Copyright (c) 2018-2019 Aris Ripandi

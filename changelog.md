@@ -5,6 +5,10 @@ format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
 
+### [3.4] - 2019/11/14
+- Changed project structure
+- Enabling multiple distributiion support
+
 ### [3.3] - 2019/06/07
 - Fix FTP server setup and configuration
 - FTP server are optional (not installed by default)
