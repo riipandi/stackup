@@ -8,3 +8,31 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+
+if [ -x $(which nginx) ]; then
+    WEBSERVER="nginx"
+elif [ -x $(which apache2) ]; then
+    WEBSERVER="apache2"
+fi
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+www=""
+
+read -ep "Generate certificate for www subdomain?      y/n : " answer
+
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then www="-d www.$1" ; fi
+
+systemctl stop $WEBSERVER
+
+certbot certonly \
+  --standalone --rsa-key-size 4096 --agree-tos \
+  --register-unsafely-without-email -d $1 $www
+
+systemctl restart $WEBSERVER
+
+echo -e "SSL certificate for $1 created..."

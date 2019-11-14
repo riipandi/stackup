@@ -36,7 +36,7 @@ if [[ "${CONFIRM}" =~ ^[Yy]$ ]]; then
     sleep 5
 
     # Creating the password
-    DB_ROOT_PASS_LEN=`shuf -i 20-30 -n 1`
+    DB_ROOT_PASS_LEN=`shuf -i 12-20 -n 1`
     DB_ROOT_PASS=`pwgen -scn $DB_ROOT_PASS_LEN 1`
     DB_ROOT_USER='root'
 
