@@ -17,19 +17,32 @@ fi
 DOMAIN=$1
 WEBDIR="/srv/web"
 
+# Validate IP address
+#----------------------------------------------------------------------------------
+ipServer=`curl -s ifconfig.me`
+ipDomain=`dig +short ${DOMAIN} | tail -n1`
+
+if ! [[ $ipDomain == $ipServer ]]; then
+    echo -e "\nDomain not pointed to this server...\n"
+    exit 1
+fi
+
 # Validate existing vhost
 #----------------------------------------------------------------------------------
 if [[ -d "${WEBDIR}/${DOMAIN}" ]]; then
     echo -e "\nVirtualHost already exist...\n"
     exit 1
-else
-    sitePath="${WEBDIR}/${DOMAIN}"
-    [[ -d "${sitePath}/public" ]] || mkdir -p "${sitePath}/public"
 fi
+
+# Starting the process
+#----------------------------------------------------------------------------------
+read -p "Press [Enter] to Continue or [Ctrl+C] to Cancel..."
+
+sitePath="${WEBDIR}/${DOMAIN}"
+[[ -d "${sitePath}/public" ]] || mkdir -p "${sitePath}/public"
 
 # Site creation functions
 #----------------------------------------------------------------------------------
-
 srcStubs="/etc/nginx/stubs"
 srcVhost="/etc/nginx/vhost.tpl"
 dstVhost="/etc/nginx/vhost.d"
@@ -74,9 +87,11 @@ chown -R webmaster:webmaster ${sitePath}
 
 # Ask to generate LetsEncrypt certificate
 #----------------------------------------------------------------------------------
-read -ep "Do you want to generate SSL certificate?    y/n : " answer
-if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
-    bash /usr/local/bin/ssl-create ${DOMAIN}
+if [ ! -d "/etc/letsencrypt/live/${DOMAIN}" ]; then
+    read -ep "Do you want to generate SSL certificate?    y/n : " answer
+    if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+        bash /usr/local/bin/ssl-create ${DOMAIN}
+    fi
 fi
 
 # Enabling virtualhost
@@ -95,4 +110,4 @@ else
     exit
 fi
 
-echo -e "VirtualHost for ${DOMAIN} created...\n"
+echo -e "\nVirtualHost for ${DOMAIN} created...\n"
