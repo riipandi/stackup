@@ -8,3 +8,20 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+if [[ ! -d "/etc/letsencrypt/live/$1" ]]; then
+    echo -e "SSL certificate for $1 doesn't exist..."
+    exit 1
+fi
+
+read -p "Press enter to continue ..."
+
+certbot revoke --cert-path /etc/letsencrypt/live/$1/fullchain.pem
+
+echo -e "SSL certificate for $1 has been revoked..."

@@ -1,0 +1,40 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+nocolor='\033[0m'
+green='\033[0;32m'
+red='\033[0;33m'
+blue='\033[0;34m'
+
+#----------------------------------------------------------------------------------
+# --
+#----------------------------------------------------------------------------------
+
+if [ -z "$1" ] || [ -z "$2" ] ; then
+    echo -e "\nPlease input the username and directory."
+    echo -e "\nExample: $(basename "$0") admin /srv/domain.com\n"
+    exit 1
+fi
+
+# Check existing user
+check_user=$(mysql -uroot stackup_ftp -e "select userid from ftpuser where userid='$1'" | grep $1)
+if [ ! -z "$check_user" ] ; then
+    echo "FTP user $1 already exists!" ; exit 1
+fi
+
+# Ask for password
+while true; do
+    echo
+    read -sp "Enter FTP password for new user                 : " ftp_password
+    if [ "$ftp_password" == "" ]; then
+        echo -e "${NO}\n\nPlease enter user password!${NC}"
+    else
+        ftp_password="$ftp_password" && break && echo
+    fi
+done
+
+# Create new user and directory
+password=$(echo "{md5}"`echo -n "$ftp_password" | openssl dgst -binary -md5 | openssl enc -base64`)
+mysql -uroot stackup_ftp -e "INSERT INTO ftpuser (userid, passwd, homedir) VALUE ('$1', '$password', '$2');"
+mkdir -p $2 && chown -R webmaster:webmaster $2 && chmod -R 0755 $2
+
+echo -e "\n\nFTP user $1 has been created...\n"

@@ -1,0 +1,27 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then echo 'This script must be run as root' ; exit 1 ; fi
+nocolor='\033[0m'
+green='\033[0;32m'
+red='\033[0;33m'
+blue='\033[0;34m'
+
+#----------------------------------------------------------------------------------
+# --
+#----------------------------------------------------------------------------------
+
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the username."
+    echo -e "\nExample: $(basename "$0") admin\n"
+    exit 1
+fi
+
+# Check existing user
+check_user=$(mysql -uroot stackup_ftp -e "select userid from ftpuser where userid='$1'" | grep $1)
+if [ -z "$check_user" ] ; then
+    echo "FTP user $1 doesn't exists!" ; exit 1
+fi
+
+# Delete ftp user except the directory
+mysql -uroot stackup_ftp -e "DELETE FROM ftpuser WHERE userid='$1';"
+
+echo -e "\nFTP user $1 has been deleted...\n"

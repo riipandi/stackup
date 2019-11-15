@@ -8,3 +8,13 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+
+if [ -x $(which nginx) ]; then
+    WEBSERVER="nginx"
+elif [ -x $(which apache2) ]; then
+    WEBSERVER="apache2"
+fi
+
+systemctl stop $WEBSERVER
+certbot renew --no-self-upgrade
+systemctl restart $WEBSERVER
