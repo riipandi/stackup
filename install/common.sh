@@ -116,13 +116,13 @@ sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config &>${logInstall}
 echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd &>${logInstall}
-
-[[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
-timedatectl set-ntp true &>${logInstall}
-timedatectl set-timezone $timezone &>${logInstall}
-systemctl enable systemd-timesyncd &>${logInstall}
-systemctl restart systemd-timesyncd &>${logInstall}
 systemctl restart ssh &>${logInstall}
+
+# [[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
+# timedatectl set-ntp true &>${logInstall}
+timedatectl set-timezone $timezone &>${logInstall}
+# systemctl enable systemd-timesyncd &>${logInstall}
+# systemctl restart systemd-timesyncd &>${logInstall}
 
 # Disable IPv6
 #-----------------------------------------------------------------------------------------
