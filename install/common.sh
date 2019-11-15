@@ -135,7 +135,7 @@ systemctl restart ssh &>${logInstall}
 #     motdMessage=`curl -s ifconfig.me`
 # fi
 motdMessage=`curl -s ifconfig.me`
-echo -e "\n$(figlet ${motdMessage})\n" > /etc/motd
+echo -e "\n$(figlet ' '${motdMessage})\n" > /etc/motd
 
 # Disable IPv6
 #-----------------------------------------------------------------------------------------
