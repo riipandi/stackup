@@ -60,14 +60,13 @@ crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'user'         $mysql_root
 crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password'     $DB_ROOT_PASS
 
 systemctl restart mysql
-systemctl enable mysql
 
 # Reset db root password
 #-----------------------------------------------------------------------------------------
-systemctl stop mysql && killall -vw mysqld
+systemctl stop mysql && killall mysqld
 mysqld_safe --skip-grant-tables >res 2>&1 &
 mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';"
-killall -v mysqld && systemctl restart mysql
+killall mysqld && systemctl restart mysql
 
 # Write log information
 writeLogInfo 'mysql_password' $DB_ROOT_PASS

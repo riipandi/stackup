@@ -35,7 +35,8 @@ curl -L# https://2ton.com.au/dhparam/2048 -o /etc/ssl/certs/dhparam-2048.pem
 msgSuccess "\n--- Configuring Nginx Mainline"
 ip6Check=$(crudini --get /etc/sysctl.conf '' 'net.ipv6.conf.all.disable_ipv6')
 
-systemctl enable --now haveged && rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/
+systemctl enable --now haveged &>${logInstall}
+rm -fr /etc/nginx/ ; cp -r $PWD/config/nginx/ /etc/
 sed -i "s|\("^worker_processes" * *\).*|\1$(nproc --all);|" /etc/nginx/nginx.conf
 sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf

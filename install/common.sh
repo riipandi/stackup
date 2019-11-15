@@ -115,7 +115,7 @@ sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config &>${logInstall}
-echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd &>${logInstall}
+echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd
 systemctl restart ssh &>${logInstall}
 
 # [[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
