@@ -87,9 +87,17 @@ perl -pi -e 's#(.*sudo.*ALL=)(.*)#${1}(ALL) NOPASSWD:ALL#' /etc/sudoers
 read -ep "Create new system user?                     y/n : " -i "n" answer
 [[ "${answer,,}" =~ ^(yes|y)$ ]] && createNewUser && echo
 
-# Configure Timezone, SSH server + welcome message
+# Configure Timezone
 #-----------------------------------------------------------------------------------------
 read -ep "Please specify time zone                        : " -i "Asia/Jakarta" timezone
+# [[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
+# timedatectl set-ntp true &>${logInstall}
+timedatectl set-timezone $timezone &>${logInstall}
+# systemctl enable systemd-timesyncd &>${logInstall}
+# systemctl restart systemd-timesyncd &>${logInstall}
+
+SSH server + welcome message
+#-----------------------------------------------------------------------------------------
 read -ep "Please specify SSH port                         : " -i "22" ssh_port
 read -ep "Dou you want to enable root login?       yes/no : " -i "no" ssh_root_login
 
@@ -115,14 +123,19 @@ sed -i "s|\("^PermitTunnel" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s|\("^X11Forwarding" * *\).*|\1no|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s|\("^StrictModes" * *\).*|\1yes|" /etc/ssh/sshd_config &>${logInstall}
 sed -i "s/[#]*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config &>${logInstall}
-echo && echo -e "\n$(figlet `hostname -s`)\n" > /etc/motd
 systemctl restart ssh &>${logInstall}
 
-# [[ $(which ntp) -ne 0 ]] && apt purge -yqq ntp ntpdate &>${logInstall}
-# timedatectl set-ntp true &>${logInstall}
-timedatectl set-timezone $timezone &>${logInstall}
-# systemctl enable systemd-timesyncd &>${logInstall}
-# systemctl restart systemd-timesyncd &>${logInstall}
+# SSH welcome message
+# hostnameLen=`echo $(hostname -f) | wc -c`
+# if (( $hostnameLen >= 15 )); then
+#     motdMessage=`curl -s ifconfig.me`
+# elif (( $hostnameLen <= 14 )); then
+#     motdMessage=`hostname -f`
+# else
+#     motdMessage=`curl -s ifconfig.me`
+# fi
+motdMessage=`curl -s ifconfig.me`
+echo -e "\n$(figlet ${motdMessage})\n" > /etc/motd
 
 # Disable IPv6
 #-----------------------------------------------------------------------------------------
