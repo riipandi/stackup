@@ -61,10 +61,21 @@ siteCreateHtml() {
     fi
 }
 
+siteCreateWp() {
+    echo -e "\nInstalling WordPress for ${DOMAIN}...\n"
+    wpUrl="https://wordpress.org/latest.zip"
+    curl -fsSL ${wpUrl} | bsdtar -xvf- -C ${sitePath}
+
+    [[ -d "${sitePath}/public" ]] && rm -fr ${sitePath}/public
+    mv ${sitePath}/wordpress ${sitePath}/public
+    cp ${srcStubs}/wp-config-sample.php ${sitePath}/public/wp-config-sample.php
+    cp ${srcVhost}/vhost-php.conf ${sitePath}/vhost.conf
+}
+
 # Create Web directory and default index file
 #----------------------------------------------------------------------------------
 if   [ -z "$2" ]        ; then siteCreatePhp
-elif [ "$2" == "--wp" ] ; then echo "site type wp"
+elif [ "$2" == "--wp" ] ; then siteCreateWp
 elif [ "$2" == "--html" ]  ; then siteCreateHtml
 elif [ "$2" == "--proxy" ] ; then echo "site type proxy"
 elif [ "$2" == "--ghost" ] ; then echo "site type ghost"
