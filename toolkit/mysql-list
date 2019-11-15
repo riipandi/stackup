@@ -11,4 +11,6 @@ blue='\033[0;34m'
 
 if [[ $(mysql -e "select Db, User, Host from mysql.db") ]]; then
     echo ; mysql -e "select Db, User, Host from mysql.db;" ; echo
+else
+    echo -e "\nYou have no database!\n"
 fi

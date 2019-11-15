@@ -63,10 +63,10 @@ systemctl restart mysql
 
 # Reset db root password
 #-----------------------------------------------------------------------------------------
-systemctl stop mysql && killall mysqld
+systemctl stop mysql && killall -w mysqld
 mysqld_safe --skip-grant-tables >res 2>&1 &
 mysql -u root -e "FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';"
-killall mysqld && systemctl restart mysql
+killall -w mysqld && systemctl restart mysql
 
 # Write log information
 writeLogInfo 'mysql_password' $DB_ROOT_PASS

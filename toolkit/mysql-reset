@@ -25,7 +25,7 @@ if [[ "${CONFIRM}" =~ ^[Yy]$ ]]; then
     # Kill any mysql processes currently running
     echo -e '\nShutting down any mysql processes...'
     service mysql stop
-    killall -vw mysqld
+    killall -w mysqld
 
     # Start mysql without grant tables
     mysqld_safe --skip-grant-tables >res 2>&1 &
@@ -47,7 +47,7 @@ if [[ "${CONFIRM}" =~ ^[Yy]$ ]]; then
     echo 'Cleaning up...'
 
     # Kill the insecure mysql process
-    killall -v mysqld
+    killall -w mysqld
 
     # Starting mysql again
     service mysql restart
@@ -55,6 +55,9 @@ if [[ "${CONFIRM}" =~ ^[Yy]$ ]]; then
     # Update Configuration
     crudini --set /etc/mysql/conf.d/mysql.cnf 'mysql'     'password' $DB_ROOT_PASS
     crudini --set /etc/mysql/conf.d/mysql.cnf 'mysqldump' 'password' $DB_ROOT_PASS
+
+    # Update Information
+    crudini --set /root/stackup-info.log '' 'mysql_password' $DB_ROOT_PASS
 
     echo
     echo "Password reset has been completed"
