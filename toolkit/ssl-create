@@ -29,7 +29,7 @@ if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then www="-d www.$1" ; fi
 
 systemctl stop $WEBSERVER
 
-certbot certonly \
+certbot certonly --no-bootstrap \
   --standalone --rsa-key-size 4096 --agree-tos \
   --register-unsafely-without-email -d $1 $www
 
