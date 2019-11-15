@@ -8,3 +8,91 @@ blue='\033[0;34m'
 #----------------------------------------------------------------------------------
 # --
 #----------------------------------------------------------------------------------
+if [ -z "$1" ] ; then
+    echo -e "\nPlease input the domain name."
+    echo -e "\nExample: $(basename "$0") domain.com\n"
+    exit 1
+fi
+
+DOMAIN=$1
+WEBDIR="/srv/web"
+
+# Validate existing vhost
+#----------------------------------------------------------------------------------
+if [[ -d "${WEBDIR}/${DOMAIN}" ]]; then
+    echo -e "\nVirtualHost already exist...\n"
+    exit 1
+else
+    sitePath="${WEBDIR}/${DOMAIN}"
+    [[ -d "${sitePath}/public" ]] || mkdir -p "${sitePath}/public"
+fi
+
+# Site creation functions
+#----------------------------------------------------------------------------------
+
+srcStubs="/etc/nginx/stubs"
+srcVhost="/etc/nginx/vhost.tpl"
+dstVhost="/etc/nginx/vhost.d"
+
+siteCreatePhp() {
+    cp ${srcVhost}/vhost-php.conf ${sitePath}/vhost.conf
+    if [[ ! -f "${sitePath}/public/index.php" ]]; then
+        cp ${srcStubs}/default.php ${sitePath}/public/index.php
+    fi
+}
+
+siteCreateHtml() {
+    cp ${srcVhost}/vhost-html.conf ${sitePath}/vhost.conf
+    if [[ ! -f "${sitePath}/public/index.html" ]]; then
+        cp ${srcStubs}/default.html ${sitePath}/public/index.html
+    fi
+}
+
+# Create Web directory and default index file
+#----------------------------------------------------------------------------------
+if   [ -z "$2" ]        ; then siteCreatePhp
+elif [ "$2" == "--wp" ] ; then echo "site type wp"
+elif [ "$2" == "--html" ]  ; then siteCreateHtml
+elif [ "$2" == "--proxy" ] ; then echo "site type proxy"
+elif [ "$2" == "--ghost" ] ; then echo "site type ghost"
+else echo "site type undefined" && exit 1 ; fi
+
+# Configure virtualhost
+#----------------------------------------------------------------------------------
+sed -i "s/HOSTNAME/${DOMAIN}/" ${sitePath}/vhost.conf
+read -ep "Do you want to use www subdomain?           y/n : " use_prefix_www
+if [[ "${use_prefix_www,,}" =~ ^(yes|y)$ ]] ; then
+    sed -i "s/# server_name www/server_name www/" ${sitePath}/vhost.conf
+fi
+
+# Fix directory permission
+#----------------------------------------------------------------------------------
+find "${sitePath}/." -type d -exec chmod 0777 {} \;
+find "${sitePath}/." -type f -exec chmod 0644 {} \;
+chmod -R 0770 ${sitePath}/* && chmod 0777 ${sitePath}
+chown -R webmaster:webmaster ${sitePath}
+
+# Ask to generate LetsEncrypt certificate
+#----------------------------------------------------------------------------------
+read -ep "Do you want to generate SSL certificate?    y/n : " answer
+if [[ "${answer,,}" =~ ^(yes|y)$ ]] ; then
+    bash /usr/local/bin/ssl-create ${DOMAIN}
+fi
+
+# Enabling virtualhost
+#----------------------------------------------------------------------------------
+ln -fs ${sitePath}/vhost.conf ${dstVhost}/${DOMAIN}.conf
+
+# Test web server configuration then restart
+#----------------------------------------------------------------------------------
+`which nginx` -t 2>/dev/null > /dev/null
+if [[ $? == 0 ]]; then
+    echo -e "\nReloading Nginx configuration..."
+    systemctl reload nginx
+else
+    echo -e "\nNginx configuration fail..."
+    `which nginx` -t
+    exit
+fi
+
+echo -e "VirtualHost for ${DOMAIN} created...\n"
