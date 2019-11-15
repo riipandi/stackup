@@ -26,7 +26,8 @@ fi
 # Database password
 read -e -p "Database Password : " -i "auto" ask_db_pass
 if [ "$ask_db_pass" == "auto" ] ;then
-    passlen=`shuf -i 8-16 -n 1`
+    # passlen=`shuf -i 8-16 -n 1`
+    passlen=`echo $1 | wc -c`
     db_pass=`pwgen -scn $passlen 1`
 else
     db_pass=$ask_db_pass
