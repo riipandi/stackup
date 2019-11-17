@@ -96,7 +96,7 @@ timedatectl set-timezone $timezone &>${logInstall}
 # systemctl enable systemd-timesyncd &>${logInstall}
 # systemctl restart systemd-timesyncd &>${logInstall}
 
-SSH server + welcome message
+# SSH server + welcome message
 #-----------------------------------------------------------------------------------------
 read -ep "Please specify SSH port                         : " -i "22" ssh_port
 read -ep "Dou you want to enable root login?       yes/no : " -i "no" ssh_root_login
