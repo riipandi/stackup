@@ -1,4 +1,11 @@
-deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME main restricted universe multiverse
-deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-updates main restricted universe multiverse
-deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-security main restricted universe multiverse
-deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-proposed main restricted universe multiverse
+# AWS Mirror
+deb http://ap-southeast-1.ec2.archive.ubuntu.com/ubuntu CODENAME main restricted universe multiverse
+deb http://ap-southeast-1.ec2.archive.ubuntu.com/ubuntu CODENAME-updates main restricted universe multiverse
+deb http://ap-southeast-1.ec2.archive.ubuntu.com/ubuntu CODENAME-security main restricted universe multiverse
+deb http://ap-southeast-1.ec2.archive.ubuntu.com/ubuntu CODENAME-proposed main restricted universe multiverse
+
+# GCP Mirror
+#deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME main restricted universe multiverse
+#deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-updates main restricted universe multiverse
+#deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-security main restricted universe multiverse
+#deb http://asia-southeast1.gce.archive.ubuntu.com/ubuntu CODENAME-proposed main restricted universe multiverse
