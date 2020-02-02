@@ -22,6 +22,7 @@ msgSuccess "\n--- Installing PHP v${default_php}"
 
 # Install packages
 #-----------------------------------------------------------------------------------------
+# apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E5267A6C
 curl -sS https://packages.sury.org/php/apt.gpg | apt-key add - &>${logInstall}
 cat > /etc/apt/sources.list.d/php.list <<EOF
 deb https://packages.sury.org/php/ $(lsb_release -sc) main

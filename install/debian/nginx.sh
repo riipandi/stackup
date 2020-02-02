@@ -42,7 +42,7 @@ sed -i "s|\("^worker_connections" * *\).*|\1$(ulimit -n);|" /etc/nginx/nginx.con
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
 
-mkdir -p /etc/nginx/vhost.d /var/www/html /srv/web
+mkdir -p /etc/nginx/vhost.d /srv/web /var/www/html
 cat /etc/nginx/stubs/default.html > /usr/share/nginx/html/index.html
 cat /etc/nginx/stubs/error404.html > /usr/share/nginx/html/404.html
 chown -R webmaster: /var/www && chmod -R 0775 /var/www
