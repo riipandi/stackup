@@ -1,9 +1,18 @@
-# Global restrticttion
-location = /favicon.ico { log_not_found off; access_log off; allow all; }
+# Global restrtiction
 location = /robots.txt  { log_not_found off; access_log off; allow all; }
 location ~ \.well-known { log_not_found off; access_log off; allow all; }
 location ~ \.(htaccess|htpasswd|db|yml|log|svn|git|twig|cfg|conf|ini|tpl)$ {
     return 444;
+}
+
+# Site favicon
+location = /favicon.ico {
+    expires 1M; access_log off; log_not_found off;
+    add_header Cache-Control "public, no-transform";
+    add_header X-Permitted-Cross-Domain-Policies none;
+    add_header X-Download-Options noopen;
+    add_header X-Robots-Tag none;
+    allow all;
 }
 
 # Enhanced security
