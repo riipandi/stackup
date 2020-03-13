@@ -1,36 +1,22 @@
-# Media: css, javascript, images, icons, video, audio, htc
-location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
-    expires 1y;
-    access_log off;
-    log_not_found off;
-    add_header Cache-Control "public";
-}
+    # Media: css, javascript, images, icons, video, audio, htc
+    location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+        expires 1M; access_log off; log_not_found off;
+        add_header Cache-Control "public, no-transform";
+        add_header X-Permitted-Cross-Domain-Policies none;
+        add_header X-Download-Options noopen;
+        add_header X-Robots-Tag none;
+    }
 
-# Header for CSS and JS
-location ~* \.(?:css|js)$ {
-    add_header X-Robots-Tag none;
-    add_header X-Download-Options noopen;
-    add_header X-Permitted-Cross-Domain-Policies none;
-}
+    # rss, atom, favicon
+    location ~* \.(?:rss|atom)$ {
+        expires 1h; add_header Cache-Control "public, no-transform";
+    }
 
-# Media: fonts
-location ~* \.(?:eot|ttf|ttc|otf|woff|woff2)$ {
-    expires 1y;
-    access_log off;
-    log_not_found off;
-    add_header Cache-Control "public";
-}
-
-# rss, atom, favicon
-location ~* \.(?:rss|atom|ico)$ {
-    add_header Cache-Control "public";
-    expires 1h;
-}
-
-# other documents
-location ~* \.(?:pdf|doc|docx|xls|xlsx|ppt|pptx|rtf|eot|ttf|ttc|otf|woff|woff2)$ {
-    expires 7d;
-    access_log off;
-    log_not_found off;
-    add_header Cache-Control "public";
-}
+    # other documents
+    location ~* \.(?:pdf|doc|docx|xls|xlsx|ppt|pptx|rtf|eot|ttf|ttc|otf|woff|woff2)$ {
+        expires 7d; access_log off; log_not_found off;
+        add_header Cache-Control "public, no-transform";
+        add_header X-Permitted-Cross-Domain-Policies none;
+        add_header X-Download-Options noopen;
+        add_header X-Robots-Tag none;
+    }
