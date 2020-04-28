@@ -6,7 +6,7 @@ ROOTDIR=$(dirname "$(readlink -f "$0")")
 CLONE_DIR=/usr/src/stackup
 
 if ! [ $(pwd) == $ROOTDIR ]; then
-    wget -qO /tmp/stackup-common.sh https://raw.githubusercontent.com/riipandi/stackup/master/common.sh
+    wget -qO /tmp/stackup-common.sh https://raw.githubusercontent.com/riipandi/stackup-shell/master/common.sh
     source "/tmp/stackup-common.sh"
 else
     source "$ROOTDIR/common.sh"
@@ -30,7 +30,7 @@ if ! [[ $osDistro == "Debian" || $osDistro == "Ubuntu" ]]; then
 else
     if [[ $osDistro == "Debian" && ! $osVersion =~ ^(stretch|buster)$ ]]; then
         msgNotSupported && exit 1
-    elif [[ $osDistro == "Ubuntu" && ! $osVersion =~ ^(xenial|bionic)$ ]]; then
+    elif [[ $osDistro == "Ubuntu" && ! $osVersion =~ ^(xenial|bionic|focal)$ ]]; then
         msgNotSupported && exit 1
     fi
     msgContinue
@@ -70,11 +70,11 @@ if ! [ $(pwd) == $ROOTDIR ]; then
     WORKDIR=$CLONE_DIR
     [[ ! -d $WORKDIR ]] || rm -fr $WORKDIR && rm -fr /tmp/stackup-*
     if [ $CHANNEL == "dev" ]; then
-        git clone https://github.com/riipandi/stackup $WORKDIR
+        git clone https://github.com/riipandi/stackup-shell $WORKDIR
     else
-        project="https://api.github.com/repos/riipandi/stackup/releases/latest"
+        project="https://api.github.com/repos/riipandi/stackup-shell/releases/latest"
         release=`curl -s $project | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'`
-        curl -fsSL https://github.com/riipandi/stackup/archive/$release.zip | bsdtar -xvf- -C /tmp
+        curl -fsSL https://github.com/riipandi/stackup-shell/archive/$release.zip | bsdtar -xvf- -C /tmp
         version=`echo "${release/v/}"` ; mv /tmp/stackup-$version $WORKDIR
     fi
     find $WORKDIR/ -type f -name '.git*' -exec rm -fr {} \;

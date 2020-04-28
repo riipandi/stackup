@@ -5,6 +5,9 @@ format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### [Unreleased]
 
+### [4.0] - 2020/04/28
+- Support Ubuntu Focal Fossa (20.04)
+
 ### [3.4] - 2019/11/14
 - Changed project structure
 - Enabling multiple distributiion support

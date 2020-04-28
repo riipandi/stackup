@@ -54,7 +54,7 @@ systemctl restart nginx
 setupNginxDefaultHttps() {
     # Update nginxconfiguration
     # mv /etc/nginx/conf.d/force-https.conf{-disable,}
-    cat /etc/nginx/vhost.tpl/default-ssl.conf > /etc/nginx/conf.d/default.conf
+    cat /etc/nginx/templates/default-ssl.conf > /etc/nginx/conf.d/default.conf
     sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
     sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
     systemctl restart nginx

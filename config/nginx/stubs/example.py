@@ -27,7 +27,7 @@ def handle_404(req, resp):
     # resp.body = 'Resource not found'
     resp.media = {
         'message': 'Resource not found',
-        'documentation_url': 'https://github.com/riipandi/stackup'
+        'documentation_url': 'https://github.com/riipandi/stackup-shell'
     }
 
 api = falcon.API()

@@ -92,7 +92,7 @@ update-alternatives --set phar.phar /usr/bin/phar.phar$default_php >/dev/null 2>
 # Default PHP-FPM on Nginx configuration
 #-----------------------------------------------------------------------------------------
 cat /etc/nginx/stubs/default.php > /usr/share/nginx/html/index.php
-cat /etc/nginx/vhost.tpl/default-php.conf > /etc/nginx/conf.d/default.conf
+cat /etc/nginx/templates/default-php.conf > /etc/nginx/conf.d/default.conf
 sed -i "s/HOSTNAME/$(hostname -f)/"          /etc/nginx/conf.d/default.conf
 sed -i "s/IPADDRESS/$(curl -s ifconfig.me)/" /etc/nginx/conf.d/default.conf
 
@@ -102,6 +102,6 @@ if [ -d "/etc/letsencrypt/live/$(hostname -f)" ]; then
     sed -i "s/# ssl_certificate_key/ssl_certificate_key/" /etc/nginx/conf.d/default.conf
 fi
 
-find /etc/nginx/vhost.tpl/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
+find /etc/nginx/templates/ -type f -exec sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" {} +
 sed -i "s/php.*.-fpm/php\/php${default_php}-fpm/g" /etc/nginx/conf.d/default.conf
 systemctl restart nginx

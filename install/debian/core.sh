@@ -29,7 +29,7 @@ fi
 # Install core packages
 #-----------------------------------------------------------------------------------------
 msgInfo "Installing essential packages.."
-apt -yq install screen elinks lsof dirmngr gnupg debconf-utils build-essential gcc make \
+apt -yq install screen elinks lsof dirmngr net-tools gnupg debconf-utils build-essential gcc make \
 cmake whois rsync dh-autoreconf screenfetch jpegoptim optipng apache2-utils sshpass xsel \
 pv libpq-dev python3 python3-dev python3-wheel python3-pip python3-setuptools python3-venv \
 python3-virtualenv python3-psycopg2 virtualenv ansible nscd &>${logInstall}

@@ -16,6 +16,7 @@ or PostgreSQL as optional, and the dynamic processing is handled by PHP, Python,
 - Debian 10 (buster)
 - Ubuntu 16.04 (xenial)
 - Ubuntu 18.04 (bionic)
+- Ubuntu 20.04 (focal)
 
 ## Quick Start
 
@@ -23,10 +24,10 @@ Run this command as root and follow the wizard:
 
 ```sh
 # Stable channel
-bash <(curl -sLo- git.io/fhiA7 || wget -qO- git.io/fhiA7)
+bash <(curl -sLo- git.io/JfmGf || wget -qO- git.io/JfmGf)
 
 # Master branch
-bash <(curl -sLo- git.io/fhiA7 || wget -qO- git.io/fhiA7) --dev
+bash <(curl -sLo- git.io/JfmGf || wget -qO- git.io/JfmGf) --dev
 ```
 
 If you prefer to run installation manually, you have clone this repo then run `setup.sh` as root.

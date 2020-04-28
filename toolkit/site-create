@@ -44,7 +44,7 @@ sitePath="${WEBDIR}/${DOMAIN}"
 # Site creation functions
 #----------------------------------------------------------------------------------
 srcStubs="/etc/nginx/stubs"
-srcVhost="/etc/nginx/vhost.tpl"
+srcVhost="/etc/nginx/templates"
 dstVhost="/etc/nginx/vhost.d"
 
 siteCreatePhp() {
