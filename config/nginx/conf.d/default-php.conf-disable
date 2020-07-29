@@ -1,23 +1,18 @@
 server {
     listen 80;
-    server_name $server_addr;
-    return 301 $scheme://$hostname$request_uri;
-}
-
-server {
-    listen 80;
     server_name HOSTNAME;
+    root /usr/share/nginx/html;
+    autoindex off;
 
     # listen 443 ssl http2;
     # ssl_certificate /etc/letsencrypt/live/HOSTNAME/fullchain.pem;
     # ssl_certificate_key /etc/letsencrypt/live/HOSTNAME/privkey.pem;
-
-    root /usr/share/nginx/html;
+    # if ($scheme = http) {return 301 https://$host$request_uri;}
 
     add_header X-Robots-Tag 'noindex, nofollow, nosnippet, noarchive';
-    include server.d/adminator.conf;
-    include server_params;
-    include static_params;
+    include server.d/common_param.conf;
+    include server.d/static_param.conf;
+    include server.d/phpmyadmin.conf;
 
     location ~ \.(cgi|py|sh)$ {
         log_not_found off; access_log off; deny all;
@@ -25,8 +20,8 @@ server {
 
     location / { try_files $uri $uri/ /index.php?$query_string; }
     location ~ ^/(.+\.php)$ {
-        fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        include server.d/fastcgi_param.conf;
         fastcgi_read_timeout 1200;
-        include fastcgi_params;
     }
 }
