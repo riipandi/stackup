@@ -13,7 +13,7 @@ on your system, and then clone this repository. Next, navigate in your terminal 
 directory you cloned this, and spin up the containers for the web server by running
 `docker-compose up -d --build site`.
 
-After that completes, follow the steps from the [src/README.md](src/README.md) file to
+After that completes, follow the steps from the [project/README.md](project/README.md) file to
 get your Laravel project added in (or create a new blank one).
 
 Bringing up the Docker Compose network with `site` instead of just using `up`, ensures
@@ -42,7 +42,7 @@ By default, whenever you bring down the Docker network, your MySQL data will be 
 after the containers are destroyed. If you would like to have persistent data that
 remains after bringing containers down and back up, do the following:
 
-1. Create a `mysql` folder in the project root, alongside the `nginx` and `src` folders.
+1. Create a `mysql` folder in the project root, alongside the `nginx` and `project` folders.
 2. Under the mysql service in your `docker-compose.yml` file, add the following lines:
 
 ```
